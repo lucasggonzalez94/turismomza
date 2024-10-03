@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import Topbar from '@/components/ui/Topbar/Topbar';
 
 export default function HomeLayout({
   children,
@@ -7,9 +7,7 @@ export default function HomeLayout({
 }) {
   return (
     <main className="min-h-screen bg-zinc-200">
-      <Button color="primary" variant="solid" radius="md">
-        Explorar Atracciones
-      </Button>
+      <Topbar></Topbar>
       {children}
     </main>
   );
