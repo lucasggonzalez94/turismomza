@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { IoSearch } from 'react-icons/io5';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { Avatar, Badge, Button } from '@nextui-org/react';
 import Link from 'next/link';
+import DropdownSearch from '../DropdownSearch/DropdownSearch';
 
 const Topbar = () => {
   return (
@@ -15,13 +15,13 @@ const Topbar = () => {
           height={100}
         ></Image>
       </Link>
+
       <div className="hidden md:block">
         <div className="flex items-center justify-center">
-          <Button isIconOnly variant="light">
-            <IoSearch size={25} color="#fff" />
-          </Button>
+          <DropdownSearch />
         </div>
       </div>
+
       <div className="hidden 2xl:block col-span-5">
         <nav className="flex gap-4 items-center justify-end">
           <Link href="#" className="text-white">
