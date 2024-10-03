@@ -15,7 +15,7 @@ const Topbar = () => {
   ];
 
   return (
-    <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-full">
+    <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-full z-10">
       <Link href="/" className="col-span-5">
         <Image
           src="/images/logoTurimomza.png"
