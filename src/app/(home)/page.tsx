@@ -1,5 +1,11 @@
+import AboutMza from '@/components/sections/AboutMza';
 import Banner from '@/components/sections/Banner';
 
 export default function HomePage() {
-  return <Banner />;
+  return (
+    <div className="flex flex-col">
+      <Banner />
+      <AboutMza />
+    </div>
+  );
 }
