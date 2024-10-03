@@ -3,6 +3,7 @@ import { Avatar, Badge, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
 import DropdownNotifications from '../DropdownNotifications/DropdownNotifications';
+import DropdownProfile from '../DropdownProfile/DropdownProfile';
 
 const Topbar = () => {
   const notifications = [
@@ -13,7 +14,7 @@ const Topbar = () => {
   ];
 
   return (
-    <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-screen">
+    <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-full">
       <Link href="/" className="col-span-5">
         <Image
           src="/images/logoTurimomza.png"
@@ -52,11 +53,7 @@ const Topbar = () => {
           <Badge content="5" color="primary" className="border-none">
             <DropdownNotifications notifications={notifications} />
           </Badge>
-          <Avatar
-            className="cursor-pointer"
-            showFallback
-            src="https://images.unsplash.com/broken"
-          />
+          <DropdownProfile />
         </nav>
       </div>
     </div>

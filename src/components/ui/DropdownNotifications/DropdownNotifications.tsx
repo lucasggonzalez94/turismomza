@@ -26,7 +26,9 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
     >
       <div className="mt-2 bg-gray-200 rounded-md shadow-ms overflow-hidden">
         <div className="p-4 bg-gray-100 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800">Notifications</h3>
+          <h3 className="text-lg font-semibold text-gray-800">
+            Notificationes
+          </h3>
         </div>
         <div className="overflow-y-auto">
           {notifications.length > 0 ? (

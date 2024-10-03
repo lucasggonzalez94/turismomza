@@ -5,11 +5,13 @@ import {
   ReactElement,
   ReactNode,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 
 import { Button } from '@nextui-org/react';
+import { IoPerson } from 'react-icons/io5';
 
 interface IPropsDropdownButton {
   icon?: ReactElement;
@@ -17,6 +19,7 @@ interface IPropsDropdownButton {
   children: ReactNode;
   position?: 'center' | 'left' | 'right';
   square?: boolean;
+  profile?: boolean;
 }
 
 const DropdownButton: FC<IPropsDropdownButton> = ({
@@ -25,9 +28,11 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   children,
   position = 'center',
   square,
+  profile,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [positionValue, setPositionValue] = useState('-45%');
+  const [positionValue, setPositionValue] = useState('translate-x-[90%]');
+  const [hidden, setHidden] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,27 +66,37 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
     }
   }, [position]);
 
+  useLayoutEffect(() => {
+    setHidden(false);
+  }, []);
+
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center z-10">
       <div className="relative" ref={searchRef}>
         <Button
-          isIconOnly
+          isIconOnly={!!icon || profile}
           variant="light"
-          className={`rounded-${square ? 'md' : 'full'} z-50`}
+          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white'}`}
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {icon ?? text}
+          {profile ? (
+            <IoPerson size={25} color="#000" className="mb-[2px]" />
+          ) : (
+            (icon ?? text)
+          )}
         </Button>
 
-        <div
-          className={`absolute top-0 left-0 transition-all duration-500 w-96 z-40 ${
-            isOpen
-              ? `opacity-100 transform translate-y-12 ${positionValue}`
-              : `opacity-0 translate-y-0 ${positionValue}`
-          }`}
-        >
-          {children}
-        </div>
+        {!hidden && (
+          <div
+            className={`absolute top-0 left-0 transition-all duration-500 w-96 ${
+              isOpen
+                ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
+                : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`
+            }`}
+          >
+            {children}
+          </div>
+        )}
       </div>
     </div>
   );
