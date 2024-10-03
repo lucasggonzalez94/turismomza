@@ -7,7 +7,7 @@ export default function HomeLayout({
 }) {
   return (
     <main className="min-h-screen bg-zinc-200">
-      <Button color="primary" variant="flat" radius="md">
+      <Button color="primary" variant="solid" radius="md">
         Explorar Atracciones
       </Button>
       {children}

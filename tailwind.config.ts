@@ -36,7 +36,11 @@ const config: Config = {
           colors: {
             primary: {
               DEFAULT: '#E95718',
-              foreground: '#ffffff',
+              foreground: '#d9d9d9',
+            },
+            secondary: {
+              DEFAULT: 'rgba(15, 15, 15, 0.5)',
+              foreground: '#d9d9d9',
             },
             focus: '#E95718',
           },
