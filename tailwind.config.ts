@@ -21,19 +21,21 @@ const config: Config = {
       layout: {
         disabledOpacity: '0.3',
         radius: {
-          small: '2px',
-          medium: '4px',
-          large: '6px',
+          small: '4px',
+          medium: '6px',
+          large: '8px',
         },
         borderWidth: {
           small: '1px',
-          medium: '1px',
-          large: '2px',
+          medium: '2px',
+          large: '3px',
         },
       },
       themes: {
         light: {
           colors: {
+            background: '#d9d9d9',
+            foreground: '#333333',
             primary: {
               DEFAULT: '#E95718',
               foreground: '#d9d9d9',
@@ -46,6 +48,8 @@ const config: Config = {
           },
         },
       },
+      defaultTheme: 'light',
+      defaultExtendTheme: 'light',
     }),
   ],
 };
