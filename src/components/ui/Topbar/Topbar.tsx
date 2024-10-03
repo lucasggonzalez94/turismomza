@@ -1,10 +1,17 @@
 import Image from 'next/image';
-import { IoNotificationsOutline } from 'react-icons/io5';
 import { Avatar, Badge, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
+import DropdownNotifications from '../DropdownNotifications/DropdownNotifications';
 
 const Topbar = () => {
+  const notifications = [
+    { id: 1, user: 'John Doe', type: 'like', time: '2 minutes ago' },
+    { id: 2, user: 'Jane Smith', type: 'comment', time: '5 minutes ago' },
+    { id: 3, user: 'Mike Johnson', type: 'like', time: '10 minutes ago' },
+    { id: 4, user: 'Sarah Brown', type: 'comment', time: '15 minutes ago' },
+  ];
+
   return (
     <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-screen">
       <Link href="/" className="col-span-5">
@@ -24,13 +31,13 @@ const Topbar = () => {
 
       <div className="hidden 2xl:block col-span-5">
         <nav className="flex gap-4 items-center justify-end">
-          <Link href="#" className="text-white">
+          <Link href="attractions" className="text-white">
             ATRACTIVOS
           </Link>
-          <Link href="#" className="text-white">
+          <Link href="about" className="text-white">
             SOBRE NOSOTROS
           </Link>
-          <Link href="#" className="text-white">
+          <Link href="contact" className="text-white">
             CONTACTO
           </Link>
           <Button color="secondary" className="text-medium">
@@ -42,10 +49,8 @@ const Topbar = () => {
           >
             ES
           </Button>
-          <Badge content="5" color="primary">
-            <Button isIconOnly variant="light">
-              <IoNotificationsOutline size={25} color="#fff" />
-            </Button>
+          <Badge content="5" color="primary" className="border-none">
+            <DropdownNotifications notifications={notifications} />
           </Badge>
           <Avatar
             className="cursor-pointer"

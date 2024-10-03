@@ -1,5 +1,5 @@
 import Banner from '@/components/sections/Banner';
 
-export default function Home() {
+export default function HomePage() {
   return <Banner />;
 }
