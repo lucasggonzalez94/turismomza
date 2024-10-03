@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import { Avatar, Badge, Button } from '@nextui-org/react';
-import Link from 'next/link';
+import { Badge, Button } from '@nextui-org/react';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
 import DropdownNotifications from '../DropdownNotifications/DropdownNotifications';
 import DropdownProfile from '../DropdownProfile/DropdownProfile';
+import AnimatedLink from '../AnimatedLink/AnimatedLink';
+import Link from 'next/link';
 
 const Topbar = () => {
   const notifications = [
@@ -32,24 +33,23 @@ const Topbar = () => {
 
       <div className="hidden 2xl:block col-span-5">
         <nav className="flex gap-4 items-center justify-end">
-          <Link href="attractions" className="text-white">
-            ATRACTIVOS
-          </Link>
-          <Link href="about" className="text-white">
-            SOBRE NOSOTROS
-          </Link>
-          <Link href="contact" className="text-white">
-            CONTACTO
-          </Link>
-          <Button color="secondary" className="text-medium">
+          <AnimatedLink href="attractions">ATRACTIVOS</AnimatedLink>
+          <AnimatedLink href="about">SOBRE NOSOTROS</AnimatedLink>
+          <AnimatedLink href="contact">CONTACTO</AnimatedLink>
+          <Button
+            as={Link}
+            color="secondary"
+            className="text-medium"
+            href="/create"
+          >
             Publicar
           </Button>
-          <Button
+          {/* <Button
             color="secondary"
             className="text-medium font-bold w-10 h-10 min-w-10"
           >
             ES
-          </Button>
+          </Button> */}
           <Badge content="5" color="primary" className="border-none">
             <DropdownNotifications notifications={notifications} />
           </Badge>
