@@ -3,6 +3,13 @@ import Link from 'next/link';
 
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
+import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
+
+const IMAGES = [
+  'https://images.unsplash.com/photo-1587000098522-812f8896e8df?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  'https://images.unsplash.com/photo-1587000098522-812f8896e8df?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  'https://images.unsplash.com/photo-1587000098522-812f8896e8df?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+];
 
 const AboutMza = () => {
   return (
@@ -49,13 +56,19 @@ const AboutMza = () => {
         </Button>
       </div>
       <div className="w-1/2 h-full flex justify-center items-center p-16">
-        <Image
+        <SliderCarousel
+          images={IMAGES}
+          showDots
+          autoplay
+          autoplayDelay={5000}
+        />
+        {/* <Image
           src="https://images.unsplash.com/photo-1587000098522-812f8896e8df?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="viñedo"
           width={600}
           height={700}
           className="rounded-lg object-cover h-full"
-        />
+        /> */}
       </div>
     </div>
   );
