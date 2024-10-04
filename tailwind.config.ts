@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 import { nextui } from '@nextui-org/react';
 
 const config: Config = {
@@ -54,6 +55,15 @@ const config: Config = {
       defaultTheme: 'light',
       defaultExtendTheme: 'light',
     }),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-thin': {
+          'scrollbar-width': 'thin',
+        },
+      });
+    }),
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('tailwind-scrollbar'),
   ],
 };
 export default config;

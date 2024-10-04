@@ -20,6 +20,9 @@ interface IPropsDropdownButton {
   position?: 'center' | 'left' | 'right';
   square?: boolean;
   profile?: boolean;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
 const DropdownButton: FC<IPropsDropdownButton> = ({
@@ -29,8 +32,10 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   position = 'center',
   square,
   profile,
+  isOpen,
+  onOpen,
+  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [positionValue, setPositionValue] = useState('translate-x-[90%]');
   const [hidden, setHidden] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -41,7 +46,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
         searchRef.current &&
         !searchRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        onClose();
       }
     };
 
@@ -50,7 +55,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [onClose]);
 
   useEffect(() => {
     switch (position) {
@@ -77,7 +82,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
           isIconOnly={!!icon || profile}
           variant="light"
           className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white'}`}
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={onOpen}
         >
           {profile ? (
             <IoPerson size={25} color="#000" className="mb-[2px]" />

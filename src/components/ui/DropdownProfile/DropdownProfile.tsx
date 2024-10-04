@@ -1,7 +1,17 @@
+import { FC } from 'react';
 import DropdownButton from '../DropdownButton/DropdownButton';
-import { IoNotificationsOutline } from 'react-icons/io5';
 
-const DropdownProfile = () => {
+interface IPropsDropdownProfile {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const DropdownProfile: FC<IPropsDropdownProfile> = ({
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   const options = [
     {
       id: 1,
@@ -16,7 +26,13 @@ const DropdownProfile = () => {
   ];
 
   return (
-    <DropdownButton position="left" profile>
+    <DropdownButton
+      position="left"
+      profile
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+    >
       <div className="mt-2 bg-gray-200 rounded-md shadow-ms overflow-hidden">
         <div className="p-4 bg-gray-100 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-800">Perfil</h3>

@@ -13,16 +13,25 @@ interface IPropsDropdownNotifications {
     user: string;
     time: string;
   }[];
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
 const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   notifications,
+  isOpen,
+  onOpen,
+  onClose,
 }) => {
   return (
     <DropdownButton
       icon={<IoNotificationsOutline size={25} color="#fff" />}
       position="left"
       square
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
     >
       <div className="mt-2 bg-gray-200 rounded-md shadow-ms overflow-hidden">
         <div className="p-4 bg-gray-100 border-b border-gray-200">

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { Badge, Button } from '@nextui-org/react';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
@@ -14,6 +17,18 @@ const Topbar = () => {
     { id: 4, user: 'Sarah Brown', type: 'comment', time: '15 minutes ago' },
   ];
 
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
+    null,
+  );
+
+  const handleOpenDropdown = (index: number | null) => {
+    setOpenDropdownIndex((prev) => (prev === index ? null : index));
+  };
+
+  const handleCloseDropdown = () => {
+    setOpenDropdownIndex(null);
+  };
+
   return (
     <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-full z-10">
       <Link href="/" className="col-span-5">
@@ -27,7 +42,11 @@ const Topbar = () => {
 
       <div className="hidden md:block">
         <div className="flex items-center justify-center">
-          <DropdownSearch />
+          <DropdownSearch
+            isOpen={openDropdownIndex === 0}
+            onOpen={() => handleOpenDropdown(0)}
+            onClose={handleCloseDropdown}
+          />
         </div>
       </div>
 
@@ -51,9 +70,18 @@ const Topbar = () => {
             ES
           </Button> */}
           <Badge content="5" color="primary" className="border-none">
-            <DropdownNotifications notifications={notifications} />
+            <DropdownNotifications
+              notifications={notifications}
+              isOpen={openDropdownIndex === 1}
+              onOpen={() => handleOpenDropdown(1)}
+              onClose={handleCloseDropdown}
+            />
           </Badge>
-          <DropdownProfile />
+          <DropdownProfile
+            isOpen={openDropdownIndex === 2}
+            onOpen={() => handleOpenDropdown(2)}
+            onClose={handleCloseDropdown}
+          />
         </nav>
       </div>
     </div>

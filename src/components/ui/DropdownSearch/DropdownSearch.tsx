@@ -1,10 +1,26 @@
 import { Input } from '@nextui-org/react';
 import { IoSearch } from 'react-icons/io5';
 import DropdownButton from '../DropdownButton/DropdownButton';
+import { FC } from 'react';
 
-const DropdownSearch = () => {
+interface IPropsDropdownSearch {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const DropdownSearch: FC<IPropsDropdownSearch> = ({
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   return (
-    <DropdownButton icon={<IoSearch size={25} color="#fff" />}>
+    <DropdownButton
+      icon={<IoSearch size={25} color="#fff" />}
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+    >
       <div className="flex items-center bg-gray-800/60 rounded-md p-4 shadow-md">
         <Input
           isClearable

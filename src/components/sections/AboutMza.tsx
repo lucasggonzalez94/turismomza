@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { IoArrowForwardCircleOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
 
