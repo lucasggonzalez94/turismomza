@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { IoArrowForwardCircleOutline } from 'react-icons/io5';
 import Image from 'next/image';
+import { Button } from '@nextui-org/react';
 
 const AboutMza = () => {
   return (
@@ -37,6 +38,16 @@ const AboutMza = () => {
           excepcional, Mendoza te espera con los brazos abiertos. ¡No te lo
           pierdas!
         </p>
+        <Button
+          as={Link}
+          href="https://es.wikipedia.org/wiki/Mendoza_(Argentina)"
+          target="_blank"
+          rel="noopener noreferrer"
+          color="primary"
+          className="w-fit"
+        >
+          Leer más...
+        </Button>
       </div>
       <div className="w-1/2 h-full flex justify-center items-center p-16">
         <Image
