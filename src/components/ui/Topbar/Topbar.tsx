@@ -69,7 +69,7 @@ const Topbar = () => {
           >
             ES
           </Button> */}
-          <Badge content="5" color="primary" className="border-none">
+          <Badge content={4} color="primary" className="border-none">
             <DropdownNotifications
               notifications={notifications}
               isOpen={openDropdownIndex === 1}

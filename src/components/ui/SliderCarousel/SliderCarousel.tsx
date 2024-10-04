@@ -64,7 +64,7 @@ const Carousel: React.FC<CarouselProps> = ({
               <Image
                 src={src}
                 alt={`Carousel image ${index + 1}`}
-                width={500}
+                width={600}
                 height={600}
                 className="object-contain rounded-lg"
               />
