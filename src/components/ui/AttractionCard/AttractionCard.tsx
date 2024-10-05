@@ -98,7 +98,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
               <IoStar className="mb-[2px]" /> {averageRating}
             </span>
             <span className="text-tiny text-gray-400">
-              {`(${comments?.length} comentarios)`}
+              {`(${comments?.length} opiniones)`}
             </span>
           </div>
         </div>
