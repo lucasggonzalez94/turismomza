@@ -1,0 +1,359 @@
+{
+  "total": 10,
+  "page": 1,
+  "pageSize": 10,
+  "totalPages": 1,
+  "data": [
+    {
+      "id": "4f72d76d-fdea-4c04-8523-df712e40bd09",
+      "title": "Cerro de la Gloria",
+      "description": "Monumento histórico dedicado al Ejército de los Andes",
+      "location": "Mendoza, Mendoza",
+      "category": "Historia",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:33:29.570Z",
+      "services": ["Guía", "Mirador"],
+      "contactNumber": "+542616209709",
+      "email": "info@cerrodelagloria.com",
+      "webSite": "https://www.cerrodelagloria.com",
+      "instagram": null,
+      "facebook": null,
+      "timeOpen": "08:00",
+      "timeClose": "20:00",
+      "price": 20,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "55297084-5cb1-4cf8-8335-e6a321357883",
+      "title": "Cañón del Atuel",
+      "description": "Impresionante cañón y formación geológica",
+      "location": "San Rafael, Mendoza",
+      "category": "Naturaleza",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:32:00.591Z",
+      "services": ["Kayak", "Senderismo"],
+      "contactNumber": "+542616209703",
+      "email": "info@canondelatuel.com",
+      "webSite": "https://www.canondelatuel.com",
+      "instagram": "https://www.instagram.com/canondelatuel",
+      "facebook": null,
+      "timeOpen": "08:00",
+      "timeClose": "18:00",
+      "price": 50,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "57ce382d-a4dc-48d6-89c3-63b7ab6c6488",
+      "title": "Bodega El Enemigo",
+      "description": "Bodega reconocida por su alta calidad de vinos",
+      "location": "Maipú, Mendoza",
+      "category": "Enoturismo",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:32:08.909Z",
+      "services": ["Degustación de vinos", "Restaurante"],
+      "contactNumber": "+542616209704",
+      "email": "reservas@elenemigo.com",
+      "webSite": "https://www.elenemigo.com",
+      "instagram": "https://www.instagram.com/elenemigowines",
+      "facebook": null,
+      "timeOpen": "10:00",
+      "timeClose": "18:00",
+      "price": 120,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "5a32e407-505f-4b27-9d0b-325722a4e3e3",
+      "title": "Termas de Cacheuta",
+      "description": "Spa termal en un entorno montañoso",
+      "location": "Cacheuta, Mendoza",
+      "category": "Relajación",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:33:07.765Z",
+      "services": ["Spa", "Piscina termal"],
+      "contactNumber": "+542616209706",
+      "email": "reservas@termasdecacheuta.com",
+      "webSite": "https://www.termasdecacheuta.com",
+      "instagram": "https://www.instagram.com/termasdecacheuta",
+      "facebook": "https://www.facebook.com/termasdecacheuta",
+      "timeOpen": "09:00",
+      "timeClose": "20:00",
+      "price": 100,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "7a3123bf-6017-4fa4-8b09-22f61f2cbbce",
+      "title": "Parque General San Martín",
+      "description": "Uno de los parques urbanos más grandes de Argentina",
+      "location": "Mendoza, Mendoza",
+      "category": "Naturaleza",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:30:45.693Z",
+      "services": ["Estacionamiento", "Cafetería", "Guía"],
+      "contactNumber": "+542616209701",
+      "email": "contacto@parque-sanmartin.com",
+      "webSite": "https://www.parque-sanmartin.com",
+      "instagram": "https://www.instagram.com/parquesanmartin",
+      "facebook": null,
+      "timeOpen": "07:00",
+      "timeClose": "22:00",
+      "price": 0,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "848d673d-3e3e-4535-8afe-8e85ceb51f5a",
+      "title": "Cristo Redentor de los Andes",
+      "description": "Monumento que simboliza la paz entre Argentina y Chile",
+      "location": "Las Cuevas, Mendoza",
+      "category": "Historia",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:33:15.846Z",
+      "services": ["Guía"],
+      "contactNumber": "+542616209707",
+      "email": "info@cristoredentor.com",
+      "webSite": "https://www.cristoredentor.com",
+      "instagram": null,
+      "facebook": null,
+      "timeOpen": "08:00",
+      "timeClose": "18:00",
+      "price": 0,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
+      "title": "Bodega Catena Zapata",
+      "description": "Una de las bodegas más prestigiosas de Mendoza",
+      "location": "Luján de Cuyo, Mendoza",
+      "category": "Enoturismo",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:31:17.791Z",
+      "services": ["Degustación de vinos", "Tour guiado"],
+      "contactNumber": "+542614258765",
+      "email": "info@catenazapata.com",
+      "webSite": "https://www.catenazapata.com",
+      "instagram": "https://www.instagram.com/catenazapata",
+      "facebook": "https://www.facebook.com/catenazapata",
+      "timeOpen": "09:00",
+      "timeClose": "18:00",
+      "price": 150,
+      "currencyPrice": "usd",
+      "advertisements": [
+        {
+          "id": "024f55b5-4113-4922-acd0-4598b622cef8",
+          "attractionId": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
+          "userId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+          "createdAt": "2024-10-04T23:47:43.421Z",
+          "startDate": "2024-10-04T23:13:40.251Z",
+          "endDate": "2024-10-14T23:13:40.251Z",
+          "amountPaid": 5000,
+          "isActive": true,
+          "impressions": 0,
+          "clicks": 0
+        },
+        {
+          "id": "1835ddb2-5289-4ca3-afbe-5eb649614aa6",
+          "attractionId": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
+          "userId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+          "createdAt": "2024-10-04T23:47:55.303Z",
+          "startDate": "2024-10-01T23:13:40.251Z",
+          "endDate": "2024-10-04T23:13:40.251Z",
+          "amountPaid": 5000,
+          "isActive": false,
+          "impressions": 0,
+          "clicks": 0
+        }
+      ],
+      "images": [],
+      "comments": [
+        {
+          "content": "Excelente servicio",
+          "rating": 4,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:37:42.174Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Muy linda experiencia",
+          "rating": 5,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:37:56.419Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Muy linda experiencia",
+          "rating": 5,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:38:12.209Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Un poco fria la comida",
+          "rating": 3,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:38:22.482Z",
+          "likes": [
+            {
+              "user": {
+                "name": "Lucas Gonzalez"
+              }
+            }
+          ],
+          "reports": []
+        }
+      ]
+    },
+    {
+      "id": "9bbdce79-8fef-4266-9ab1-0f40e43b22ed",
+      "title": "Aconcagua",
+      "description": "La montaña más alta de América",
+      "location": "Parque Provincial Aconcagua, Mendoza",
+      "category": "Aventura",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:31:51.213Z",
+      "services": ["Guía", "Campamento"],
+      "contactNumber": "+542616209702",
+      "email": "info@aconcagua.com",
+      "webSite": "https://www.aconcagua.com",
+      "instagram": "https://www.instagram.com/aconcagua",
+      "facebook": null,
+      "timeOpen": "06:00",
+      "timeClose": "20:00",
+      "price": 200,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "c12fa43b-9f72-49cd-a56d-09109afecf78",
+      "title": "Puente del Inca",
+      "description": "Formación natural de gran interés geológico",
+      "location": "Las Cuevas, Mendoza",
+      "category": "Historia",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:32:17.098Z",
+      "services": ["Guía", "Tienda de souvenirs"],
+      "contactNumber": "+542616209705",
+      "email": "info@puentedelinca.com",
+      "webSite": "https://www.puentedelinca.com",
+      "instagram": "https://www.instagram.com/puentedelinca",
+      "facebook": null,
+      "timeOpen": "08:00",
+      "timeClose": "18:00",
+      "price": 0,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    },
+    {
+      "id": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
+      "title": "Bodega Catena Zapata",
+      "description": "Una de las bodegas más prestigiosas de Mendoza",
+      "location": "Luján de Cuyo, Mendoza",
+      "category": "Enoturismo",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:31:17.791Z",
+      "services": ["Degustación de vinos", "Tour guiado"],
+      "contactNumber": "+542614258765",
+      "email": "info@catenazapata.com",
+      "webSite": "https://www.catenazapata.com",
+      "instagram": "https://www.instagram.com/catenazapata",
+      "facebook": "https://www.facebook.com/catenazapata",
+      "timeOpen": "09:00",
+      "timeClose": "18:00",
+      "price": 150,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": [
+        {
+          "content": "Excelente servicio",
+          "rating": 4,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:37:42.174Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Muy linda experiencia",
+          "rating": 5,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:37:56.419Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Muy linda experiencia",
+          "rating": 5,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:38:12.209Z",
+          "likes": [],
+          "reports": []
+        },
+        {
+          "content": "Un poco fria la comida",
+          "rating": 3,
+          "user": {
+            "name": "Lucas Gonzalez"
+          },
+          "creation_date": "2024-10-04T23:38:22.482Z",
+          "likes": [
+            {
+              "user": {
+                "name": "Lucas Gonzalez"
+              }
+            }
+          ],
+          "reports": []
+        }
+      ]
+    },
+    {
+      "id": "ff7e9227-a2a0-474c-a802-955840eca05e",
+      "title": "Villavicencio",
+      "description": "Reserva natural famosa por sus aguas minerales",
+      "location": "Villavicencio, Mendoza",
+      "category": "Naturaleza",
+      "creatorId": "55e8b7bc-fe6d-4e0b-a333-8fd128813314",
+      "creation_date": "2024-10-04T23:33:23.187Z",
+      "services": ["Senderismo", "Mirador"],
+      "contactNumber": "+542616209708",
+      "email": "info@villavicencio.com",
+      "webSite": "https://www.villavicencio.com",
+      "instagram": "https://www.instagram.com/villavicencio",
+      "facebook": null,
+      "timeOpen": "08:00",
+      "timeClose": "18:00",
+      "price": 50,
+      "currencyPrice": "usd",
+      "images": [],
+      "comments": []
+    }
+  ]
+}

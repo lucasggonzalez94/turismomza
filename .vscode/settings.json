@@ -18,5 +18,6 @@
     "titleBar.inactiveBackground": "#052b6999",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#052b69"
+  "peacock.color": "#052b69",
+  "cSpell.language": "en,es-ES"
 }
