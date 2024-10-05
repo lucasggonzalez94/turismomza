@@ -72,6 +72,8 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
             width={300}
             height={200}
             className="object-cover w-full h-44"
+            // TODO: Modificar si se carga
+            priority
           />
         ) : (
           <Image
@@ -80,6 +82,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
             width={300}
             height={200}
             className="object-cover w-full h-44"
+            priority
           />
         )}
       </div>

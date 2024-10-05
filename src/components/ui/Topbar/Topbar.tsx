@@ -37,6 +37,7 @@ const Topbar = () => {
           alt="Logo turismo mendoza"
           width={250}
           height={100}
+          priority
         ></Image>
       </Link>
 
