@@ -1,6 +1,7 @@
 export interface Attraction {
   id: string;
   title: string;
+  slug: string;
   description: string;
   location: string;
   category: string;
@@ -17,6 +18,7 @@ export interface Attraction {
   price: number | null;
   currencyPrice: string | null;
   advertisements?: Advertisement[];
+  isFavorite: boolean;
   images: Image[];
   comments: Comment[];
 }
