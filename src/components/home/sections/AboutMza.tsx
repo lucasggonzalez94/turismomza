@@ -12,13 +12,13 @@ const IMAGES = [
 
 const AboutMza = () => {
   return (
-    <div className="flex justify-between items-center gap-4 h-screen">
-      <div className="flex flex-col gap-8 w-1/2 p-16">
-        <h2 className="font-magiesta text-8xl">
+    <div className="flex flex-col lg:flex-row justify-between items-center gap-4 min-h-fit h-auto lg:h-screen">
+      <div className="flex flex-col gap-8 lg:w-1/2 p-16">
+        <h2 className="font-magiesta text-6xl lg:text-7xl xl:text-8xl">
           Tierra del sol
           <br />y del buen vino
         </h2>
-        <p>
+        <p className="text-xs md:text-sm xl:text-base">
           Ubicada al pie de la majestuosa cordillera de los Andes, Mendoza es el
           lugar perfecto para los amantes del vino, la naturaleza y la aventura.
           Famosa por su exquisito Malbec, esta provincia te invita a recorrer
@@ -54,7 +54,7 @@ const AboutMza = () => {
           Leer más...
         </Button>
       </div>
-      <div className="w-1/2 h-full flex justify-center items-center p-16">
+      <div className="hidden w-1/2 h-full lg:flex justify-center items-center p-16">
         <SliderCarousel
           images={IMAGES}
           showDots
