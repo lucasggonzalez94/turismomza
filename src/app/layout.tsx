@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scrollbar scrollbar-thin">
+    <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
       <body className={`${rootFont.className} antialiased`}>
         <NextUIProvider>{children}</NextUIProvider>
       </body>

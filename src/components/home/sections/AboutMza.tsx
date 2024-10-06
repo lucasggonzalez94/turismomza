@@ -12,9 +12,9 @@ const IMAGES = [
 
 const AboutMza = () => {
   return (
-    <div className="flex flex-col lg:flex-row justify-between items-center gap-4 min-h-fit h-auto lg:h-screen">
-      <div className="flex flex-col gap-8 lg:w-1/2 p-16">
-        <h2 className="font-magiesta text-6xl lg:text-7xl xl:text-8xl">
+    <div className="flex flex-col lg:flex-row justify-between items-center lg:gap-4 min-h-fit h-auto lg:h-screen">
+      <div className="flex flex-col gap-8 lg:w-1/2 p-8 md:p-12 lg:p-16">
+        <h2 className="font-magiesta text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
           Tierra del sol
           <br />y del buen vino
         </h2>
