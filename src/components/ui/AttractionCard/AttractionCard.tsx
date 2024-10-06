@@ -44,7 +44,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
 
   return (
     <div
-      className={`flex flex-col rounded-md w-[100%] bg-white overflow-hidden border ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
+      className={`flex flex-col rounded-md w-[100%] bg-white overflow-hidden border cursor-pointer transition-transform duration-300 transform hover:scale-105 ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
       onClick={() => handleNavigation(`/${slug}`)}
     >
       <div className="relative">

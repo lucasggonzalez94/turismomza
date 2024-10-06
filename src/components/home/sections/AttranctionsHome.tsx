@@ -1,15 +1,48 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@nextui-org/react';
+
 import AttractionCard from '@/components/ui/AttractionCard/AttractionCard';
 import { Attraction } from '@/interfaces/attraction';
-import { getAttractions } from '@/services/attractions/get-attractions';
-import { Button } from '@nextui-org/react';
-import Link from 'next/link';
+import { getAttractionsService } from '@/services/attractions/get-attractions';
+import useWindowSize from '@/hooks/useWindowSize';
 
-const AttractionsHome = async () => {
-  const { data: attractions } = await getAttractions();
+const AttractionsHome = () => {
+  const [attractions, setAttractions] = useState([]);
+  const [pageSize, setPageSize] = useState(0);
+
+  const { width } = useWindowSize();
+
+  useEffect(() => {
+    const getAttractions = async () => {
+      const { data } = await getAttractionsService({
+        page: 1,
+        pageSize: pageSize,
+      });
+      setAttractions(data);
+    };
+
+    if (pageSize > 0) {
+      getAttractions();
+    }
+  }, [pageSize]);
+
+  useEffect(() => {
+    if (width > 1280) {
+      setPageSize(10);
+    } else if (width > 1024) {
+      setPageSize(8);
+    } else {
+      setPageSize(6);
+    }
+  }, [width]);
+
   return (
-    <div className="flex flex-col gap-4 h-auto p-12">
+    <div className="flex flex-col gap-4 h-auto p-8 md:p-12">
       <h2 className="font-bold text-3xl">Atractivos</h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 grid-rows-2 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
         <>
           {attractions?.map((attraction: Attraction) => (
             <AttractionCard key={attraction?.id} attraction={attraction} />
