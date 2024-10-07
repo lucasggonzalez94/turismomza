@@ -1,5 +1,6 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+
+import { refreshAccessToken } from '@/services/auth/refreshToken';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -11,20 +12,8 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = Cookies.get('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
 
 axiosInstance.interceptors.response.use(
   (response): any => {
@@ -34,7 +23,29 @@ axiosInstance.interceptors.response.use(
       errors: {},
     };
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        const newAccessToken = await refreshAccessToken();
+
+        axios.defaults.headers.common['Authorization'] =
+          `Bearer ${newAccessToken}`;
+
+        return axios(originalRequest);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Error refreshing token:', err);
+      }
+    }
+
     return {
       status: error.response ? error.response.status : 500,
       data: {},

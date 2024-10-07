@@ -81,7 +81,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
         <Button
           isIconOnly={!!icon || profile}
           variant="light"
-          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400 hover:text-white'}`}
+          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
           onClick={onOpen}
         >
           {profile ? (

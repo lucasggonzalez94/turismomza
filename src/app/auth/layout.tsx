@@ -12,7 +12,7 @@ export default function HomeLayout({
       <Link href="/">
         <IoCloseCircleOutline size={40} className="absolute right-2 top-2" />
       </Link>
-      <div className="w-1/2 overflow-hidden relative">
+      <div className="hidden lg:block w-1/2 overflow-hidden relative">
         <div className="absolute inset-0 bg-black opacity-40 pointer-events-none"></div>
         <Image
           src="/images/logoTurismomza.png"
@@ -26,10 +26,12 @@ export default function HomeLayout({
           alt="Uvas"
           width={500}
           height={400}
-          className="object-cover object-center w-full"
+          className="object-cover object-center w-full h-full"
         />
       </div>
-      <div className="w-1/2 flex justify-center items-center">{children}</div>
+      <div className="w-full lg:w-1/2 flex justify-center items-center">
+        {children}
+      </div>
     </main>
   );
 }

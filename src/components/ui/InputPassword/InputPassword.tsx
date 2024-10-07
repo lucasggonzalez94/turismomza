@@ -1,10 +1,15 @@
 'use client';
 
-import { useState } from "react";
-import { Input } from "@nextui-org/react";
-import { IoEye, IoEyeOffOutline } from "react-icons/io5";
+import { ChangeEvent, FC, useState } from 'react';
+import { Input } from '@nextui-org/react';
+import { IoEye, IoEyeOffOutline } from 'react-icons/io5';
 
-const InputPassword = () => {
+interface IPropsInputPassword {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const InputPassword: FC<IPropsInputPassword> = ({ value, onChange }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -21,14 +26,12 @@ const InputPassword = () => {
           onClick={toggleVisibility}
           aria-label="toggle password visibility"
         >
-          {isVisible ? (
-            <IoEye />
-          ) : (
-            <IoEyeOffOutline />
-          )}
+          {isVisible ? <IoEye /> : <IoEyeOffOutline />}
         </button>
       }
       type={isVisible ? 'text' : 'password'}
+      value={value}
+      onChange={(e) => onChange(e)}
     />
   );
 };
