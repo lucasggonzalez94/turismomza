@@ -8,6 +8,7 @@ import DropdownNotifications from '../DropdownNotifications/DropdownNotification
 import DropdownProfile from '../DropdownProfile/DropdownProfile';
 import AnimatedLink from '../AnimatedLink/AnimatedLink';
 import Link from 'next/link';
+import useAuth from '@/hooks/useAuth';
 
 const Topbar = () => {
   const notifications = [
@@ -16,6 +17,8 @@ const Topbar = () => {
     { id: 3, user: 'Mike Johnson', type: 'like', time: '10 minutes ago' },
     { id: 4, user: 'Sarah Brown', type: 'comment', time: '15 minutes ago' },
   ];
+
+  const verified = useAuth();
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
@@ -70,14 +73,16 @@ const Topbar = () => {
           >
             ES
           </Button> */}
-          <Badge content={4} color="primary" className="border-none">
-            <DropdownNotifications
-              notifications={notifications}
-              isOpen={openDropdownIndex === 1}
-              onOpen={() => handleOpenDropdown(1)}
-              onClose={handleCloseDropdown}
-            />
-          </Badge>
+          {verified && (
+            <Badge content={4} color="primary" className="border-none">
+              <DropdownNotifications
+                notifications={notifications}
+                isOpen={openDropdownIndex === 1}
+                onOpen={() => handleOpenDropdown(1)}
+                onClose={handleCloseDropdown}
+              />
+            </Badge>
+          )}
           <DropdownProfile
             isOpen={openDropdownIndex === 2}
             onOpen={() => handleOpenDropdown(2)}

@@ -37,7 +37,6 @@ const RegisterForm = () => {
         ...restValues,
         name: `${name} ${lastname}`,
       };
-      debugger;
       await register(registerBody);
       handleNavigation('/');
     } catch (error) {
