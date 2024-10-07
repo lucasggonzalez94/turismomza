@@ -1,16 +1,19 @@
 import axiosInstance from '@/config/axiosInstance';
 
-export const login = async ({
+export const register = async ({
+  name,
   email,
   password,
 }: {
+  name: string;
   email: string;
   password: string;
 }) => {
   try {
     const response = await axiosInstance.post(
-      '/auth/login',
+      '/auth/register',
       {
+        name,
         email,
         password,
       },
@@ -21,14 +24,15 @@ export const login = async ({
         withCredentials: true,
       },
     );
-    if (response.status === 200) {
+
+    if (response.status === 201) {
       return response.data;
     }
 
-    throw new Error('Login failed');
+    throw new Error('Register failed');
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error during login:', error);
-    throw new Error('Login failed');
+    console.error('Error during register:', error);
+    throw new Error('Register failed');
   }
 };

@@ -1,16 +1,18 @@
 'use client';
 
-import { Button, Input, Link } from '@nextui-org/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Button, Input } from '@nextui-org/react';
 import InputPassword from '../ui/InputPassword/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
-import { login } from '@/services/auth/login';
+import { register } from '@/services/auth/register';
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const router = useRouter();
 
   const [formValues, setFormValues] = useState({
+    name: '',
+    lastname: '',
     email: '',
     password: '',
   });
@@ -27,10 +29,16 @@ const LoginForm = () => {
     });
   };
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
       setLoading(true);
-      await login(formValues);
+      const { name, lastname, ...restValues } = formValues;
+      const registerBody = {
+        ...restValues,
+        name: `${name} ${lastname}`,
+      };
+      debugger;
+      await register(registerBody);
       handleNavigation('/');
     } catch (error) {
       setLoading(false);
@@ -42,6 +50,24 @@ const LoginForm = () => {
     <>
       <div className="flex flex-col">
         <div className="flex flex-col gap-4">
+          <div className="flex justify-between gap-3 w-full">
+            <Input
+              type="text"
+              label="Nombre"
+              labelPlacement="outside"
+              placeholder="Ingresá tu nombre"
+              value={formValues?.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+            />
+            <Input
+              type="text"
+              label="Apellido"
+              labelPlacement="outside"
+              placeholder="Ingresá tu apellido"
+              value={formValues?.lastname}
+              onChange={(e) => handleChange('lastname', e.target.value)}
+            />
+          </div>
           <Input
             type="email"
             label="Email"
@@ -55,32 +81,27 @@ const LoginForm = () => {
             onChange={(e) => handleChange('password', e.target.value)}
           />
         </div>
-        <Link href="#" className="mt-1 text-sm text-end">
-          <span className="w-full text-black">
-            ¿Has olvidado tu contraseña?
-          </span>
-        </Link>
       </div>
 
       <div className="flex flex-col gap-3">
         <Button
           color="primary"
           className="w-full font-bold"
-          onClick={handleLogin}
+          onClick={handleRegister}
           isLoading={loading}
         >
-          Ingresar
+          Regístrate
         </Button>
         <Button
           color="primary"
           className="w-full font-bold bg-white border border-gray-400 text-black"
           startContent={<FcGoogle size={30} />}
         >
-          Ingresar con Google
+          Regístrate con Google
         </Button>
       </div>
     </>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
