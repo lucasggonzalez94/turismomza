@@ -13,7 +13,7 @@ const Footer = () => {
           priority
         ></Image>
       </Link>
-      <nav className="flex flex-col items-end lg:flex-row gap-4 lg:items-center lg:justify-end text-gray-300">
+      <nav className="flex flex-col items-end lg:flex-row gap-4 lg:items-center lg:justify-end text-end text-sm text-gray-300 md:text-md">
         <Link href="about">FAQs</Link>
         <Link href="contact">CONTACTO</Link>
         <Link href="contact">SOBRE NOSOTROS</Link>
