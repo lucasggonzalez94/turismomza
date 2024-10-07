@@ -38,15 +38,15 @@ const config: Config = {
       themes: {
         light: {
           colors: {
-            background: '#d9d9d9',
+            background: '#ffffff',
             foreground: '#333333',
             primary: {
               DEFAULT: '#E95718',
-              foreground: '#d9d9d9',
+              foreground: '#ffffff',
             },
             secondary: {
               DEFAULT: 'rgba(15, 15, 15, 0.5)',
-              foreground: '#d9d9d9',
+              foreground: '#ffffff',
             },
             focus: '#E95718',
           },

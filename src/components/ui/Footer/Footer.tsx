@@ -6,7 +6,7 @@ const Footer = () => {
     <div className="p-6 min-h-28 h-auto w-full flex justify-between items-center bg-black">
       <Link href="/" className="col-span-5">
         <Image
-          src="/images/logoTurimomza.png"
+          src="/images/logoTurismomza.png"
           alt="Logo turismo mendoza"
           width={250}
           height={100}

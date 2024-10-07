@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
-      <body className={`${rootFont.className} antialiased`}>
+      <body className={`${rootFont.className} antialiased bg-gray-300`}>
         <NextUIProvider>{children}</NextUIProvider>
       </body>
     </html>
