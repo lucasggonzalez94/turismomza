@@ -6,6 +6,8 @@ import InputPassword from '../ui/InputPassword/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
 import { login } from '@/services/auth/login';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -15,6 +17,12 @@ const LoginForm = () => {
     password: '',
   });
   const [loading, setLoading] = useState(false);
+
+  const notify = (message?: string) =>
+    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
+      position: 'bottom-right',
+      theme: 'dark',
+    });
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -32,9 +40,13 @@ const LoginForm = () => {
       setLoading(true);
       await login(formValues);
       handleNavigation('/');
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      console.log(error);
+      if (error.status === 401) {
+        notify('Las credenciales no son válidas.');
+      } else {
+        notify();
+      }
     }
   };
 
@@ -79,6 +91,7 @@ const LoginForm = () => {
           Ingresar con Google
         </Button>
       </div>
+      <ToastContainer autoClose={10000} />
     </>
   );
 };

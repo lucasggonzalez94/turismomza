@@ -30,9 +30,23 @@ export const register = async ({
     }
 
     throw new Error('Register failed');
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error during register:', error);
-    throw new Error('Register failed');
+  } catch (error: any) {
+    if (error.response) {
+      throw {
+        status: error.response.status,
+        data: error.response.data,
+        message: error.response.data.message || 'Register failed',
+      };
+    } else if (error.request) {
+      throw {
+        status: 500,
+        message: 'No response received from server',
+      };
+    } else {
+      throw {
+        status: 500,
+        message: error.message || 'Register failed',
+      };
+    }
   }
 };

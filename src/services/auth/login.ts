@@ -24,11 +24,23 @@ export const login = async ({
     if (response.status === 200) {
       return response.data;
     }
-
-    throw new Error('Login failed');
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error during login:', error);
-    throw new Error('Login failed');
+  } catch (error: any) {
+    if (error.response) {
+      throw {
+        status: error.response.status,
+        data: error.response.data,
+        message: error.response.data.message || 'Login failed',
+      };
+    } else if (error.request) {
+      throw {
+        status: 500,
+        message: 'No response received from server',
+      };
+    } else {
+      throw {
+        status: 500,
+        message: error.message || 'Login failed',
+      };
+    }
   }
 };
