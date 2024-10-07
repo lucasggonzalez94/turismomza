@@ -17,30 +17,32 @@ const ContactAndDonations = () => {
             nos ayuda a crecer. ¡Gracias por tomarte el tiempo de compartir tus
             pensamientos con nosotros!
           </p>
-          <Input
-            type="text"
-            label="Nombre"
-            labelPlacement="outside"
-            placeholder="Ingresá tu nombre"
-          />
-          <Input
-            type="text"
-            label="Asunto"
-            labelPlacement="outside"
-            placeholder="Ingresá el asunto"
-          />
-          <Input
-            type="email"
-            label="Email"
-            labelPlacement="outside"
-            placeholder="Ingresá tu email"
-          />
-          <Textarea
-            label="Mensaje"
-            className="w-full"
-            labelPlacement="outside"
-            placeholder="Ingresá el mensaje"
-          />
+          <div className="flex flex-col gap-4 w-full">
+            <Input
+              type="text"
+              label="Nombre"
+              labelPlacement="outside"
+              placeholder="Ingresá tu nombre"
+            />
+            <Input
+              type="text"
+              label="Asunto"
+              labelPlacement="outside"
+              placeholder="Ingresá el asunto"
+            />
+            <Input
+              type="email"
+              label="Email"
+              labelPlacement="outside"
+              placeholder="Ingresá tu email"
+            />
+            <Textarea
+              label="Mensaje"
+              className="w-full"
+              labelPlacement="outside"
+              placeholder="Ingresá el mensaje"
+            />
+          </div>
           <div className="flex justify-center lg:justify-end w-full">
             <Button color="primary">Enviar</Button>
           </div>
