@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 export default function HomeLayout({
   children,
@@ -6,7 +8,10 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="h-screen w-screen flex">
+    <main className="h-screen w-screen flex relative">
+      <Link href="/">
+        <IoCloseCircleOutline size={40} className="absolute right-2 top-2" />
+      </Link>
       <div className="w-1/2 overflow-hidden relative">
         <div className="absolute inset-0 bg-black opacity-40 pointer-events-none"></div>
         <Image
