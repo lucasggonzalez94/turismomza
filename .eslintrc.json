@@ -21,6 +21,8 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-require-imports": "off",
+    "import/no-anonymous-default-export": "off",
+    "react/display-name": "off",
     "react/react-in-jsx-scope": "off",
     "import/no-unresolved": "error",
     "import/named": "error",
