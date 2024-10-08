@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 interface State {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
 }
 
 export const useStore = create<State>((set) => ({

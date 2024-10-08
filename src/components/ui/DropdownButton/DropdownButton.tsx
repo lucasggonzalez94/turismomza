@@ -42,9 +42,12 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
       if (
         searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
+        !searchRef.current.contains(target) &&
+        !target.closest('[data-dropdown-button]')
       ) {
         onClose();
       }
@@ -76,33 +79,35 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   }, []);
 
   return (
-    <div className="flex items-center justify-center z-10">
-      <div className="relative" ref={searchRef}>
-        <Button
-          isIconOnly={!!icon || profile}
-          variant="light"
-          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
-          onClick={onOpen}
-        >
-          {profile ? (
-            <IoPerson size={25} color="#000" className="mb-[2px]" />
-          ) : (
-            (icon ?? text)
-          )}
-        </Button>
-
-        {!hidden && (
-          <div
-            className={`absolute top-0 left-0 transition-all duration-500 w-96 ${
-              isOpen
-                ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
-                : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`
-            }`}
-          >
-            {children}
-          </div>
+    <div
+      className="flex items-center justify-center z-10 relative"
+      ref={searchRef}
+      data-dropdown-button
+    >
+      <Button
+        isIconOnly={!!icon || profile}
+        variant="light"
+        className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
+        onClick={onOpen}
+      >
+        {profile ? (
+          <IoPerson size={25} color="#000" className="mb-[2px]" />
+        ) : (
+          (icon ?? text)
         )}
-      </div>
+      </Button>
+
+      {!hidden && (
+        <div
+          className={`absolute top-0 left-0 transition-all duration-500 w-96 ${
+            isOpen
+              ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
+              : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`
+          }`}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 };
