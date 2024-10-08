@@ -1,9 +1,11 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
+import Link from 'next/link';
+
+import { IoLogOutOutline } from 'react-icons/io5';
 import DropdownButton from '../DropdownButton/DropdownButton';
 import { User as IUser } from '@/interfaces/user';
-import { User } from '@nextui-org/react';
 import { ROLS } from '@/utils/constants';
 
 interface IPropsDropdownProfile {
@@ -16,8 +18,30 @@ interface IPropsDropdownProfile {
 interface IPropsMenuOption {
   id: string;
   text: string;
-  path: string;
+  icon?: ReactElement;
+  path?: string;
+  onClick?: () => void;
+  divider?: boolean;
 }
+
+const DEFAULT_OPTIONS = [
+  {
+    id: 'login',
+    text: 'Iniciar sesión',
+    path: '/auth/login',
+  },
+  {
+    id: 'register',
+    text: 'Registrarse',
+    path: '/auth/register',
+    divider: true,
+  },
+  {
+    id: 'help',
+    text: 'Ayuda',
+    path: '/help',
+  },
+];
 
 const DropdownProfile: FC<IPropsDropdownProfile> = ({
   user,
@@ -25,25 +49,18 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   onOpen,
   onClose,
 }) => {
-  const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
+  const [menuOptions, setMenuOptions] =
+    useState<IPropsMenuOption[]>(DEFAULT_OPTIONS);
 
   useEffect(() => {
     if (user) {
       if (user.role === ROLS.viewer) {
-        setMenuOptions([]);
-      } else if (user.role === ROLS.publisher) {
-        setMenuOptions([]);
-      } else {
         setMenuOptions([
           {
             id: 'profile',
             text: 'Ver datos del perfil',
             path: '/profile',
-          },
-          {
-            id: 'publications',
-            text: 'Mis publicaciones',
-            path: '/publications',
+            divider: true,
           },
           {
             id: 'preferences',
@@ -54,16 +71,75 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             id: 'help',
             text: 'Ayuda',
             path: '/help',
+            divider: true,
           },
           {
             id: 'logout',
             text: 'Cerrar sesión',
             path: '/logout',
+            icon: <IoLogOutOutline size={15} />,
+          },
+        ]);
+      } else if (user.role === ROLS.publisher) {
+        setMenuOptions([
+          {
+            id: 'profile',
+            text: 'Ver datos del perfil',
+            path: '/profile',
+          },
+          {
+            id: 'publications',
+            text: 'Mis publicaciones',
+            path: '/publications',
+            divider: true,
+          },
+          {
+            id: 'preferences',
+            text: 'Preferencias',
+            path: '/preferences',
+          },
+          {
+            id: 'help',
+            text: 'Ayuda',
+            path: '/help',
+            divider: true,
+          },
+          {
+            id: 'logout',
+            text: 'Cerrar sesión',
+            path: '/logout',
+            icon: <IoLogOutOutline size={15} />,
+          },
+        ]);
+      } else {
+        setMenuOptions([
+          {
+            id: 'profile',
+            text: 'Ver datos del perfil',
+            path: '/profile',
+          },
+          {
+            id: 'admin',
+            text: 'Administrar',
+            path: '/admin',
+            divider: true,
+          },
+          {
+            id: 'preferences',
+            text: 'Preferencias',
+            path: '/preferences',
+            divider: true,
+          },
+          {
+            id: 'logout',
+            text: 'Cerrar sesión',
+            path: '/logout',
+            icon: <IoLogOutOutline size={15} />,
           },
         ]);
       }
     } else {
-      setMenuOptions([]);
+      setMenuOptions(DEFAULT_OPTIONS);
     }
   }, [user]);
 
@@ -75,18 +151,15 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       onOpen={onOpen}
       onClose={onClose}
     >
-      <div className="mt-2 bg-gray-200 rounded-md shadow-ms overflow-hidden">
+      <div className="mt-2 bg-gray-100 rounded-md shadow-ms overflow-hidden">
         <div className="p-4 bg-gray-100 border-b border-gray-200 flex items-center">
           {user ? (
-            <User
-              name={user?.name}
-              avatarProps={{
-                // TODO: Tomar foto de perfil y cambiar icono sin foto
-                src: user?.profilePicture
-                  ? 'https://i.pravatar.cc/150?u=a04258114e29026702d'
-                  : '/images/profile-empty.png',
-              }}
-            />
+            <Link
+              href="/profile"
+              className="text-lg font-semibold text-gray-800"
+            >
+              {user?.name}
+            </Link>
           ) : (
             <h3 className="text-lg font-semibold text-gray-800">Perfil</h3>
           )}
@@ -95,12 +168,13 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {menuOptions.map((option) => (
             <div
               key={option.id}
-              className="p-4 border-b border-gray-100 hover:bg-gray-50 transition duration-150 ease-in-out"
+              className={`p-4 hover:bg-gray-200 transition duration-150 ease-in-out ${option.divider ? 'border-b border-gray-200' : ''}`}
             >
               <div className="flex items-center cursor-pointer">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {option.text}
+                  <p className="text-sm font-medium text-gray-900 flex gap-3 items-center">
+                    <span>{option.text}</span>
+                    {option?.icon && option?.icon}
                   </p>
                 </div>
               </div>
