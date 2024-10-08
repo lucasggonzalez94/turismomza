@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Badge, Button } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
 import DropdownNotifications from '../DropdownNotifications/DropdownNotifications';
 import DropdownProfile from '../DropdownProfile/DropdownProfile';
 import AnimatedLink from '../AnimatedLink/AnimatedLink';
 import Link from 'next/link';
 import useAuth from '@/hooks/useAuth';
+import { useStore } from '@/store/store';
 
 const Topbar = () => {
   const notifications = [
@@ -19,6 +20,7 @@ const Topbar = () => {
   ];
 
   const verified = useAuth();
+  const user = useStore((state) => state.user);
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
@@ -74,16 +76,15 @@ const Topbar = () => {
             ES
           </Button> */}
           {verified && (
-            <Badge content={4} color="primary" className="border-none">
-              <DropdownNotifications
-                notifications={notifications}
-                isOpen={openDropdownIndex === 1}
-                onOpen={() => handleOpenDropdown(1)}
-                onClose={handleCloseDropdown}
-              />
-            </Badge>
+            <DropdownNotifications
+              notifications={notifications}
+              isOpen={openDropdownIndex === 1}
+              onOpen={() => handleOpenDropdown(1)}
+              onClose={handleCloseDropdown}
+            />
           )}
           <DropdownProfile
+            user={user}
             isOpen={openDropdownIndex === 2}
             onOpen={() => handleOpenDropdown(2)}
             onClose={handleCloseDropdown}
