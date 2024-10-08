@@ -8,14 +8,34 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/services/auth/login';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Debe ingresar un correo electrónico válido.',
+      )
+      .required('El campo es obligatorio.'),
+    password: yup.string().required('El campo es obligatorio.'),
+  })
+  .required();
 
 const LoginForm = () => {
   const router = useRouter();
-
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
+
   const [loading, setLoading] = useState(false);
 
   const notify = (message?: string) =>
@@ -28,17 +48,10 @@ const LoginForm = () => {
     router.push(path);
   };
 
-  const handleChange = (field: string, value: string) => {
-    setFormValues({
-      ...formValues,
-      [field]: value,
-    });
-  };
-
-  const handleLogin = async () => {
+  const handleLogin = async (data: any) => {
     try {
       setLoading(true);
-      await login(formValues);
+      await login(data);
       handleNavigation('/');
     } catch (error: any) {
       setLoading(false);
@@ -51,21 +64,32 @@ const LoginForm = () => {
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(handleLogin)} className="max-w-96">
       <div className="flex flex-col">
         <div className="flex flex-col gap-4">
-          <Input
-            type="email"
-            label="Email"
-            labelPlacement="outside"
-            placeholder="Ingresá tu email"
-            value={formValues?.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-          />
-          <InputPassword
-            value={formValues?.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-          />
+          <div className="flex flex-col gap-1">
+            <Input
+              type="email"
+              label="Email"
+              labelPlacement="outside"
+              placeholder="Ingresá tu email"
+              {...register('email')}
+            />
+            <span className="text-sm text-red-500">
+              {errors.email?.message}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <InputPassword {...field} />}
+            />
+            <span className="text-sm text-red-500">
+              {errors.password?.message}
+            </span>
+          </div>
         </div>
         <Link href="#" className="mt-1 text-sm text-end">
           <span className="w-full text-black">
@@ -74,11 +98,11 @@ const LoginForm = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 mt-10">
         <Button
           color="primary"
           className="w-full font-bold"
-          onClick={handleLogin}
+          type="submit"
           isLoading={loading}
         >
           Ingresar
@@ -92,7 +116,7 @@ const LoginForm = () => {
         </Button>
       </div>
       <ToastContainer autoClose={10000} />
-    </>
+    </form>
   );
 };
 

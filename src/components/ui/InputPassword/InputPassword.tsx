@@ -7,9 +7,10 @@ import { IoEye, IoEyeOffOutline } from 'react-icons/io5';
 interface IPropsInputPassword {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  name: string;
 }
 
-const InputPassword: FC<IPropsInputPassword> = ({ value, onChange }) => {
+const InputPassword: FC<IPropsInputPassword> = ({ value, onChange, name }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -31,7 +32,8 @@ const InputPassword: FC<IPropsInputPassword> = ({ value, onChange }) => {
       }
       type={isVisible ? 'text' : 'password'}
       value={value}
-      onChange={(e) => onChange(e)}
+      onChange={onChange}
+      name={name}
     />
   );
 };

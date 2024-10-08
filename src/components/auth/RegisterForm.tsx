@@ -7,17 +7,43 @@ import 'react-toastify/dist/ReactToastify.css';
 import InputPassword from '../ui/InputPassword/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
-import { register } from '@/services/auth/register';
+import { register as registerService } from '@/services/auth/register';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup
+  .object({
+    name: yup.string().required('El campo es obligatorio.'),
+    lastname: yup.string().required('El campo es obligatorio.'),
+    email: yup
+      .string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Debe ingresar un correo electrónico válido.',
+      )
+      .required('El campo es obligatorio.'),
+    password: yup
+      .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.',
+      )
+      .required('El campo es obligatorio.'),
+  })
+  .required();
 
 const RegisterForm = () => {
   const router = useRouter();
-
-  const [formValues, setFormValues] = useState({
-    name: '',
-    lastname: '',
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
+
   const [loading, setLoading] = useState(false);
 
   const notify = () =>
@@ -30,22 +56,15 @@ const RegisterForm = () => {
     router.push(path);
   };
 
-  const handleChange = (field: string, value: string) => {
-    setFormValues({
-      ...formValues,
-      [field]: value,
-    });
-  };
-
-  const handleRegister = async () => {
+  const handleRegister = async (data: any) => {
     try {
       setLoading(true);
-      const { name, lastname, ...restValues } = formValues;
+      const { name, lastname, ...restValues } = data;
       const registerBody = {
         ...restValues,
         name: `${name} ${lastname}`,
       };
-      await register(registerBody);
+      await registerService(registerBody);
       handleNavigation('/');
     } catch {
       setLoading(false);
@@ -54,47 +73,67 @@ const RegisterForm = () => {
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(handleRegister)} className="max-w-96">
       <div className="flex flex-col">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 w-full">
-            <Input
-              type="text"
-              label="Nombre"
-              labelPlacement="outside"
-              placeholder="Ingresá tu nombre"
-              value={formValues?.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-            />
-            <Input
-              type="text"
-              label="Apellido"
-              labelPlacement="outside"
-              placeholder="Ingresá tu apellido"
-              value={formValues?.lastname}
-              onChange={(e) => handleChange('lastname', e.target.value)}
-            />
+            {/* TODO: Crear componente Input reutilizable */}
+            <div className="flex flex-col gap-1 w-full">
+              <Input
+                type="text"
+                label="Nombre"
+                labelPlacement="outside"
+                placeholder="Ingresá tu nombre"
+                {...register('name')}
+              />
+              <span className="text-sm text-red-500">
+                {errors.name?.message}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1 w-full">
+              <Input
+                type="text"
+                label="Apellido"
+                labelPlacement="outside"
+                placeholder="Ingresá tu apellido"
+                {...register('lastname')}
+              />
+              <span className="text-sm text-red-500">
+                {errors.lastname?.message}
+              </span>
+            </div>
           </div>
-          <Input
-            type="email"
-            label="Email"
-            labelPlacement="outside"
-            placeholder="Ingresá tu email"
-            value={formValues?.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-          />
-          <InputPassword
-            value={formValues?.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-          />
+          <div className="flex flex-col gap-1">
+            <Input
+              type="email"
+              label="Email"
+              labelPlacement="outside"
+              placeholder="Ingresá tu email"
+              {...register('email')}
+            />
+            <span className="text-sm text-red-500">
+              {errors.email?.message}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <InputPassword {...field} />}
+            />
+            <span className="text-sm text-red-500 text-wrap">
+              {errors.password?.message}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 mt-10">
         <Button
           color="primary"
           className="w-full font-bold"
-          onClick={handleRegister}
+          type="submit"
           isLoading={loading}
         >
           Regístrate
@@ -108,7 +147,7 @@ const RegisterForm = () => {
         </Button>
       </div>
       <ToastContainer autoClose={10000} />
-    </>
+    </form>
   );
 };
 
