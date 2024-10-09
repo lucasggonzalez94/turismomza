@@ -40,7 +40,7 @@ const AttractionsHome = () => {
   }, [width]);
 
   return (
-    <div className="flex flex-col gap-4 h-auto p-8 md:p-12">
+    <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
       <h2 className="font-bold text-3xl">Atractivos</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
         <>
