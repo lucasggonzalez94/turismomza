@@ -195,7 +195,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             {menuOptions.map((option) => (
               <div
                 key={option.id}
-                className={`p-4 hover:bg-gray-200 transition duration-150 ease-in-out ${option.divider ? 'border-b border-gray-200' : ''}`}
+                className={`cursor-pointer p-4 hover:bg-gray-200 transition duration-150 ease-in-out ${option.divider ? 'border-b border-gray-200' : ''}`}
                 onClick={() => {
                   if (option?.onClick) {
                     option.onClick();

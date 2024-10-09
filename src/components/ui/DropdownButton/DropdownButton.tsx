@@ -80,7 +80,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
   return (
     <div
-      className="flex items-center justify-center z-10 relative"
+      className="flex items-center justify-center relative"
       ref={searchRef}
       data-dropdown-button
     >

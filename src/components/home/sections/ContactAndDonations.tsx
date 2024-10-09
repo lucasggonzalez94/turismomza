@@ -55,7 +55,7 @@ const ContactAndDonations = () => {
             Tus donaciones nos ayudan a mantener este sitio funcionando y
             mejorar nuestros servicios. ¡Gracias por tu apoyo!
           </p>
-          <div className="w-full flex justify-center items-center gap-2">
+          <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-2">
             <span className="text-sm">Donar con</span>
             <Button
               className="bg-blue-800 text-white"
