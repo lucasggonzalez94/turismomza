@@ -1,4 +1,8 @@
 import LinkToSection from '@/components/ui/LinkToSection/LinkToSection';
+import {
+  IoArrowForwardCircleOutline,
+  IoArrowDownCircleOutline,
+} from 'react-icons/io5';
 
 const Banner = () => {
   return (
@@ -14,7 +18,20 @@ const Banner = () => {
           Descubre lo mejor de<br></br>
           <span className="text-8xl md:text-9xl lg:text-10xl">Mendoza</span>
         </h1>
-        <LinkToSection text="Comienza tu aventura" idToScroll="attractions" />
+        <LinkToSection
+          idToScroll="attractions"
+          className="text-lg text-white flex flex-col md:flex-row items-center justify-between w-[240px] transition-transform duration-300 transform hover:scale-110"
+        >
+          <span>Comienza tu aventura</span>
+          <IoArrowForwardCircleOutline
+            size={25}
+            className="hidden md:inline-block"
+          />
+          <IoArrowDownCircleOutline
+            size={25}
+            className="inline-block md:hidden"
+          />
+        </LinkToSection>
       </div>
     </div>
   );

@@ -1,18 +1,19 @@
 'use client';
 
+import { FC, ReactNode } from 'react';
 import Link from 'next/link';
-import { FC } from 'react';
-import {
-  IoArrowDownCircleOutline,
-  IoArrowForwardCircleOutline,
-} from 'react-icons/io5';
 
 interface IPropsLinkToSection {
-  text: string;
+  children: ReactNode;
   idToScroll: string;
+  className?: string;
 }
 
-const LinkToSection: FC<IPropsLinkToSection> = ({ text, idToScroll }) => {
+const LinkToSection: FC<IPropsLinkToSection> = ({
+  children,
+  idToScroll,
+  className,
+}) => {
   const scrollToAttractions = (e: React.MouseEvent) => {
     e.preventDefault();
     const element = document.getElementById(idToScroll);
@@ -22,17 +23,8 @@ const LinkToSection: FC<IPropsLinkToSection> = ({ text, idToScroll }) => {
   };
 
   return (
-    <Link
-      href="#"
-      onClick={scrollToAttractions}
-      className="text-lg text-white flex flex-col md:flex-row items-center justify-between w-[240px] transition-transform duration-300 transform hover:scale-110"
-    >
-      {text}
-      <IoArrowForwardCircleOutline
-        size={25}
-        className="hidden md:inline-block"
-      />
-      <IoArrowDownCircleOutline size={25} className="inline-block md:hidden" />
+    <Link href="#" onClick={scrollToAttractions} className={className}>
+      {children}
     </Link>
   );
 };

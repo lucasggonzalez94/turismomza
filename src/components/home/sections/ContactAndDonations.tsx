@@ -5,7 +5,10 @@ import { PiPaypalLogoLight } from 'react-icons/pi';
 
 const ContactAndDonations = () => {
   return (
-    <div className="flex flex-col lg:flex-row justify-between items-start lg:gap-4 min-h-fit h-auto">
+    <div
+      className="flex flex-col lg:flex-row justify-between items-start lg:gap-4 min-h-fit h-auto"
+      id="contact"
+    >
       <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
         <div className="flex flex-col items-start justify-start gap-8 h-full">
           <h2 className="font-bold text-3xl">Sugerencias</h2>

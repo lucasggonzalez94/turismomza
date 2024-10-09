@@ -10,6 +10,7 @@ import AnimatedLink from '../AnimatedLink/AnimatedLink';
 import Link from 'next/link';
 import useAuth from '@/hooks/useAuth';
 import { useStore } from '@/store/store';
+import LinkToSection from '../LinkToSection/LinkToSection';
 
 const Topbar = () => {
   const notifications = [
@@ -60,7 +61,9 @@ const Topbar = () => {
         <nav className="flex gap-4 items-center justify-end">
           <AnimatedLink href="attractions">ATRACTIVOS</AnimatedLink>
           <AnimatedLink href="about">SOBRE NOSOTROS</AnimatedLink>
-          <AnimatedLink href="contact">CONTACTO</AnimatedLink>
+          <AnimatedLink href="contact">
+            <LinkToSection idToScroll="contact">CONTACTO</LinkToSection>
+          </AnimatedLink>
           <Button
             as={Link}
             color="secondary"
