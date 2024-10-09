@@ -106,7 +106,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
           <Button
             color="primary"
             onClick={() => handleNavigation(`/${slug}`)}
-            className="hidden sm:block"
+            className="hidden sm:block min-w-fit"
           >
             Ver más
           </Button>
