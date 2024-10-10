@@ -59,14 +59,14 @@ const Carousel: React.FC<CarouselProps> = ({
           {images.map((src, index) => (
             <div
               key={index}
-              className="flex-[0_0_100%] flex justify-center items-center"
+              className="flex-[0_0_100%] flex justify-center items-center w-full h-[800px]"
             >
               <Image
                 src={src}
                 alt={`Carousel image ${index + 1}`}
                 width={600}
                 height={600}
-                className="object-contain rounded-lg"
+                className="object-cover rounded-lg"
               />
             </div>
           ))}
