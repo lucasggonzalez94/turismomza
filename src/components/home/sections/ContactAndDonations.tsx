@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Input, Textarea } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import { SiMercadopago } from 'react-icons/si';
 import { PiPaypalLogoLight } from 'react-icons/pi';
+
+import ContactForm from '@/components/contact/ContactForm';
 
 const ContactAndDonations = () => {
   return (
@@ -20,35 +21,7 @@ const ContactAndDonations = () => {
             nos ayuda a crecer. ¡Gracias por tomarte el tiempo de compartir tus
             pensamientos con nosotros!
           </p>
-          <div className="flex flex-col gap-4 w-full">
-            <Input
-              type="text"
-              label="Nombre"
-              labelPlacement="outside"
-              placeholder="Ingresá tu nombre"
-            />
-            <Input
-              type="text"
-              label="Asunto"
-              labelPlacement="outside"
-              placeholder="Ingresá el asunto"
-            />
-            <Input
-              type="email"
-              label="Email"
-              labelPlacement="outside"
-              placeholder="Ingresá tu email"
-            />
-            <Textarea
-              label="Mensaje"
-              className="w-full"
-              labelPlacement="outside"
-              placeholder="Ingresá el mensaje"
-            />
-          </div>
-          <div className="flex justify-center lg:justify-end w-full">
-            <Button color="primary">Enviar</Button>
-          </div>
+          <ContactForm />
         </div>
       </div>
       <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
