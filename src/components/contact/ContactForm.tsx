@@ -45,12 +45,12 @@ const ContactForm = () => {
 
   const notifySuccess = (message?: string) =>
     toast.success(message ?? 'El email se envió correctamente.', {
-      position: 'top-right',
+      position: 'top-left',
       theme: 'dark',
     });
   const notifyError = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'top-right',
+      position: 'top-left',
       theme: 'dark',
     });
 
