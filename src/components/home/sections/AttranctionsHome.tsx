@@ -8,26 +8,14 @@ import AttractionCard from '@/components/ui/AttractionCard/AttractionCard';
 import { Attraction } from '@/interfaces/attraction';
 import { getAttractionsService } from '@/services/attractions/get-attractions';
 import useWindowSize from '@/hooks/useWindowSize';
+import CardSkeleton from '@/components/skeletons/CardSkeleton';
 
 const AttractionsHome = () => {
-  const [attractions, setAttractions] = useState([]);
-  const [pageSize, setPageSize] = useState(0);
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
 
   const { width } = useWindowSize();
-
-  useEffect(() => {
-    const getAttractions = async () => {
-      const { data } = await getAttractionsService({
-        page: 1,
-        pageSize: pageSize,
-      });
-      setAttractions(data);
-    };
-
-    if (pageSize > 0) {
-      getAttractions();
-    }
-  }, [pageSize]);
 
   useEffect(() => {
     if (width > 1280) {
@@ -38,6 +26,21 @@ const AttractionsHome = () => {
       setPageSize(6);
     }
   }, [width]);
+
+  useEffect(() => {
+    const getAttractions = async () => {
+      const { data } = await getAttractionsService({
+        page: 1,
+        pageSize: pageSize,
+      });
+      setAttractions(data);
+      setLoading(false);
+    };
+
+    if (pageSize > 0) {
+      getAttractions();
+    }
+  }, [pageSize]);
 
   return (
     <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
@@ -54,17 +57,14 @@ const AttractionsHome = () => {
         </Link>
       </div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
-        <>
-          {attractions?.map((attraction: Attraction) => (
-            <AttractionCard key={attraction?.id} attraction={attraction} />
-          ))}
-        </>
+        {loading
+          ? Array.from({ length: pageSize }).map((_, index) => (
+              <CardSkeleton key={index} />
+            ))
+          : attractions.map((attraction: Attraction) => (
+              <AttractionCard key={attraction?.id} attraction={attraction} />
+            ))}
       </div>
-      {/* <div className="w-full flex justify-center items-center mt-5">
-        <Button color="primary" as={Link} href="/attractions">
-          Ver todos
-        </Button>
-      </div> */}
     </div>
   );
 };
