@@ -3,7 +3,7 @@ import ContentLoader from 'react-content-loader';
 const CardSkeleton = (props: any) => (
   <ContentLoader
     speed={1}
-    viewBox="0 0 500 280"
+    viewBox="0 0 300 280"
     height={280}
     width={500}
     backgroundColor="#f3f3f3"

@@ -59,7 +59,7 @@ const AttractionsHome = () => {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
         {loading
           ? Array.from({ length: pageSize }).map((_, index) => (
-              <CardSkeleton key={index} />
+              <CardSkeleton key={index} className="w-full" />
             ))
           : attractions.map((attraction: Attraction) => (
               <AttractionCard key={attraction?.id} attraction={attraction} />
