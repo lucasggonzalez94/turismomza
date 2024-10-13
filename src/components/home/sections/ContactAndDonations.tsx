@@ -12,14 +12,13 @@ const ContactAndDonations = () => {
     >
       <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
         <div className="flex flex-col items-start justify-start gap-8 h-full">
-          <h2 className="font-bold text-3xl">Sugerencias</h2>
+          <h2 className="font-bold text-3xl">Contacto</h2>
           <p className="text-sm">
-            Tu feedback es muy importante para nosotros. Por favor, utiliza el
-            siguiente formulario para enviarnos tus sugerencias, críticas
-            constructivas o ideas para nuevas funcionalidades que te gustaría
-            ver en nuestro sitio. Queremos mejorar continuamente y tu opinión
-            nos ayuda a crecer. ¡Gracias por tomarte el tiempo de compartir tus
-            pensamientos con nosotros!
+            Utiliza el siguiente formulario para enviarnos tus dudas,
+            sugerencias, críticas constructivas o ideas para nuevas
+            funcionalidades que te gustaría ver en nuestro sitio. Queremos
+            mejorar continuamente y tu opinión nos ayuda a crecer. ¡Gracias por
+            tomarte el tiempo de compartir tus pensamientos con nosotros!
           </p>
           <ContactForm />
         </div>
