@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { IoChevronForwardSharp } from 'react-icons/io5';
+import { IoAlertCircle } from 'react-icons/io5';
 
 import AttractionCard from '@/components/ui/AttractionCard/AttractionCard';
 import { Attraction } from '@/interfaces/attraction';
@@ -13,6 +14,7 @@ import CardSkeleton from '@/components/skeletons/CardSkeleton';
 const AttractionsHome = () => {
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [pageSize, setPageSize] = useState(10);
+  const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const { width } = useWindowSize();
@@ -29,12 +31,17 @@ const AttractionsHome = () => {
 
   useEffect(() => {
     const getAttractions = async () => {
-      const { data } = await getAttractionsService({
-        page: 1,
-        pageSize: pageSize,
-      });
-      setAttractions(data);
-      setLoading(false);
+      try {
+        const { data } = await getAttractionsService({
+          page: 1,
+          pageSize: pageSize,
+        });
+        setAttractions(data);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+        setErrorService(true);
+      }
     };
 
     if (pageSize > 0) {
@@ -56,15 +63,24 @@ const AttractionsHome = () => {
           <IoChevronForwardSharp />
         </Link>
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
-        {loading
-          ? Array.from({ length: pageSize }).map((_, index) => (
-              <CardSkeleton key={index} className="w-full" />
-            ))
-          : attractions.map((attraction: Attraction) => (
-              <AttractionCard key={attraction?.id} attraction={attraction} />
-            ))}
-      </div>
+      {errorService ? (
+        <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
+          <IoAlertCircle size={30} className="text-red-600" />
+          <span>
+            Tuvimos un error al cargar los atractivos, te pedimos disculpas.
+          </span>
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
+          {loading
+            ? Array.from({ length: pageSize }).map((_, index) => (
+                <CardSkeleton key={index} className="w-full" />
+              ))
+            : attractions.map((attraction: Attraction) => (
+                <AttractionCard key={attraction?.id} attraction={attraction} />
+              ))}
+        </div>
+      )}
     </div>
   );
 };
