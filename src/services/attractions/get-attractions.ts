@@ -1,14 +1,19 @@
 'use server';
 
 import axiosInstance from '@/config/axiosInstance';
-import { Pagination } from '@/interfaces/pagination';
+import { ListAttractionsProps } from '@/interfaces/listAttractionsProps';
 
 export const getAttractionsService = async ({
+  filters,
   page = 1,
   pageSize = 10,
-}: Pagination): Promise<any> => {
-  const response = await axiosInstance.get(
-    `/attractions?page=${page}&pageSize=${pageSize}`,
-  );
+}: ListAttractionsProps): Promise<any> => {
+  const response = await axiosInstance.get(`/attractions`, {
+    params: {
+      ...filters,
+      page,
+      pageSize,
+    },
+  });
   return response?.data;
 };

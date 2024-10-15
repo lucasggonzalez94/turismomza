@@ -8,6 +8,7 @@ import CardSkeleton from '../skeletons/CardSkeleton';
 import AttractionCard from '../ui/AttractionCard/AttractionCard';
 import { IoAlertCircle } from 'react-icons/io5';
 import { Pagination } from '@nextui-org/react';
+import { useStore } from '@/store/store';
 
 const AttractionsGrid = () => {
   const [attractions, setAttractions] = useState<Attraction[]>([]);
@@ -17,6 +18,7 @@ const AttractionsGrid = () => {
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const filters = useStore((state) => state.filters);
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const AttractionsGrid = () => {
     const getAttractions = async () => {
       try {
         const { data, totalPages } = await getAttractionsService({
+          filters,
           page: currentPage,
           pageSize: pageSize,
         });
@@ -46,7 +49,7 @@ const AttractionsGrid = () => {
     if (pageSize > 0) {
       getAttractions();
     }
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, filters]);
 
   return (
     <div className="flex flex-col gap-8 items-center">

@@ -14,6 +14,8 @@ import {
 } from '@nextui-org/react';
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
+import { FC } from 'react';
+import { useStore } from '@/store/store';
 
 const schema = yup
   .object({
@@ -68,14 +70,7 @@ const CATEGORIES = [
 ];
 
 const FiltersForm = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm({
+  const { register, handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       priceRange: [100, 500],
@@ -85,10 +80,18 @@ const FiltersForm = () => {
 
   const priceRange = watch('priceRange') ?? [100, 500];
 
+  const setFilters = useStore((state) => state.setFilters);
+
   const handleFilter = async (data: any) => {
-    debugger;
-    console.log(errors);
-    console.log(data);
+    const { priceRange, ...restData } = data;
+    const filteredData = {
+      ...restData,
+      categories: data.categories || [],
+      rating: data.rating || [],
+      priceMin: priceRange[0],
+      priceMax: priceRange[1],
+    };
+    setFilters(filteredData);
   };
 
   return (
@@ -105,20 +108,31 @@ const FiltersForm = () => {
           labelPlacement="outside"
           {...register('title')}
         />
-        <Select
-          label="Categorías"
-          labelPlacement="outside"
-          placeholder="Seleccioná las categorías"
-          selectionMode="multiple"
-          className="w-full"
-          {...register('categories')}
-        >
-          {CATEGORIES.map((category) => (
-            <SelectItem key={category.key} value={category.key}>
-              {category.label}
-            </SelectItem>
-          ))}
-        </Select>
+        <Controller
+          name="categories"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select
+              label="Categorías"
+              labelPlacement="outside"
+              placeholder="Seleccioná las categorías"
+              selectionMode="multiple"
+              className="w-full"
+              value={
+                (value?.filter((val) => val !== undefined) as string[]) || []
+              }
+              onChange={(e) => {
+                onChange(e.target.value.split(','));
+              }}
+            >
+              {CATEGORIES.map((category) => (
+                <SelectItem key={category.key} value={category.key}>
+                  {category.label}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
+        />
         <div>
           <h3 className="text-sm mb-3">Precio</h3>
           <div className="flex gap-2 justify-between items-center">
