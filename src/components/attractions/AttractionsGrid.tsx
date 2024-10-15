@@ -76,6 +76,7 @@ const AttractionsGrid = () => {
         initialPage={1}
         page={currentPage}
         onChange={setCurrentPage}
+        showControls
       />
     </div>
   );
