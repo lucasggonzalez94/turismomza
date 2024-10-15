@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
 import DropdownSearch from '../DropdownSearch/DropdownSearch';
@@ -11,6 +11,7 @@ import Link from 'next/link';
 import useAuth from '@/hooks/useAuth';
 import { useStore } from '@/store/store';
 import LinkToSection from '../LinkToSection/LinkToSection';
+import { usePathname } from 'next/navigation';
 
 const Topbar = () => {
   const notifications = [
@@ -22,6 +23,9 @@ const Topbar = () => {
 
   const verified = useAuth();
   const user = useStore((state) => state.user);
+  const pathname = usePathname();
+
+  const [black, setBlack] = useState(false);
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
@@ -35,8 +39,18 @@ const Topbar = () => {
     setOpenDropdownIndex(null);
   };
 
+  useEffect(() => {
+    if (pathname === '/') {
+      setBlack(false);
+    } else {
+      setBlack(true);
+    }
+  }, [pathname]);
+
   return (
-    <div className="grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 absolute w-full z-20">
+    <div
+      className={`grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full z-20 ${black ? 'relative bg-black' : 'absolute'}`}
+    >
       <Link href="/" className="col-span-5">
         <Image
           src="/images/logoTurismomza.png"

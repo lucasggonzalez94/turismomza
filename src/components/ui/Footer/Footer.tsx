@@ -14,10 +14,10 @@ const Footer = () => {
         ></Image>
       </Link>
       <nav className="flex flex-col items-end lg:flex-row gap-4 lg:items-center lg:justify-end text-end text-sm text-gray-300 md:text-md">
-        <Link href="about">FAQs</Link>
-        <Link href="contact">CONTACTO</Link>
-        <Link href="contact">SOBRE NOSOTROS</Link>
-        <Link href="attractions">TÉRMINOS Y CONDICIONES</Link>
+        <Link href="/faq">FAQs</Link>
+        <Link href="/">CONTACTO</Link>
+        <Link href="/about">SOBRE NOSOTROS</Link>
+        <Link href="/tyc">TÉRMINOS Y CONDICIONES</Link>
       </nav>
     </div>
   );
