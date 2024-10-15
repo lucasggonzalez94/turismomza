@@ -85,7 +85,7 @@ const Topbar = () => {
           <Button
             as={Link}
             color="secondary"
-            className="text-medium"
+            className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
             href="/create"
           >
             Publicar

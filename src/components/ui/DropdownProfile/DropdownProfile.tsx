@@ -64,7 +64,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       {
         id: 'help',
         text: 'Ayuda',
-        onClick: () => handleNavigation('/help'),
+        onClick: () => handleNavigation('/faqs'),
       },
     ];
 
@@ -96,7 +96,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {
             id: 'help',
             text: 'Ayuda',
-            onClick: () => handleNavigation('/help'),
+            onClick: () => handleNavigation('/faqs'),
             divider: true,
           },
           {
@@ -127,7 +127,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {
             id: 'help',
             text: 'Ayuda',
-            onClick: () => handleNavigation('/help'),
+            onClick: () => handleNavigation('/faqs'),
             divider: true,
           },
           {
