@@ -15,6 +15,7 @@ import {
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
 import { useStore } from '@/store/store';
+import { useEffect } from 'react';
 
 const schema = yup
   .object({
@@ -27,43 +28,43 @@ const schema = yup
 
 const CATEGORIES = [
   {
-    key: 'nature',
+    key: 'Naturaleza',
     label: 'Naturaleza',
   },
   {
-    key: 'enotourism',
+    key: 'Enoturismo',
     label: 'Enoturismo',
   },
   {
-    key: 'adventure',
+    key: 'Aventura',
     label: 'Aventura',
   },
   {
-    key: 'history',
+    key: 'Historia',
     label: 'Historia',
   },
   {
-    key: 'relaxation',
+    key: 'Relajación',
     label: 'Relajación',
   },
   {
-    key: 'culture',
+    key: 'Cultura',
     label: 'Cultura',
   },
   {
-    key: 'gastronomy',
+    key: 'Gastronomía',
     label: 'Gastronomía',
   },
   {
-    key: 'sports',
+    key: 'Deportes',
     label: 'Deportes',
   },
   {
-    key: 'family',
+    key: 'Familia',
     label: 'Familia',
   },
   {
-    key: 'rural_tourism',
+    key: 'Turismo Rural',
     label: 'Turismo Rural',
   },
 ];
@@ -71,7 +72,7 @@ const CATEGORIES = [
 const FiltersForm = () => {
   const { setFilters, prices } = useStore((state) => state);
 
-  const { register, handleSubmit, control, setValue, watch } = useForm({
+  const { register, handleSubmit, control, setValue, watch, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       priceRange: [prices?.minPrice, prices?.maxPrice],
@@ -95,6 +96,10 @@ const FiltersForm = () => {
     };
     setFilters(filteredData);
   };
+
+  useEffect(() => {
+    setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
+  }, [prices, setValue]);
 
   return (
     <form
@@ -248,9 +253,21 @@ const FiltersForm = () => {
             )}
           />
         </div>
-        <Button type="submit" color="primary" className="mt-4">
-          Aplicar
-        </Button>
+        <div className="mt-4 flex flex-col w-full gap-4">
+          <Button type="submit" color="primary">
+            Aplicar
+          </Button>
+          <Button
+            color="primary"
+            variant="bordered"
+            onClick={() => {
+              reset();
+              setFilters(null);
+            }}
+          >
+            Limpiar
+          </Button>
+        </div>
       </div>
     </form>
   );
