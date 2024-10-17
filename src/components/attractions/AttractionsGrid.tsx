@@ -61,7 +61,7 @@ const AttractionsGrid = () => {
   }, [currentPage, pageSize, filters, user]);
 
   return (
-    <div className="flex flex-col gap-8 items-center">
+    <div className="flex flex-col gap-8 items-center w-full">
       {errorService ? (
         <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
           <IoAlertCircle size={30} className="text-red-600" />
@@ -80,14 +80,16 @@ const AttractionsGrid = () => {
               ))}
         </div>
       )}
-      <Pagination
-        total={totalPages || 1}
-        initialPage={1}
-        page={currentPage}
-        onChange={setCurrentPage}
-        color="primary"
-        showControls
-      />
+      {!errorService && (
+        <Pagination
+          total={totalPages || 1}
+          initialPage={1}
+          page={currentPage}
+          onChange={setCurrentPage}
+          color="primary"
+          showControls
+        />
+      )}
     </div>
   );
 };
