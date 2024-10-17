@@ -57,15 +57,17 @@ const Topbar = () => {
     <div
       className={`grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full z-20 ${black ? 'relative bg-black' : 'absolute'}`}
     >
-      <Link href="/" className="col-span-5">
-        <Image
-          src="/images/logoTurismomza.png"
-          alt="Logo turismo mendoza"
-          width={250}
-          height={100}
-          priority
-        ></Image>
-      </Link>
+      <div className="col-span-5 flex">
+        <Link href="/">
+          <Image
+            src="/images/logoTurismomza.png"
+            alt="Logo turismo mendoza"
+            width={250}
+            height={100}
+            priority
+          ></Image>
+        </Link>
+      </div>
 
       <div className="hidden md:block">
         <div className="flex items-center justify-center">
