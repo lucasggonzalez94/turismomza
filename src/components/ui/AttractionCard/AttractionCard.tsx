@@ -22,6 +22,8 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
     comments,
     isFavorite,
     advertisements,
+    price,
+    currencyPrice,
   } = attraction;
 
   const averageRating = calculateAverageRating(comments);
@@ -40,6 +42,14 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
     e.stopPropagation();
     setFavorite((prev) => !prev);
     console.log('Favorito clicado');
+  };
+
+  const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
+    const formatter = new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: currency === 'ars' ? 'ARS' : 'USD',
+    });
+    return formatter.format(price);
   };
 
   return (
@@ -91,7 +101,11 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
         <div className="flex flex-col w-full">
           <div className="flex justify-between items-center gap-4 text-lg md:text-sm lg:text-md 2xl:text-lg">
             <h3 className="font-bold line-clamp-1">{title}</h3>
-            <span className="font-bold text-gray-500 text-sm">1.3Km</span>
+            {price && currencyPrice ? (
+              <span className="font-bold text-gray-500 text-sm">
+                {formatPrice(price, currencyPrice)}
+              </span>
+            ) : null}
           </div>
           <span className="text-tiny text-gray-400">{category}</span>
         </div>

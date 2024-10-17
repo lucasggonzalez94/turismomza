@@ -16,7 +16,7 @@ export interface Attraction {
   timeOpen: string | null;
   timeClose: string | null;
   price: number | null;
-  currencyPrice: string | null;
+  currencyPrice: 'ars' | 'usd' | null;
   advertisements?: Advertisement[];
   isFavorite: boolean;
   images: Image[];
