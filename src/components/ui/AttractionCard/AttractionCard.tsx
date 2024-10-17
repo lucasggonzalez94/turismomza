@@ -63,6 +63,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
       await addFavoriteService(id);
     } catch {
       setFavorite(favorite);
+      notify();
     }
   };
 
