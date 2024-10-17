@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,8 +16,7 @@ import {
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
 import { useStore } from '@/store/store';
-import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const schema = yup
   .object({
@@ -71,19 +71,19 @@ const CATEGORIES = [
 ];
 
 const FiltersForm = () => {
-  const { setFilters, prices } = useStore((state) => state);
+  const { prices, setFilters } = useStore((state) => state);
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const search = searchParams.get('search');
+  const searchQuery = searchParams.get('search');
 
-  const { register, handleSubmit, control, setValue, watch, reset, getValues } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues: {
-        priceRange: [prices?.minPrice, prices?.maxPrice],
-        rating: [],
-      },
-    });
+  const { register, handleSubmit, control, setValue, watch, reset } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      priceRange: [prices?.minPrice, prices?.maxPrice],
+      rating: [],
+    },
+  });
 
   const priceRange = watch('priceRange') ?? [
     prices?.minPrice,
@@ -100,19 +100,26 @@ const FiltersForm = () => {
       priceMax: priceRange[1],
     };
     setFilters(filteredData);
+
+    if (filteredData.title) {
+      router.push(`/attractions?search=${filteredData.title}`);
+    } else {
+      router.push('/attractions');
+    }
   };
 
   useEffect(() => {
     setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
-  }, [prices, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prices]);
 
   useEffect(() => {
-    if (search) {
-      setValue('title', search);
-      handleFilter(getValues());
+    if (searchQuery) {
+      setValue('title', searchQuery);
+      setFilters({ title: searchQuery });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [searchQuery]);
 
   return (
     <form
@@ -272,7 +279,7 @@ const FiltersForm = () => {
           </Button>
           <Button
             color="primary"
-            variant="bordered"
+            variant="ghost"
             onClick={() => {
               reset();
               setFilters(null);
