@@ -81,10 +81,11 @@ const AttractionsGrid = () => {
         </div>
       )}
       <Pagination
-        total={totalPages}
+        total={totalPages || 1}
         initialPage={1}
         page={currentPage}
         onChange={setCurrentPage}
+        color="primary"
         showControls
       />
     </div>
