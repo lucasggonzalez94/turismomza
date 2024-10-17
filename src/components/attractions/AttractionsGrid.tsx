@@ -18,7 +18,7 @@ const AttractionsGrid = () => {
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const { filters, setPrices } = useStore((state) => state);
+  const { filters, setPrices, user } = useStore((state) => state);
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -33,11 +33,14 @@ const AttractionsGrid = () => {
     const getAttractions = async () => {
       try {
         const { data, totalPages, minPrice, maxPrice } =
-          await getAttractionsService({
-            filters,
-            page: currentPage,
-            pageSize: pageSize,
-          });
+          await getAttractionsService(
+            {
+              filters,
+              page: currentPage,
+              pageSize: pageSize,
+            },
+            user?.id,
+          );
         setAttractions(data);
         setTotalPages(totalPages);
         setPrices({
@@ -54,7 +57,8 @@ const AttractionsGrid = () => {
     if (pageSize > 0) {
       getAttractions();
     }
-  }, [currentPage, pageSize, filters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, pageSize, filters, user]);
 
   return (
     <div className="flex flex-col gap-8 items-center">

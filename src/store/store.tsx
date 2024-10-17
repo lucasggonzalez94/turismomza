@@ -12,6 +12,8 @@ interface State {
   setFilters: (filters: Filters | null) => void;
   prices: Price;
   setPrices: (prices: Price) => void;
+  lastPath: string;
+  setLastPath: (path: string) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -24,4 +26,6 @@ export const useStore = create<State>((set) => ({
     maxPrice: 0,
   },
   setPrices: (prices) => set(() => ({ prices })),
+  lastPath: '/',
+  setLastPath: (path) => set(() => ({ lastPath: path })),
 }));

@@ -1,11 +1,15 @@
 'use client';
 
+import { FC, useEffect, useState } from 'react';
+import useAuth from '@/hooks/useAuth';
 import { Attraction } from '@/interfaces/attraction';
+import { addFavoriteService } from '@/services/attractions/add-favorite';
+import { useStore } from '@/store/store';
 import { calculateAverageRating } from '@/utils/helpers';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { FC, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
 
@@ -15,6 +19,7 @@ interface IPropsAttractionCard {
 
 const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
   const {
+    id,
     title,
     slug,
     category,
@@ -29,19 +34,36 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
   const averageRating = calculateAverageRating(comments);
   const imageCard = images?.length ? images[0]?.url : null;
 
+  const verified = useAuth();
+  const pathname = usePathname();
   const router = useRouter();
+  const setLastPath = useStore((state) => state.setLastPath);
 
-  const [favorite, setFavorite] = useState(isFavorite);
+  const notify = (message?: string) =>
+    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
+      position: 'bottom-right',
+      theme: 'dark',
+    });
+
+  const [favorite, setFavorite] = useState(false);
 
   const handleNavigation = (path: string) => {
     router.push(path);
   };
 
-  const handleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setFavorite((prev) => !prev);
-    console.log('Favorito clicado');
+    if (!verified) {
+      setLastPath(pathname);
+      handleNavigation('/auth/login');
+      return;
+    }
+    try {
+      setFavorite((prev) => !prev);
+      await addFavoriteService(id);
+    } catch {
+      setFavorite(favorite);
+    }
   };
 
   const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
@@ -51,6 +73,10 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
     });
     return formatter.format(price);
   };
+
+  useEffect(() => {
+    setFavorite(isFavorite);
+  }, [isFavorite]);
 
   return (
     <div
@@ -132,6 +158,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
           </div>
         </div>
       </div>
+      <ToastContainer autoClose={10000} />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useStore } from '@/store/store';
 
 const schema = yup
   .object({
@@ -27,6 +28,8 @@ const schema = yup
 
 const LoginForm = () => {
   const router = useRouter();
+  const lastPath = useStore((state) => state.lastPath);
+
   const {
     register,
     handleSubmit,
@@ -52,7 +55,7 @@ const LoginForm = () => {
     try {
       setLoading(true);
       await login(data);
-      handleNavigation('/');
+      handleNavigation(lastPath);
     } catch (error: any) {
       setLoading(false);
       if (error.status === 401) {
