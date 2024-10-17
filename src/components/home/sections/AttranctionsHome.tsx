@@ -10,6 +10,7 @@ import { Attraction } from '@/interfaces/attraction';
 import { getAttractionsService } from '@/services/attractions/get-attractions';
 import useWindowSize from '@/hooks/useWindowSize';
 import CardSkeleton from '@/components/skeletons/CardSkeleton';
+import { useStore } from '@/store/store';
 
 const AttractionsHome = () => {
   const [attractions, setAttractions] = useState<Attraction[]>([]);
@@ -18,6 +19,7 @@ const AttractionsHome = () => {
   const [loading, setLoading] = useState(true);
 
   const { width } = useWindowSize();
+  const user = useStore((state) => state.user);
 
   useEffect(() => {
     if (width > 1280) {
@@ -32,10 +34,13 @@ const AttractionsHome = () => {
   useEffect(() => {
     const getAttractions = async () => {
       try {
-        const { data } = await getAttractionsService({
-          page: 1,
-          pageSize: pageSize,
-        });
+        const { data } = await getAttractionsService(
+          {
+            page: 1,
+            pageSize: pageSize,
+          },
+          user?.id,
+        );
         setAttractions(data);
         setLoading(false);
       } catch {
@@ -47,7 +52,7 @@ const AttractionsHome = () => {
     if (pageSize > 0) {
       getAttractions();
     }
-  }, [pageSize]);
+  }, [pageSize, user]);
 
   return (
     <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
