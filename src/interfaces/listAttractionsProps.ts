@@ -1,7 +1,7 @@
 import { Filters } from './filters';
 
 export interface ListAttractionsProps {
-  filters: Filters | null;
+  filters?: Filters | null;
   page?: number;
   pageSize?: number;
 }

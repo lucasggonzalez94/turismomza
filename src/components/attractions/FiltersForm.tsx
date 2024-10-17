@@ -16,6 +16,7 @@ import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
 import { useStore } from '@/store/store';
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const schema = yup
   .object({
@@ -71,14 +72,18 @@ const CATEGORIES = [
 
 const FiltersForm = () => {
   const { setFilters, prices } = useStore((state) => state);
+  const searchParams = useSearchParams();
 
-  const { register, handleSubmit, control, setValue, watch, reset } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      priceRange: [prices?.minPrice, prices?.maxPrice],
-      rating: [],
-    },
-  });
+  const search = searchParams.get('search');
+
+  const { register, handleSubmit, control, setValue, watch, reset, getValues } =
+    useForm({
+      resolver: yupResolver(schema),
+      defaultValues: {
+        priceRange: [prices?.minPrice, prices?.maxPrice],
+        rating: [],
+      },
+    });
 
   const priceRange = watch('priceRange') ?? [
     prices?.minPrice,
@@ -100,6 +105,14 @@ const FiltersForm = () => {
   useEffect(() => {
     setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
   }, [prices, setValue]);
+
+  useEffect(() => {
+    if (search) {
+      setValue('title', search);
+      handleFilter(getValues());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   return (
     <form

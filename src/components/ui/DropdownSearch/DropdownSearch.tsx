@@ -1,7 +1,10 @@
+'use client';
+
 import { Input } from '@nextui-org/react';
 import { IoSearch } from 'react-icons/io5';
 import DropdownButton from '../DropdownButton/DropdownButton';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface IPropsDropdownSearch {
   isOpen: boolean;
@@ -14,6 +17,10 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
   onOpen,
   onClose,
 }) => {
+  const router = useRouter();
+
+  const [searchValue, setSearchValue] = useState('');
+
   return (
     <DropdownButton
       icon={<IoSearch size={25} color="#fff" />}
@@ -33,6 +40,13 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
           startContent={
             <IoSearch className="text-gray-700 pointer-events-none flex-shrink-0" />
           }
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={({ key }) => {
+            if (key === 'Enter') {
+              router.push(`/attractions?search=${searchValue}`);
+            }
+          }}
         />
       </div>
     </DropdownButton>

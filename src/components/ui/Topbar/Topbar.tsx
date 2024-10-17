@@ -26,6 +26,7 @@ const Topbar = () => {
   const pathname = usePathname();
 
   const [black, setBlack] = useState(false);
+  const [hideSearch, setHideSearch] = useState(false);
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
@@ -45,6 +46,11 @@ const Topbar = () => {
     } else {
       setBlack(true);
     }
+    if (pathname === '/attractions') {
+      setHideSearch(true);
+    } else {
+      setHideSearch(false);
+    }
   }, [pathname]);
 
   return (
@@ -63,11 +69,13 @@ const Topbar = () => {
 
       <div className="hidden md:block">
         <div className="flex items-center justify-center">
-          <DropdownSearch
-            isOpen={openDropdownIndex === 0}
-            onOpen={() => handleOpenDropdown(0)}
-            onClose={handleCloseDropdown}
-          />
+          {!hideSearch && (
+            <DropdownSearch
+              isOpen={openDropdownIndex === 0}
+              onOpen={() => handleOpenDropdown(0)}
+              onClose={handleCloseDropdown}
+            />
+          )}
         </div>
       </div>
 
