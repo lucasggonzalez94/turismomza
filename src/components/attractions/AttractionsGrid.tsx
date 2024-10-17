@@ -18,7 +18,7 @@ const AttractionsGrid = () => {
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const filters = useStore((state) => state.filters);
+  const { filters, setPrices } = useStore((state) => state);
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -32,13 +32,18 @@ const AttractionsGrid = () => {
   useEffect(() => {
     const getAttractions = async () => {
       try {
-        const { data, totalPages } = await getAttractionsService({
-          filters,
-          page: currentPage,
-          pageSize: pageSize,
-        });
+        const { data, totalPages, minPrice, maxPrice } =
+          await getAttractionsService({
+            filters,
+            page: currentPage,
+            pageSize: pageSize,
+          });
         setAttractions(data);
         setTotalPages(totalPages);
+        setPrices({
+          minPrice,
+          maxPrice,
+        });
         setLoading(false);
       } catch {
         setLoading(false);

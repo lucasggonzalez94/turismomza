@@ -14,7 +14,6 @@ import {
 } from '@nextui-org/react';
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
-import { FC } from 'react';
 import { useStore } from '@/store/store';
 
 const schema = yup
@@ -70,17 +69,20 @@ const CATEGORIES = [
 ];
 
 const FiltersForm = () => {
+  const { setFilters, prices } = useStore((state) => state);
+
   const { register, handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      priceRange: [100, 500],
+      priceRange: [prices?.minPrice, prices?.maxPrice],
       rating: [],
     },
   });
 
-  const priceRange = watch('priceRange') ?? [100, 500];
-
-  const setFilters = useStore((state) => state.setFilters);
+  const priceRange = watch('priceRange') ?? [
+    prices?.minPrice,
+    prices?.maxPrice,
+  ];
 
   const handleFilter = async (data: any) => {
     const { priceRange, ...restData } = data;
@@ -168,8 +170,8 @@ const FiltersForm = () => {
               <Slider
                 step={10}
                 size="sm"
-                minValue={0}
-                maxValue={1000}
+                minValue={prices?.minPrice}
+                maxValue={prices?.maxPrice}
                 value={value as number[]}
                 onChange={(newValue) => {
                   onChange(newValue);
