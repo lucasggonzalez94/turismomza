@@ -75,6 +75,10 @@ const AttractionsHome = () => {
             Tuvimos un error al cargar los atractivos, te pedimos disculpas.
           </span>
         </div>
+      ) : !attractions.length ? (
+        <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
+          <span>Todavía no hay atractivos creados.</span>
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
           {loading

@@ -1,8 +1,7 @@
 'use client';
 
-import { FC, ReactNode, useEffect, useRef } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { CSSTransition } from 'react-transition-group';
 
 interface IPropSidedrawer {
   title?: string;
@@ -19,63 +18,57 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const drawerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(isOpen);
+
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    if (target.id === 'backdrop') {
+      setIsOpen(false);
+    }
+  };
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
     if (isOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
+      setIsVisible(true);
+    } else {
+      setTimeout(() => setIsVisible(false), 300); // Tiempo de la animación
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [isOpen, setIsOpen]);
+  }, [isOpen]);
 
   return (
-    <CSSTransition in={isOpen} timeout={300} classNames="drawer" unmountOnExit>
+    <>
+      {isVisible && (
+        <div
+          id="backdrop"
+          className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-all duration-300 ${
+            isOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          onClick={handleOutsideClick}
+        />
+      )}
       <div
-        className={`fixed top-0 ${
-          side === 'left' ? 'left-0' : 'right-0'
-        } h-full w-full sm:w-96 bg-white shadow-2xl z-50 transition-transform duration-300 ease-in-out transform ${
+        className={`fixed top-0 h-full bg-white shadow-lg z-50 transition-all duration-300 ${
+          side === 'right' ? 'right-0' : 'left-0'
+        } ${
           isOpen
             ? 'translate-x-0'
-            : side === 'left'
-              ? '-translate-x-full'
-              : 'translate-x-full'
+            : side === 'right'
+              ? 'translate-x-full'
+              : '-translate-x-full'
         }`}
-        ref={drawerRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="drawer-title"
       >
-        <div className="flex flex-col h-full">
-          {title ? (
-            <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h2 id="drawer-title" className="text-xl font-semibold">
-                {title}
-              </h2>
-            </div>
-          ) : null}
+        <div className="flex justify-between items-center">
+          {title && <h2 className="text-lg font-semibold">{title}</h2>}
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1 absolute top-4 right-4"
-            aria-label="Close sidedrawer"
+            className="text-xl absolute top-4 right-4"
           >
             <IoMdClose size={24} />
           </button>
-          <div className="flex-grow overflow-y-auto p-4">{children}</div>
         </div>
+        <div className="p-4">{children}</div>
       </div>
-    </CSSTransition>
+    </>
   );
 };
 

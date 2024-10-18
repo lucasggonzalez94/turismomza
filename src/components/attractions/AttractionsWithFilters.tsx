@@ -106,6 +106,10 @@ const AttractionsWithFilters = () => {
                   disculpas.
                 </span>
               </div>
+            ) : !attractions.length ? (
+              <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
+                <span>Todavía no hay atractivos creados.</span>
+              </div>
             ) : (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {loading
@@ -133,9 +137,11 @@ const AttractionsWithFilters = () => {
           </div>
         </div>
       </div>
-      <Sidedrawer isOpen={openSidedrawer} setIsOpen={setOpenSidedrawer}>
-        <FiltersForm />
-      </Sidedrawer>
+      {hideFilters && (
+        <Sidedrawer isOpen={openSidedrawer} setIsOpen={setOpenSidedrawer}>
+          <FiltersForm />
+        </Sidedrawer>
+      )}
     </>
   );
 };
