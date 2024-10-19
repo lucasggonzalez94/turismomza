@@ -1,5 +1,5 @@
 import ButtonsHeaderAttraction from '@/components/attractions/ButtonsHeaderAttraction';
-import CommentsAttraction from '@/components/attractions/CommentsAttraction';
+import { InfiniteMovingCards } from '@/components/attractions/InfiniteMovingCards';
 import MapRoute from '@/components/attractions/MapRoute';
 import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
@@ -40,6 +40,117 @@ export default async function AttractionPage({ params }: Props) {
       ),
     },
   ];
+
+  const commentsExample = [
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: {
+        user: {
+          name: 'Lucas Gonzalez',
+        },
+      },
+    },
+    {
+      user: {
+        name: 'Lucas Gonzalez',
+      },
+      creation_date: '19/10/2024',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      rating: 4.5,
+      likes: [
+        {
+          user: {
+            name: 'Lucas Gonzalez',
+          },
+        },
+      ],
+    },
+  ];
+
+  const formattedComments = commentsExample?.map((comment) => ({
+    userName: comment.user.name,
+    dateAdded: comment.creation_date.toString(),
+    content: comment.content,
+    rating: comment.rating,
+    likes: comment.likes,
+  }));
 
   return (
     <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
@@ -124,7 +235,10 @@ export default async function AttractionPage({ params }: Props) {
           <AccordionCustom items={servicesAccordion} bold />
         </div>
       ) : null}
-      <CommentsAttraction />
+      <div className="w-full flex flex-col gap-2">
+        <h3 className="font-bold ml-1">Comentarios</h3>
+        <InfiniteMovingCards speed="normal" />
+      </div>
     </div>
   );
 }
