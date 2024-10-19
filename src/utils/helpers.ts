@@ -16,3 +16,11 @@ export const calculateAverageRating = (comments: Comment[]) => {
 
   return averageRating;
 };
+
+export const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
+  const formatter = new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: currency === 'ars' ? 'ARS' : 'USD',
+  });
+  return formatter.format(price);
+};
