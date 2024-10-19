@@ -3,7 +3,6 @@ import Maps from '@/components/attractions/Maps';
 import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
-import { Accordion, AccordionItem } from '@nextui-org/react';
 import Image from 'next/image';
 import { IoStar } from 'react-icons/io5';
 
