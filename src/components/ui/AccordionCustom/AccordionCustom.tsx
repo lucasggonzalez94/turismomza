@@ -1,12 +1,12 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/react';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 interface IPropsAccordion {
   items: {
     title: string;
-    content: string;
+    content: string | ReactNode;
   }[];
 }
 

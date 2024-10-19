@@ -1,7 +1,9 @@
 import ButtonsHeaderAttraction from '@/components/attractions/ButtonsHeaderAttraction';
 import Maps from '@/components/attractions/Maps';
+import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
+import { Accordion, AccordionItem } from '@nextui-org/react';
 import Image from 'next/image';
 import { IoStar } from 'react-icons/io5';
 
@@ -16,9 +18,28 @@ export default async function AttractionPage({ params }: Props) {
 
   const attraction = await getAttractionBySlugService(slug);
 
-  const { title, category, price, currencyPrice, comments, images } =
-    attraction;
+  const {
+    title,
+    category,
+    price,
+    currencyPrice,
+    comments,
+    images,
+    description,
+    services,
+  } = attraction;
   const averageRating = calculateAverageRating(comments);
+
+  const servicesAccordion = [
+    {
+      title: 'Servicios',
+      content: (
+        <ul className="list-disc list-inside">
+          {services?.map((service, index) => <li key={index}>{service}</li>)}
+        </ul>
+      ),
+    },
+  ];
 
   return (
     <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
@@ -97,6 +118,12 @@ export default async function AttractionPage({ params }: Props) {
           <Maps />
         </div>
       </div>
+      <p className="border-b border-gray-300 pb-4">{description}</p>
+      {services?.length ? (
+        <div className="border-b border-gray-300 pb-4">
+          <AccordionCustom items={servicesAccordion} />
+        </div>
+      ) : null}
     </div>
   );
 }
