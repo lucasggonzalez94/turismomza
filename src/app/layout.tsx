@@ -4,7 +4,6 @@ import './globals.css';
 import './fonts.css';
 
 import { NextUIProvider } from '@nextui-org/react';
-import Providers from '@/store/Providers';
 
 export const metadata: Metadata = {
   title: 'Turismomza | Home',
@@ -19,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
       <body className={`${rootFont.className} antialiased bg-gray-300`}>
-        <NextUIProvider>
-          <Providers>{children}</Providers>
-        </NextUIProvider>
+        <NextUIProvider>{children}</NextUIProvider>
       </body>
     </html>
   );

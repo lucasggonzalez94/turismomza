@@ -8,11 +8,16 @@ interface IPropsAccordion {
     title: string;
     content: string | ReactNode;
   }[];
+  bold?: boolean;
 }
 
-const AccordionCustom: FC<IPropsAccordion> = ({ items }) => {
+const AccordionCustom: FC<IPropsAccordion> = ({ items, bold }) => {
   return (
-    <Accordion>
+    <Accordion
+      itemClasses={{
+        title: bold && 'font-bold text-base',
+      }}
+    >
       {items.map((item, i) => (
         <AccordionItem
           key={i?.toString()}

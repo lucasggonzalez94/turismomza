@@ -1,5 +1,6 @@
 import ButtonsHeaderAttraction from '@/components/attractions/ButtonsHeaderAttraction';
-import Maps from '@/components/attractions/Maps';
+import CommentsAttraction from '@/components/attractions/CommentsAttraction';
+import MapRoute from '@/components/attractions/MapRoute';
 import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
@@ -114,15 +115,16 @@ export default async function AttractionPage({ params }: Props) {
             ))}
         </div>
         <div className="w-1/3">
-          <Maps />
+          <MapRoute />
         </div>
       </div>
       <p className="border-b border-gray-300 pb-4">{description}</p>
       {services?.length ? (
         <div className="border-b border-gray-300 pb-4">
-          <AccordionCustom items={servicesAccordion} />
+          <AccordionCustom items={servicesAccordion} bold />
         </div>
       ) : null}
+      <CommentsAttraction />
     </div>
   );
 }

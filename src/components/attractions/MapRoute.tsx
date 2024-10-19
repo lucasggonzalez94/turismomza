@@ -20,7 +20,7 @@ const containerStyle = {
 
 const destination = { lat: -32.88930366016088, lng: -68.87073591419724 };
 
-const Maps = () => {
+const MapRoute = () => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [directionsResponse, setDirectionsResponse] =
     useState<google.maps.DirectionsResult | null>(null);
@@ -102,4 +102,4 @@ const Maps = () => {
   );
 };
 
-export default Maps;
+export default MapRoute;
