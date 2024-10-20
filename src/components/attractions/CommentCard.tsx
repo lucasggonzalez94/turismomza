@@ -1,6 +1,12 @@
-import { Button } from '@nextui-org/react';
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@nextui-org/react';
 import { FiThumbsUp } from 'react-icons/fi';
-import { IoPerson, IoStar } from 'react-icons/io5';
+import { IoEllipsisHorizontal, IoPerson, IoStar } from 'react-icons/io5';
 
 const CommentCard = () => {
   return (
@@ -34,16 +40,24 @@ const CommentCard = () => {
         occaecat cupidatat non proident, sunt in culpa qui officia deserunt
         mollit anim id est laborum.
       </p>
-      <div className="w-full flex justify-end gap-2 items-center">
-        <span className="text-sm text-gray-400">2</span>
-        <Button
-          isIconOnly
-          color="primary"
-          variant="ghost"
-          className="rounded-full"
-        >
-          <FiThumbsUp size={25} className="mb-1" />
-        </Button>
+      <div className="flex gap-3 justify-end">
+        <div className="flex gap-2 items-center">
+          <span className="text-sm text-gray-400">2</span>
+          <FiThumbsUp
+            size={20}
+            className="mb-1 hover:text-[#E95718] cursor-pointer"
+          />
+        </div>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button variant="light" isIconOnly>
+              <IoEllipsisHorizontal />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Actions comment">
+            <DropdownItem key="report">Reportar</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
     </div>
   );

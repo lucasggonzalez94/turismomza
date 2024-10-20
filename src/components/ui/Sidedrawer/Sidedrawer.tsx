@@ -47,7 +47,7 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
         />
       )}
       <div
-        className={`fixed top-0 h-full bg-white shadow-lg z-50 transition-all duration-300 ${
+        className={`fixed top-0 h-screen bg-white shadow-lg z-50 transition-all duration-300 p-4 ${
           side === 'right' ? 'right-0' : 'left-0'
         } ${
           isOpen
@@ -57,7 +57,7 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
               : '-translate-x-full'
         }`}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center border-b border-gray-300 pb-3">
           {title && <h2 className="text-lg font-semibold">{title}</h2>}
           <button
             onClick={() => setIsOpen(false)}
@@ -66,7 +66,9 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
             <IoMdClose size={24} />
           </button>
         </div>
-        <div className="p-4">{children}</div>
+        <div className="p-4 h-[calc(100vh-64px)] overflow-y-auto scrollbar-hide">
+          {children}
+        </div>
       </div>
     </>
   );
