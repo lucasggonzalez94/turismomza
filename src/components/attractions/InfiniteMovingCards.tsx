@@ -1,10 +1,10 @@
 'use client';
 
 import React, { FC, useEffect, useRef, useState } from 'react';
-import CommentCard from './CommentCard';
+import ReviewCard from './ReviewCard';
 
 interface IPropsInfiniteMovingCards {
-  // comments: {
+  // reviews: {
   //   userName: string;
   //   dateAdded: string;
   //   content: string;
@@ -18,7 +18,7 @@ interface IPropsInfiniteMovingCards {
 }
 
 export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = () => {
-  const [likedComments, setLikedComments] = useState({});
+  const [likedReviews, setLikedReviews] = useState({});
   const [isPaused, setIsPaused] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -58,8 +58,8 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = () => {
       >
         {/* {[...comments, ...comments].map((comment, index) => (
           <div key={`${comment.id}-${index}`} className="flex-shrink-0">
-            <CommentCard
-              comment={{
+            <ReviewCard
+              review={{
                 ...comment,
                 likes: likedComments[comment.id]
                   ? comment.likes + 1
@@ -70,34 +70,34 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = () => {
           </div>
         ))} */}
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
         <div className="flex-shrink-0">
-          <CommentCard />
+          <ReviewCard />
         </div>
       </div>
     </div>

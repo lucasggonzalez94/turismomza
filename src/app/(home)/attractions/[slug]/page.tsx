@@ -1,5 +1,5 @@
 import ButtonsHeaderAttraction from '@/components/attractions/ButtonsHeaderAttraction';
-import Comments from '@/components/attractions/Comments';
+import Reviews from '@/components/attractions/Reviews';
 import MapRoute from '@/components/attractions/MapRoute';
 import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
@@ -19,6 +19,7 @@ export default async function AttractionPage({ params }: Props) {
   const attraction = await getAttractionBySlugService(slug);
 
   const {
+    id,
     title,
     category,
     price,
@@ -42,7 +43,7 @@ export default async function AttractionPage({ params }: Props) {
     },
   ];
 
-  const commentsExample = [
+  const reviewsExample = [
     {
       user: {
         name: 'Lucas Gonzalez',
@@ -229,7 +230,7 @@ export default async function AttractionPage({ params }: Props) {
             <AccordionCustom items={servicesAccordion} bold />
           </div>
         ) : null}
-        <Comments comments={commentsExample} />
+        <Reviews reviews={reviewsExample} attractionId={id} />
       </div>
     </>
   );

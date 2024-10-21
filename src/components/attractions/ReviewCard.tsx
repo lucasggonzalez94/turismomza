@@ -5,12 +5,19 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react';
+import { FC } from 'react';
 import { FiThumbsUp } from 'react-icons/fi';
 import { IoEllipsisHorizontal, IoPerson, IoStar } from 'react-icons/io5';
 
-const CommentCard = () => {
+interface IPropsReviewCard {
+  expandReview?: boolean;
+}
+
+const ReviewCard: FC<IPropsReviewCard> = ({ expandReview }) => {
   return (
-    <div className="rounded-md bg-white p-4 w-96 flex flex-col justify-between gap-4">
+    <div
+      className={`${expandReview ? 'border-b border-gray-300' : 'rounded-md bg-white'} p-4 w-96 flex flex-col justify-between gap-4`}
+    >
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center">
           <Button
@@ -23,7 +30,7 @@ const CommentCard = () => {
           <div className="flex flex-col gap-1">
             <h4 className="font-bold text-md">Lucas Gonzalez</h4>
             <span className="text-tiny text-gray-400">
-              Escrito el 09/07/2024
+              Escrita el 09/07/2024
             </span>
           </div>
         </div>
@@ -31,7 +38,7 @@ const CommentCard = () => {
           <IoStar className="mb-[2px]" /> 4.5
         </span>
       </div>
-      <p className="text-sm line-clamp-4">
+      <p className={`text-sm ${expandReview ? '' : 'line-clamp-4'}`}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
@@ -54,7 +61,7 @@ const CommentCard = () => {
               <IoEllipsisHorizontal />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu aria-label="Actions comment">
+          <DropdownMenu aria-label="Actions review">
             <DropdownItem key="report">Reportar</DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -63,4 +70,4 @@ const CommentCard = () => {
   );
 };
 
-export default CommentCard;
+export default ReviewCard;
