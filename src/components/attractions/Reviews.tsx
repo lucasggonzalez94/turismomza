@@ -35,10 +35,26 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
   const [formattedReview, setFormattedReview] = useState<FormattedReview[]>([]);
 
   const onSubmit = async (data: ReviewFormData) => {
-    await addReviewService({
+    const newReview = await addReviewService({
       ...data,
       attractionId,
     });
+
+    setFormattedReview((prevReviews) => [
+      ...prevReviews,
+      {
+        id: newReview.id,
+        user: {
+          id: newReview.user.id,
+          name: newReview.user.name,
+        },
+        dateAdded: newReview.creation_date.toString(),
+        content: newReview.content,
+        rating: newReview.rating,
+        likes: newReview.likes,
+      },
+    ]);
+
     reset();
     setOpenModalAddReview(false);
   };
