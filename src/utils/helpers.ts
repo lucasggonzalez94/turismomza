@@ -11,7 +11,7 @@ export const calculateAverageRating = (reviews: Review[]) => {
   const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
   const averageRating = totalRating / reviews.length;
 
-  return averageRating;
+  return parseFloat(averageRating.toFixed(1));
 };
 
 export const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
@@ -20,4 +20,14 @@ export const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
     currency: currency === 'ars' ? 'ARS' : 'USD',
   });
   return formatter.format(price);
+};
+
+export const formatDate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
 };

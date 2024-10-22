@@ -24,13 +24,13 @@ export default async function AttractionPage({ params }: Props) {
     category,
     price,
     currencyPrice,
-    comments,
+    reviews,
     images,
     description,
     services,
   } = attraction;
 
-  const averageRating = calculateAverageRating(comments);
+  const averageRating = calculateAverageRating(reviews);
 
   const servicesAccordion = [
     {
@@ -40,109 +40,6 @@ export default async function AttractionPage({ params }: Props) {
           {services?.map((service, index) => <li key={index}>{service}</li>)}
         </ul>
       ),
-    },
-  ];
-
-  const reviewsExample = [
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: {
-        user: {
-          name: 'Lucas Gonzalez',
-        },
-      },
-    },
-    {
-      user: {
-        name: 'Lucas Gonzalez',
-      },
-      creation_date: '19/10/2024',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      rating: 4.5,
-      likes: [
-        {
-          user: {
-            name: 'Lucas Gonzalez',
-          },
-        },
-      ],
     },
   ];
 
@@ -158,11 +55,11 @@ export default async function AttractionPage({ params }: Props) {
             )}
           </div>
           <div className="flex flex-col gap-2 items-end">
-            {!comments.length ? (
+            {!reviews.length ? (
               <div className="text-sm text-gray-500">Sin opiniones</div>
             ) : (
               <div className="flex gap-1 items-center">
-                <div className="text-sm text-gray-500">{`(${comments.length} opiniones)`}</div>
+                <div className="text-sm text-gray-500">{`(${reviews.length} opiniones)`}</div>
                 <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
                   <IoStar className="mb-[2px]" /> {averageRating}
                 </span>
@@ -230,7 +127,7 @@ export default async function AttractionPage({ params }: Props) {
             <AccordionCustom items={servicesAccordion} bold />
           </div>
         ) : null}
-        <Reviews reviews={reviewsExample} attractionId={id} />
+        <Reviews reviews={reviews} attractionId={id} />
       </div>
     </>
   );

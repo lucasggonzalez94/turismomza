@@ -8,7 +8,9 @@ import { Review, Like } from '@/interfaces/attraction';
 import ReviewCard from './ReviewCard';
 import CustomModal from '../ui/CustomModal/CustomModal';
 import { Controller, useForm } from 'react-hook-form';
-import StarsRating from '../ui/StarsRating';
+import StarsRating from '../ui/StarsRating/StarsRating';
+import { addReviewService } from '@/services/attractions/add-review';
+import { FormattedReview } from '@/interfaces/formattedReview';
 
 interface IPropsReviews {
   reviews: Review[];
@@ -30,18 +32,13 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
 
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
   const [openModalAddReview, setOpenModalAddReview] = useState(false);
-  const [formattedReview, setFormattedReview] = useState<
-    {
-      userName: string;
-      dateAdded: string;
-      content: string;
-      rating: number;
-      likes: Like[];
-    }[]
-  >([]);
+  const [formattedReview, setFormattedReview] = useState<FormattedReview[]>([]);
 
-  const onSubmit = (data: ReviewFormData) => {
-    console.log('Review submitted:', data);
+  const onSubmit = async (data: ReviewFormData) => {
+    await addReviewService({
+      ...data,
+      attractionId,
+    });
     reset();
     setOpenModalAddReview(false);
   };
@@ -49,7 +46,11 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
   useEffect(() => {
     setFormattedReview(
       reviews?.map((review) => ({
-        userName: review.user.name,
+        id: review.id,
+        user: {
+          id: review.user.id,
+          name: review.user.name,
+        },
         dateAdded: review.creation_date.toString(),
         content: review.content,
         rating: review.rating,
@@ -64,7 +65,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
         <h3 className="font-bold ml-1">Opiniones</h3>
         {reviews?.length ? (
           <div className="w-full flex flex-col gap-3 items-center">
-            <InfiniteMovingCards speed="normal" />
+            <InfiniteMovingCards reviews={formattedReview} />
             <Button
               color="primary"
               variant="light"
@@ -91,7 +92,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
         title="Opiniones"
       >
         {formattedReview?.map((review, index) => (
-          <ReviewCard key={index} expandReview />
+          <ReviewCard key={index} review={review} expandReview />
         ))}
       </Sidedrawer>
       <CustomModal

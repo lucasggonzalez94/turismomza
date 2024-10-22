@@ -16,9 +16,9 @@ import { usePathname } from 'next/navigation';
 const Topbar = () => {
   const notifications = [
     { id: 1, user: 'John Doe', type: 'like', time: '2 minutes ago' },
-    { id: 2, user: 'Jane Smith', type: 'comment', time: '5 minutes ago' },
+    { id: 2, user: 'Jane Smith', type: 'review', time: '5 minutes ago' },
     { id: 3, user: 'Mike Johnson', type: 'like', time: '10 minutes ago' },
-    { id: 4, user: 'Sarah Brown', type: 'comment', time: '15 minutes ago' },
+    { id: 4, user: 'Sarah Brown', type: 'review', time: '15 minutes ago' },
   ];
 
   const verified = useAuth();

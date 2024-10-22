@@ -20,7 +20,7 @@ export interface Attraction {
   advertisements?: Advertisement[];
   isFavorite: boolean;
   images: Image[];
-  comments: Review[];
+  reviews: Review[];
 }
 
 export interface Advertisement {
@@ -37,6 +37,7 @@ export interface Advertisement {
 }
 
 export interface Review {
+  id: string;
   content: string;
   rating: number;
   user: User;
@@ -51,9 +52,11 @@ export interface Image {
 }
 
 export interface Like {
+  id: string;
   user: User;
 }
 
 export interface User {
+  id: string;
   name: string;
 }

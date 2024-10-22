@@ -2,29 +2,18 @@
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import ReviewCard from './ReviewCard';
+import { FormattedReview } from '@/interfaces/formattedReview';
 
 interface IPropsInfiniteMovingCards {
-  // reviews: {
-  //   userName: string;
-  //   dateAdded: string;
-  //   content: string;
-  //   rating: number;
-  //   likes: any[];
-  // }[];
-  direction?: 'left' | 'right';
-  speed?: 'fast' | 'normal' | 'slow';
-  pauseOnHover?: boolean;
-  className?: string;
+  reviews: FormattedReview[];
 }
 
-export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = () => {
+export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
+  reviews,
+}) => {
   const [likedReviews, setLikedReviews] = useState({});
   const [isPaused, setIsPaused] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
-
-  const handleLike = (id: string) => {
-    console.log(id);
-  };
 
   useEffect(() => {
     const slider = sliderRef.current;
@@ -56,49 +45,11 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = () => {
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* {[...comments, ...comments].map((comment, index) => (
-          <div key={`${comment.id}-${index}`} className="flex-shrink-0">
-            <ReviewCard
-              review={{
-                ...comment,
-                likes: likedComments[comment.id]
-                  ? comment.likes + 1
-                  : comment.likes,
-              }}
-              onLike={handleLike}
-            />
+        {[...reviews, ...reviews].map((review, index) => (
+          <div key={`${review.id}-${index}`} className="flex-shrink-0">
+            <ReviewCard review={review} />
           </div>
-        ))} */}
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
-        <div className="flex-shrink-0">
-          <ReviewCard />
-        </div>
+        ))}
       </div>
     </div>
   );

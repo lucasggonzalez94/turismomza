@@ -3,7 +3,7 @@ import {
   IoChatbubbleEllipsesOutline,
   IoNotificationsOutline,
 } from 'react-icons/io5';
-import { FiThumbsUp } from 'react-icons/fi';
+import { PiThumbsUp } from 'react-icons/pi';
 import { FC } from 'react';
 import { Badge } from '@nextui-org/react';
 
@@ -55,7 +55,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
                   <div className="flex items-center cursor-pointer">
                     <div className="flex-shrink-0">
                       {notification.type === 'like' ? (
-                        <FiThumbsUp className="w-5 h-5 text-red-400" />
+                        <PiThumbsUp className="w-5 h-5 text-red-400" />
                       ) : (
                         <IoChatbubbleEllipsesOutline className="w-5 h-5 text-blue-500" />
                       )}
@@ -63,9 +63,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900">
                         <span className="font-bold">{notification.user}</span>{' '}
-                        {notification.type === 'like'
-                          ? 'liked'
-                          : 'commented on'}{' '}
+                        {notification.type === 'like' ? 'liked' : 'reviewed on'}{' '}
                         your post
                       </p>
                       <p className="text-xs text-gray-500">

@@ -23,7 +23,7 @@
       "price": 20,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "55297084-5cb1-4cf8-8335-e6a321357883",
@@ -44,7 +44,7 @@
       "price": 50,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "57ce382d-a4dc-48d6-89c3-63b7ab6c6488",
@@ -65,7 +65,7 @@
       "price": 120,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "5a32e407-505f-4b27-9d0b-325722a4e3e3",
@@ -86,7 +86,7 @@
       "price": 100,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "7a3123bf-6017-4fa4-8b09-22f61f2cbbce",
@@ -107,7 +107,7 @@
       "price": 0,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "848d673d-3e3e-4535-8afe-8e85ceb51f5a",
@@ -128,7 +128,7 @@
       "price": 0,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
@@ -175,7 +175,7 @@
         }
       ],
       "images": [],
-      "comments": [
+      "reviews": [
         {
           "content": "Excelente servicio",
           "rating": 4,
@@ -243,7 +243,7 @@
       "price": 200,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "c12fa43b-9f72-49cd-a56d-09109afecf78",
@@ -264,7 +264,7 @@
       "price": 0,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     },
     {
       "id": "e86a18c4-ace0-4dd1-affb-654114ecdfe2",
@@ -285,7 +285,7 @@
       "price": 150,
       "currencyPrice": "usd",
       "images": [],
-      "comments": [
+      "reviews": [
         {
           "content": "Excelente servicio",
           "rating": 4,
@@ -353,7 +353,7 @@
       "price": 50,
       "currencyPrice": "usd",
       "images": [],
-      "comments": []
+      "reviews": []
     }
   ]
 }

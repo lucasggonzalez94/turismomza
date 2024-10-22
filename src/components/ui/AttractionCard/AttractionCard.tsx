@@ -24,14 +24,14 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
     slug,
     category,
     images,
-    comments,
+    reviews,
     isFavorite,
     advertisements,
     price,
     currencyPrice,
   } = attraction;
 
-  const averageRating = calculateAverageRating(comments);
+  const averageRating = calculateAverageRating(reviews);
   const imageCard = images?.length ? images[0]?.url : null;
 
   const verified = useAuth();
@@ -140,14 +140,14 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
           </Button>
           <div className="flex flex-col justify-between items-end h-full w-full">
             <div className="flex flex-col justify-end h-full text-end">
-              {comments?.length ? (
+              {reviews?.length ? (
                 <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
                   <IoStar className="mb-[2px]" /> {averageRating}
                 </span>
               ) : null}
               <span className="text-tiny text-gray-400">
-                {comments?.length
-                  ? `(${comments?.length} opiniones)`
+                {reviews?.length
+                  ? `(${reviews?.length} opiniones)`
                   : 'Sin opiniones'}
               </span>
             </div>
