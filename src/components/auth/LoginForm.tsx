@@ -2,7 +2,7 @@
 
 import { Button, Input, Link } from '@nextui-org/react';
 import React, { useState } from 'react';
-import InputPassword from '../ui/InputPassword/InputPassword';
+import InputPassword from '../ui/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
 import { login } from '@/services/auth/login';

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 import { IoAlertCircle } from 'react-icons/io5';
 
-import AttractionCard from '@/components/ui/AttractionCard/AttractionCard';
+import AttractionCard from '@/components/ui/AttractionCard';
 import { Attraction } from '@/interfaces/attraction';
 import { getAttractionsService } from '@/services/attractions/get-attractions';
 import useWindowSize from '@/hooks/useWindowSize';

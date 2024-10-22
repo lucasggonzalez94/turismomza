@@ -3,15 +3,15 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
-import DropdownSearch from '../DropdownSearch/DropdownSearch';
-import DropdownNotifications from '../DropdownNotifications/DropdownNotifications';
-import DropdownProfile from '../DropdownProfile/DropdownProfile';
-import AnimatedLink from '../AnimatedLink/AnimatedLink';
 import Link from 'next/link';
 import useAuth from '@/hooks/useAuth';
 import { useStore } from '@/store/store';
-import LinkToSection from '../LinkToSection/LinkToSection';
 import { usePathname } from 'next/navigation';
+import DropdownSearch from './DropdownSearch';
+import AnimatedLink from './AnimatedLink';
+import LinkToSection from './LinkToSection';
+import DropdownNotifications from './DropdownNotifications';
+import DropdownProfile from './DropdownProfile';
 
 const Topbar = () => {
   const notifications = [

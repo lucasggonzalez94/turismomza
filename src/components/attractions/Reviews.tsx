@@ -3,17 +3,19 @@
 import { FC, useEffect, useState } from 'react';
 import { Button, Textarea } from '@nextui-org/react';
 import { InfiniteMovingCards } from './InfiniteMovingCards';
-import Sidedrawer from '../ui/Sidedrawer/Sidedrawer';
-import { Review, Like } from '@/interfaces/attraction';
+import Sidedrawer from '../ui/Sidedrawer';
+import { Review } from '@/interfaces/attraction';
 import ReviewCard from './ReviewCard';
-import CustomModal from '../ui/CustomModal/CustomModal';
+import CustomModal from '../ui/CustomModal';
 import { Controller, useForm } from 'react-hook-form';
-import StarsRating from '../ui/StarsRating/StarsRating';
+import StarsRating from '../ui/StarsRating';
 import { addReviewService } from '@/services/attractions/add-review';
 import { FormattedReview } from '@/interfaces/formattedReview';
+import { useStore } from '@/store/store';
 
 interface IPropsReviews {
   reviews: Review[];
+  creatorId?: string;
   attractionId: string;
 }
 
@@ -22,7 +24,7 @@ interface ReviewFormData {
   review: string;
 }
 
-const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
+const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
   const { handleSubmit, control, reset, register } = useForm<ReviewFormData>({
     defaultValues: {
       rating: 0,
@@ -33,6 +35,8 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
   const [openModalAddReview, setOpenModalAddReview] = useState(false);
   const [formattedReview, setFormattedReview] = useState<FormattedReview[]>([]);
+
+  const user = useStore((state) => state.user);
 
   const onSubmit = async (data: ReviewFormData) => {
     const newReview = await addReviewService({
@@ -62,9 +66,9 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
   useEffect(() => {
     setFormattedReview(
       reviews?.map((review) => ({
-        id: review.id,
+        id: review?.id,
         user: {
-          id: review.user.id,
+          id: review?.user?.id,
           name: review.user.name,
         },
         dateAdded: review.creation_date.toString(),
@@ -87,18 +91,30 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId }) => {
               variant="light"
               onClick={() => setOpenSidedrawer(true)}
             >
-              Ver todas los opiniones
+              Ver todas las opiniones
             </Button>
-            <Button color="primary" onClick={() => setOpenModalAddReview(true)}>
-              Agregar opinión
-            </Button>
+            {user?.id !== creatorId && (
+              <Button
+                color="primary"
+                onClick={() => setOpenModalAddReview(true)}
+              >
+                Agregar opinión
+              </Button>
+            )}
           </div>
-        ) : (
+        ) : user?.id !== creatorId ? (
           <div className="w-full min-h-96 flex flex-col gap-4 items-center justify-center">
             <span>Todavía no hay opiniones, sé el primero en agregar una.</span>
             <Button color="primary" onClick={() => setOpenModalAddReview(true)}>
               Agregar opinión
             </Button>
+          </div>
+        ) : (
+          <div className="w-full min-h-96 flex items-center justify-center">
+            <span>
+              Todavía no hay opiniones, cuando otros usuarios opinen sobre tu
+              publicación vas a poder verlas en esta sección.
+            </span>
           </div>
         )}
       </div>

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { IoLogOutOutline } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
-import DropdownButton from '../DropdownButton/DropdownButton';
+import DropdownButton from './DropdownButton';
 import { User as IUser } from '@/interfaces/user';
 import { ROLS } from '@/utils/constants';
 import { logout } from '@/services/auth/logout';

@@ -1,4 +1,4 @@
-import DropdownButton from '../DropdownButton/DropdownButton';
+import DropdownButton from './DropdownButton';
 import {
   IoChatbubbleEllipsesOutline,
   IoNotificationsOutline,

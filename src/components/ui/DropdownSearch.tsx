@@ -2,7 +2,7 @@
 
 import { Input } from '@nextui-org/react';
 import { IoSearch } from 'react-icons/io5';
-import DropdownButton from '../DropdownButton/DropdownButton';
+import DropdownButton from './DropdownButton';
 import { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 

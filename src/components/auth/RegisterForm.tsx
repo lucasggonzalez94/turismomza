@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import InputPassword from '../ui/InputPassword/InputPassword';
+import InputPassword from '../ui/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
 import { register as registerService } from '@/services/auth/register';

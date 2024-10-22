@@ -5,13 +5,13 @@ import useWindowSize from '@/hooks/useWindowSize';
 import { Attraction } from '@/interfaces/attraction';
 import { getAttractionsService } from '@/services/attractions/get-attractions';
 import CardSkeleton from '../skeletons/CardSkeleton';
-import AttractionCard from '../ui/AttractionCard/AttractionCard';
+import AttractionCard from '../ui/AttractionCard';
 import { Button, Pagination } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import { useStore } from '@/store/store';
 import { User } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
-import Sidedrawer from '../ui/Sidedrawer/Sidedrawer';
+import Sidedrawer from '../ui/Sidedrawer';
 
 const AttractionsWithFilters = () => {
   const { setPrices, user, filters } = useStore((state) => state);

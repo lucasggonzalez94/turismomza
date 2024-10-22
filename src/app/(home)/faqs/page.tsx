@@ -1,4 +1,4 @@
-import AccordionCustom from '@/components/ui/AccordionCustom/AccordionCustom';
+import AccordionCustom from '@/components/ui/AccordionCustom';
 
 export default function FAQsPage() {
   const FAQs = [

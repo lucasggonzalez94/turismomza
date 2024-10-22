@@ -1,4 +1,4 @@
-import LinkToSection from '@/components/ui/LinkToSection/LinkToSection';
+import LinkToSection from '@/components/ui/LinkToSection';
 import {
   IoArrowForwardCircleOutline,
   IoArrowDownCircleOutline,
