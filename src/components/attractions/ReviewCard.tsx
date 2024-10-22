@@ -53,7 +53,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({ review, expandReview }) => {
   return (
     <>
       <div
-        className={`${expandReview ? 'border-b border-gray-300' : 'rounded-md bg-white'} p-4 w-96 h-60 flex flex-col justify-between gap-4`}
+        className={`${expandReview ? 'border-b border-gray-300' : 'rounded-md bg-white'} p-4 w-96 min-h-60 flex flex-col justify-between gap-4`}
       >
         <div className="flex justify-between items-center">
           <div className="flex gap-1 items-center">
