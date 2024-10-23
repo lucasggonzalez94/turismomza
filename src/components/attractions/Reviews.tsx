@@ -87,11 +87,13 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
         <h3 className="font-bold ml-1">Opiniones</h3>
         {reviews?.length ? (
           <div className="w-full flex flex-col gap-3 items-center">
-            <InfiniteMovingCards
-              reviews={formattedReviews}
-              setReviews={setFormattedReviews}
-              attractionId={attractionId}
-            />
+            <div className="w-full hidden md:block">
+              <InfiniteMovingCards
+                reviews={formattedReviews}
+                setReviews={setFormattedReviews}
+                attractionId={attractionId}
+              />
+            </div>
             <Button
               color="primary"
               variant="light"

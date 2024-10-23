@@ -1,4 +1,6 @@
+import { Button } from '@nextui-org/react';
 import React from 'react';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 interface ButtonProps {
   onClick: () => void;
@@ -6,21 +8,25 @@ interface ButtonProps {
 }
 
 export const PrevButton: React.FC<ButtonProps> = ({ onClick }) => (
-  <button
+  <Button
     onClick={onClick}
-    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full"
+    color="secondary"
+    className="w-12 h-12 absolute left-4 top-1/2 transform -translate-y-1/2 rounded-full"
+    isIconOnly
   >
-    Prev
-  </button>
+    <IoChevronBack size={20} />
+  </Button>
 );
 
 export const NextButton: React.FC<ButtonProps> = ({ onClick }) => (
-  <button
+  <Button
     onClick={onClick}
-    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full"
+    color="secondary"
+    className="w-12 h-12 absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full"
+    isIconOnly
   >
-    Next
-  </button>
+    <IoChevronForward size={20} />
+  </Button>
 );
 
 interface DotButtonProps {

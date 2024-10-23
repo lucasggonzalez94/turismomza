@@ -5,7 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { DotButton, PrevButton, NextButton } from './CarouselButtons';
 import Image from 'next/image';
 
-interface CarouselProps {
+interface IPropsSliderCarousel {
   images: string[];
   showPrevNextButtons?: boolean;
   showDots?: boolean;
@@ -13,7 +13,7 @@ interface CarouselProps {
   autoplayDelay?: number;
 }
 
-const Carousel: React.FC<CarouselProps> = ({
+const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
   images,
   showPrevNextButtons = false,
   showDots = false,
@@ -53,20 +53,20 @@ const Carousel: React.FC<CarouselProps> = ({
   }, [emblaApi, autoplay, autoplayDelay]);
 
   return (
-    <div className="relative">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
+    <div className="relative w-full h-full overflow-hidden rounded-lg">
+      <div ref={emblaRef} className="w-full h-full">
+        <div className="flex w-full h-full">
           {images.map((src, index) => (
             <div
               key={index}
-              className="flex-[0_0_100%] flex justify-center items-center w-full h-[800px]"
+              className="flex-[0_0_100%] flex justify-center items-center w-full h-full"
             >
               <Image
                 src={src}
                 alt={`Carousel image ${index + 1}`}
                 width={600}
                 height={600}
-                className="object-cover rounded-lg"
+                className="object-cover w-full h-full"
               />
             </div>
           ))}
@@ -95,4 +95,4 @@ const Carousel: React.FC<CarouselProps> = ({
   );
 };
 
-export default Carousel;
+export default SliderCarousel;

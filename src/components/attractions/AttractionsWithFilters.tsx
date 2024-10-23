@@ -121,6 +121,7 @@ const AttractionsWithFilters = () => {
                     <AttractionCard
                       key={attraction?.id}
                       attraction={attraction}
+                      user={user}
                     />
                   ))
                 )}

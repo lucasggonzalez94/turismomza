@@ -13,10 +13,19 @@ import { getAttractionBySlugService } from '@/services/attractions/get-attractio
 import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import Spinner from '../ui/Spinner/Spinner';
+import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
+// import useWindowSize from '@/hooks/useWindowSize';
 
 interface IPropsAttractionPageClient {
   slug: string;
 }
+
+const IMAGES = [
+  '/images/portones.jpg',
+  '/images/puente-uspallata.jpg',
+  '/images/portada_auth.jpeg',
+  '/images/portones.jpg',
+];
 
 const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
   const [attraction, setAttraction] = useState<Partial<Attraction>>({});
@@ -30,6 +39,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
 
   const { user, loading, setLoading } = useStore((state) => state);
   const router = useRouter();
+  // const { width } = useWindowSize();
 
   const {
     id,
@@ -96,12 +106,26 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     }
   }, [reviews, services]);
 
+  // useEffect(() => {
+  //   if (width > 1024) {
+  //     setPageSize(8);
+  //   } else {
+  //     setPageSize(6);
+  //   }
+
+  //   if (width < 1536) {
+  //     setHideFilters(true);
+  //   } else {
+  //     setHideFilters(false);
+  //   }
+  // }, [width]);
+
   if (loading) {
     return <Spinner />;
   }
 
   return (
-    <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
+    <div className="flex flex-col flex-grow gap-4 p-4 md:p-12">
       <div className="flex justify-between items-center border-b border-gray-300 pb-4">
         <div className="flex flex-col gap-1">
           <h1 className="font-bold text-2xl">{title}</h1>
@@ -135,8 +159,8 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
           />
         </div>
       </div>
-      <div className="flex gap-2">
-        <div className="grid grid-cols-7 grid-rows-2 gap-4 w-2/3 max-h-[700px]">
+      <div className="flex flex-col lg:flex-row gap-2">
+        <div className="hidden md:grid grid-cols-7 grid-rows-2 gap-4 w-full lg:w-2/3 max-h-[700px]">
           {/* TODO: Quitar despues de las pruebas */}
           {!images?.length ? (
             <>
@@ -184,7 +208,10 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
               />
             ))}
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:hidden h-[450px]">
+          <SliderCarousel images={IMAGES} showPrevNextButtons />
+        </div>
+        <div className="w-full lg:w-1/3 min-h-[350px] rounded-lg overflow-hidden md:rounded-none">
           <MapRoute />
         </div>
       </div>
