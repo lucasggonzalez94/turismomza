@@ -101,7 +101,8 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
             </div>
           )}
           <ButtonsHeaderAttraction
-            isFavoriteFromService={isFavorite || false}
+            isFavorite={isFavorite || false}
+            attractionId={id || ''}
           />
         </div>
       </div>
