@@ -22,7 +22,6 @@ const config: Config = {
         animation: {
           scroll:
             'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
-          cubeDelay: 'cubeGridScaleDelay 1.3s infinite ease-in-out',
         },
         keyframes: {
           scroll: {
@@ -30,17 +29,6 @@ const config: Config = {
               transform: 'translate(calc(-50% - 0.5rem))',
             },
           },
-          cubeGridScaleDelay: {
-            '0%, 70%, 100%': { transform: 'scale(1)' },
-            '35%': { transform: 'scale(0)' },
-          },
-        },
-        transitionDelay: {
-          '0': '0ms',
-          '100': '100ms',
-          '200': '200ms',
-          '300': '300ms',
-          '400': '400ms',
         },
       },
     },
