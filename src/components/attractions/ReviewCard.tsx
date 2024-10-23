@@ -114,7 +114,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   }, [review, user?.id]);
 
   useEffect(() => {
-    setHideOptionsByUser(review?.user?.id === user?.id);
+    setHideOptionsByUser(review?.user?.id !== user?.id);
   }, [review?.user?.id, user?.id]);
 
   return (

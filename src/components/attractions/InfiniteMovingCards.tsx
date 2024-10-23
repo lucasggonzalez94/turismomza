@@ -6,10 +6,14 @@ import { FormattedReview } from '@/interfaces/formattedReview';
 
 interface IPropsInfiniteMovingCards {
   reviews: FormattedReview[];
+  setReviews: (reviews: FormattedReview[]) => void;
+  attractionId: string;
 }
 
 export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
   reviews,
+  setReviews,
+  attractionId,
 }) => {
   const [likedReviews, setLikedReviews] = useState({});
   const [isPaused, setIsPaused] = useState(false);
@@ -47,7 +51,12 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
       >
         {[...reviews, ...reviews].map((review, index) => (
           <div key={`${review.id}-${index}`} className="flex-shrink-0">
-            <ReviewCard review={review} />
+            <ReviewCard
+              review={review}
+              reviews={reviews}
+              setReviews={setReviews}
+              attractionId={attractionId}
+            />
           </div>
         ))}
       </div>
