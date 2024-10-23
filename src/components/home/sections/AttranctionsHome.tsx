@@ -21,6 +21,23 @@ const AttractionsHome = () => {
   const { width } = useWindowSize();
   const user = useStore((state) => state.user);
 
+  const getAttractions = async () => {
+    try {
+      const { data } = await getAttractionsService(
+        {
+          page: 1,
+          pageSize: pageSize,
+        },
+        user?.id,
+      );
+      setAttractions(data);
+      setLoading(false);
+    } catch {
+      setLoading(false);
+      setErrorService(true);
+    }
+  };
+
   useEffect(() => {
     if (width > 1280) {
       setPageSize(10);
@@ -32,27 +49,18 @@ const AttractionsHome = () => {
   }, [width]);
 
   useEffect(() => {
-    const getAttractions = async () => {
-      try {
-        const { data } = await getAttractionsService(
-          {
-            page: 1,
-            pageSize: pageSize,
-          },
-          user?.id,
-        );
-        setAttractions(data);
-        setLoading(false);
-      } catch {
-        setLoading(false);
-        setErrorService(true);
-      }
-    };
-
     if (pageSize > 0) {
       getAttractions();
     }
-  }, [pageSize, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageSize]);
+
+  useEffect(() => {
+    if (user) {
+      getAttractions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
@@ -87,7 +95,11 @@ const AttractionsHome = () => {
             </div>
           ) : (
             attractions.map((attraction: Attraction) => (
-              <AttractionCard key={attraction?.id} attraction={attraction} />
+              <AttractionCard
+                key={attraction?.id}
+                user={user}
+                attraction={attraction}
+              />
             ))
           )}
         </div>

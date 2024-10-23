@@ -1,7 +1,6 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import useAuth from '@/hooks/useAuth';
 import { Attraction } from '@/interfaces/attraction';
 import { addFavoriteService } from '@/services/attractions/add-favorite';
 import { useStore } from '@/store/store';
@@ -10,14 +9,15 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
-
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
+import { User } from '@/interfaces/user';
 
 interface IPropsAttractionCard {
+  user: User | null;
   attraction: Attraction;
 }
 
-const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
+const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
   const {
     id,
     title,
@@ -34,7 +34,6 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
   const averageRating = calculateAverageRating(reviews);
   const imageCard = images?.length ? images[0]?.url : null;
 
-  const verified = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const setLastPath = useStore((state) => state.setLastPath);
@@ -53,7 +52,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ attraction }) => {
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!verified) {
+    if (!user) {
       setLastPath(pathname);
       handleNavigation('/auth/login');
       return;
