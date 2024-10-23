@@ -11,7 +11,8 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { Attraction } from '@/interfaces/attraction';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { useStore } from '@/store/store';
-import { notFound, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import Spinner from '../ui/Spinner/Spinner';
 
 interface IPropsAttractionPageClient {
   slug: string;
@@ -27,7 +28,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     }[]
   >([]);
 
-  const user = useStore((state) => state.user);
+  const { user, loading, setLoading } = useStore((state) => state);
   const router = useRouter();
 
   const {
@@ -49,6 +50,10 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       setAttraction(response);
     } catch {
       router.push('/not-found');
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
   };
 
@@ -57,7 +62,14 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       getAttraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, user]);
+  }, [slug]);
+
+  useEffect(() => {
+    if (user) {
+      getAttraction();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     if (reviews?.length) {
@@ -78,6 +90,10 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       ]);
     }
   }, [reviews, services]);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
@@ -101,6 +117,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
             </div>
           )}
           <ButtonsHeaderAttraction
+            user={user}
             isFavorite={isFavorite || false}
             attractionId={id || ''}
           />

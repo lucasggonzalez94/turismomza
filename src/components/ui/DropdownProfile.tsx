@@ -44,11 +44,22 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
 
   const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
 
-  useEffect(() => {
-    const handleNavigation = (path: string) => {
-      router.push(path);
-    };
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+
+      handleNavigation('/auth/login');
+    } catch {
+      notify();
+    }
+  };
+
+  useEffect(() => {
     const DEFAULT_OPTIONS: IPropsMenuOption[] = [
       {
         id: 'login',
@@ -67,17 +78,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
         onClick: () => handleNavigation('/faqs'),
       },
     ];
-
-    const handleLogout = async () => {
-      try {
-        await logout();
-        setUser(null);
-
-        handleNavigation('/auth/login');
-      } catch {
-        notify();
-      }
-    };
 
     if (user) {
       if (user.role === ROLS.viewer) {
@@ -167,7 +167,8 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
     } else {
       setMenuOptions(DEFAULT_OPTIONS);
     }
-  }, [router, setUser, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, user]);
 
   return (
     <>

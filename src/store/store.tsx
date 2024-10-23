@@ -14,6 +14,8 @@ interface State {
   setPrices: (prices: Price) => void;
   lastPath: string;
   setLastPath: (path: string) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -28,4 +30,6 @@ export const useStore = create<State>((set) => ({
   setPrices: (prices) => set(() => ({ prices })),
   lastPath: '/',
   setLastPath: (path) => set(() => ({ lastPath: path })),
+  loading: true,
+  setLoading: (loading) => set(() => ({ loading })),
 }));

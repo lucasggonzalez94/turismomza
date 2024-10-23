@@ -4,23 +4,24 @@ import { FC, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button } from '@nextui-org/react';
 import { IoHeart, IoHeartOutline, IoShareSocialOutline } from 'react-icons/io5';
-import useAuth from '@/hooks/useAuth';
 import { usePathname, useRouter } from 'next/navigation';
 import { useStore } from '@/store/store';
 import { addFavoriteService } from '@/services/attractions/add-favorite';
+import { User } from '@/interfaces/user';
 
 interface IPropsButtonsHeaderAttraction {
+  user: User | null;
   attractionId: string;
   isFavorite: boolean;
 }
 
 const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
+  user,
   attractionId,
   isFavorite,
 }) => {
   const [favorite, setFavorite] = useState(false);
 
-  const verified = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const setLastPath = useStore((state) => state.setLastPath);
@@ -32,7 +33,7 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
     });
 
   const handleFavorite = async () => {
-    if (!verified) {
+    if (!user) {
       setLastPath(pathname);
       router.push('/auth/login');
       return;
