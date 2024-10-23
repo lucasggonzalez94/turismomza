@@ -103,13 +103,23 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
           {contact?.contactNumber && (
             <div className="flex gap-2 items-center">
               <IoCall size={25} className="text-[#E95718]" />
-              <span>{contact?.contactNumber}</span>
+              <Link
+                href={`tel:${contact?.contactNumber}`}
+                className="hover:underline"
+              >
+                {contact?.contactNumber}
+              </Link>
             </div>
           )}
           {contact?.email && (
             <div className="flex gap-2 items-center">
               <IoAt size={25} className="text-[#E95718]" />
-              <span>{contact?.email}</span>
+              <Link
+                href={`mailto:${contact?.email}`}
+                className="hover:underline"
+              >
+                {contact?.email}
+              </Link>
             </div>
           )}
           {contact?.webSite && (

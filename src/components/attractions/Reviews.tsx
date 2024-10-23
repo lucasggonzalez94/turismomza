@@ -34,7 +34,9 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
 
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
   const [openModalAddReview, setOpenModalAddReview] = useState(false);
-  const [formattedReview, setFormattedReview] = useState<FormattedReview[]>([]);
+  const [formattedReviews, setFormattedReviews] = useState<FormattedReview[]>(
+    [],
+  );
 
   const user = useStore((state) => state.user);
 
@@ -44,7 +46,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
       attractionId,
     });
 
-    setFormattedReview((prevReviews) => [
+    setFormattedReviews((prevReviews) => [
       ...prevReviews,
       {
         id: newReview.id,
@@ -64,7 +66,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
   };
 
   useEffect(() => {
-    setFormattedReview(
+    setFormattedReviews(
       reviews?.map((review) => ({
         id: review?.id,
         user: {
@@ -85,7 +87,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
         <h3 className="font-bold ml-1">Opiniones</h3>
         {reviews?.length ? (
           <div className="w-full flex flex-col gap-3 items-center">
-            <InfiniteMovingCards reviews={formattedReview} />
+            <InfiniteMovingCards reviews={formattedReviews} />
             <Button
               color="primary"
               variant="light"
@@ -123,8 +125,14 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
         setIsOpen={setOpenSidedrawer}
         title="Opiniones"
       >
-        {formattedReview?.map((review, index) => (
-          <ReviewCard key={index} review={review} expandReview />
+        {formattedReviews?.map((review, index) => (
+          <ReviewCard
+            key={index}
+            review={review}
+            expandReview
+            reviews={formattedReviews}
+            setReviews={setFormattedReviews}
+          />
         ))}
       </Sidedrawer>
       <CustomModal

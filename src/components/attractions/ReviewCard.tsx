@@ -15,15 +15,25 @@ import { formatDate } from '../../utils/helpers';
 import { FormattedReview } from '@/interfaces/formattedReview';
 import { likeDislikeReviewService } from '@/services/attractions/like-dislike-review';
 import { useStore } from '@/store/store';
+import { deleteReviewService } from '@/services/attractions/delete-review';
+import CustomModal from '../ui/CustomModal';
 
 interface IPropsReviewCard {
   review: FormattedReview;
   expandReview?: boolean;
+  reviews: FormattedReview[];
+  setReviews: (reviews: FormattedReview[]) => void;
 }
 
-const ReviewCard: FC<IPropsReviewCard> = ({ review, expandReview }) => {
+const ReviewCard: FC<IPropsReviewCard> = ({
+  review,
+  expandReview,
+  reviews,
+  setReviews,
+}) => {
   const user = useStore((state) => state.user);
   const [hideOptionsByUser, setHideOptionsByUser] = useState(false);
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const [liked, setLiked] = useState(false);
 
@@ -37,6 +47,17 @@ const ReviewCard: FC<IPropsReviewCard> = ({ review, expandReview }) => {
     try {
       await likeDislikeReviewService(reviewId);
       setLiked((prev) => !prev);
+    } catch {
+      notify();
+    }
+  };
+
+  const handleDelete = async (reviewId: string) => {
+    try {
+      await deleteReviewService(reviewId);
+      const newReviews = reviews?.filter((review) => review?.id !== reviewId);
+      setReviews(newReviews);
+      setOpenConfirmDelete(false);
     } catch {
       notify();
     }
@@ -101,20 +122,34 @@ const ReviewCard: FC<IPropsReviewCard> = ({ review, expandReview }) => {
                 <IoEllipsisHorizontal />
               </Button>
             </DropdownTrigger>
-            {!hideOptionsByUser ? (
+            {hideOptionsByUser ? (
               <DropdownMenu aria-label="Actions review">
                 <DropdownItem key="report">Reportar</DropdownItem>
               </DropdownMenu>
             ) : (
               <DropdownMenu aria-label="Actions review">
                 <DropdownItem key="edit">Editar</DropdownItem>
-                <DropdownItem key="delete">Eliminar</DropdownItem>
+                <DropdownItem
+                  key="delete"
+                  onClick={() => setOpenConfirmDelete(true)}
+                >
+                  Eliminar
+                </DropdownItem>
                 <DropdownItem key="report">Reportar</DropdownItem>
               </DropdownMenu>
             )}
           </Dropdown>
         </div>
       </div>
+      <CustomModal
+        title="¿Estás seguro?"
+        isOpen={openConfirmDelete}
+        onOpenChange={setOpenConfirmDelete}
+        textButton="Eliminar"
+        onAction={() => handleDelete(review?.id)}
+      >
+        <p>Esta acción es irreversible.</p>
+      </CustomModal>
       <ToastContainer autoClose={10000} />
     </>
   );
