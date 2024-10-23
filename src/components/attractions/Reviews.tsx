@@ -19,7 +19,7 @@ interface IPropsReviews {
   attractionId: string;
 }
 
-interface ReviewFormData {
+export interface ReviewFormData {
   rating: number;
   review: string;
 }
@@ -132,6 +132,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
             expandReview
             reviews={formattedReviews}
             setReviews={setFormattedReviews}
+            attractionId={attractionId}
           />
         ))}
       </Sidedrawer>

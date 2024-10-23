@@ -6,6 +6,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Textarea,
 } from '@nextui-org/react';
 import { FC, useEffect, useState } from 'react';
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi';
@@ -17,12 +18,17 @@ import { likeDislikeReviewService } from '@/services/attractions/like-dislike-re
 import { useStore } from '@/store/store';
 import { deleteReviewService } from '@/services/attractions/delete-review';
 import CustomModal from '../ui/CustomModal';
+import { Controller, useForm } from 'react-hook-form';
+import StarsRating from '../ui/StarsRating';
+import { ReviewFormData } from './Reviews';
+import { editReviewService } from '@/services/attractions/edit-review';
 
 interface IPropsReviewCard {
   review: FormattedReview;
   expandReview?: boolean;
   reviews: FormattedReview[];
   setReviews: (reviews: FormattedReview[]) => void;
+  attractionId: string;
 }
 
 const ReviewCard: FC<IPropsReviewCard> = ({
@@ -30,11 +36,20 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   expandReview,
   reviews,
   setReviews,
+  attractionId,
 }) => {
+  const { handleSubmit, control, reset, register } = useForm<ReviewFormData>({
+    defaultValues: {
+      rating: review?.rating,
+      review: review?.content,
+    },
+  });
+
   const user = useStore((state) => state.user);
+
   const [hideOptionsByUser, setHideOptionsByUser] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
-
+  const [openEditReview, setOpenEditReview] = useState(false);
   const [liked, setLiked] = useState(false);
 
   const notify = (message?: string) =>
@@ -50,6 +65,35 @@ const ReviewCard: FC<IPropsReviewCard> = ({
     } catch {
       notify();
     }
+  };
+
+  const handleEdit = async (data: ReviewFormData) => {
+    const editedReview = await editReviewService(review?.id, {
+      ...data,
+      attractionId,
+    });
+
+    const pushEditedReview = reviews?.map((review) => {
+      if (review?.id === editedReview?.id) {
+        return {
+          id: editedReview?.id,
+          user: {
+            id: editedReview?.user?.id,
+            name: editedReview.user.name,
+          },
+          dateAdded: editedReview.creation_date.toString(),
+          content: editedReview.content,
+          rating: editedReview.rating,
+          likes: editedReview.likes,
+        };
+      }
+      return review;
+    });
+
+    setReviews(pushEditedReview);
+
+    reset();
+    setOpenEditReview(false);
   };
 
   const handleDelete = async (reviewId: string) => {
@@ -128,7 +172,12 @@ const ReviewCard: FC<IPropsReviewCard> = ({
               </DropdownMenu>
             ) : (
               <DropdownMenu aria-label="Actions review">
-                <DropdownItem key="edit">Editar</DropdownItem>
+                <DropdownItem
+                  key="edit"
+                  onClick={() => setOpenEditReview(true)}
+                >
+                  Editar
+                </DropdownItem>
                 <DropdownItem
                   key="delete"
                   onClick={() => setOpenConfirmDelete(true)}
@@ -149,6 +198,30 @@ const ReviewCard: FC<IPropsReviewCard> = ({
         onAction={() => handleDelete(review?.id)}
       >
         <p>Esta acción es irreversible.</p>
+      </CustomModal>
+      <CustomModal
+        title="Editar opinión"
+        isOpen={openEditReview}
+        onOpenChange={setOpenEditReview}
+        textButton="Guardar"
+        onAction={handleSubmit(handleEdit)}
+      >
+        <div className="flex flex-col gap-7 items-center">
+          <Controller
+            name="rating"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <StarsRating onRatingChange={onChange} ratingValue={value} />
+            )}
+          />
+          <Textarea
+            label="Opinión"
+            className="w-full"
+            labelPlacement="outside"
+            placeholder="Ingresá tu opinión"
+            {...register('review')}
+          />
+        </div>
       </CustomModal>
       <ToastContainer autoClose={10000} />
     </>
