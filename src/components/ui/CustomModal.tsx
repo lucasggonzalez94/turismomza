@@ -13,8 +13,8 @@ interface IPropsCustomModal {
   children: ReactNode;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  textButton: string;
-  onAction: () => void;
+  textButton?: string;
+  onAction?: () => void;
 }
 
 const CustomModal: FC<IPropsCustomModal> = ({
@@ -32,14 +32,16 @@ const CustomModal: FC<IPropsCustomModal> = ({
           <>
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             <ModalBody>{children}</ModalBody>
-            <ModalFooter>
-              <Button color="primary" variant="light" onPress={onClose}>
-                Cancelar
-              </Button>
-              <Button color="primary" onPress={onAction}>
-                {textButton}
-              </Button>
-            </ModalFooter>
+            {onAction && (
+              <ModalFooter>
+                <Button color="primary" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+                <Button color="primary" onPress={onAction}>
+                  {textButton}
+                </Button>
+              </ModalFooter>
+            )}
           </>
         )}
       </ModalContent>

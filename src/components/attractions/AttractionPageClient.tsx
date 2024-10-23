@@ -42,6 +42,11 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     description,
     services,
     isFavorite,
+    contactNumber,
+    email,
+    webSite,
+    instagram,
+    facebook,
   } = attraction;
 
   const getAttraction = async () => {
@@ -120,6 +125,13 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
             user={user}
             isFavorite={isFavorite || false}
             attractionId={id || ''}
+            contact={{
+              contactNumber,
+              email,
+              webSite,
+              instagram,
+              facebook,
+            }}
           />
         </div>
       </div>
