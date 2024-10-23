@@ -22,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form';
 import StarsRating from '../ui/StarsRating';
 import { ReviewFormData } from './Reviews';
 import { editReviewService } from '@/services/attractions/edit-review';
+import ModalReport from './ModalReport';
 
 interface IPropsReviewCard {
   review: FormattedReview;
@@ -50,6 +51,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   const [hideOptionsByUser, setHideOptionsByUser] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openEditReview, setOpenEditReview] = useState(false);
+  const [openReportReview, setOpenReportReview] = useState(false);
   const [liked, setLiked] = useState(false);
 
   const notify = (message?: string) =>
@@ -168,7 +170,12 @@ const ReviewCard: FC<IPropsReviewCard> = ({
             </DropdownTrigger>
             {hideOptionsByUser ? (
               <DropdownMenu aria-label="Actions review">
-                <DropdownItem key="report">Reportar</DropdownItem>
+                <DropdownItem
+                  key="report"
+                  onClick={() => setOpenReportReview(true)}
+                >
+                  Reportar
+                </DropdownItem>
               </DropdownMenu>
             ) : (
               <DropdownMenu aria-label="Actions review">
@@ -184,7 +191,12 @@ const ReviewCard: FC<IPropsReviewCard> = ({
                 >
                   Eliminar
                 </DropdownItem>
-                <DropdownItem key="report">Reportar</DropdownItem>
+                <DropdownItem
+                  key="report"
+                  onClick={() => setOpenReportReview(true)}
+                >
+                  Reportar
+                </DropdownItem>
               </DropdownMenu>
             )}
           </Dropdown>
@@ -223,6 +235,11 @@ const ReviewCard: FC<IPropsReviewCard> = ({
           />
         </div>
       </CustomModal>
+      <ModalReport
+        reviewId={review?.id}
+        isOpen={openReportReview}
+        onOpenChange={setOpenReportReview}
+      />
       <ToastContainer autoClose={10000} />
     </>
   );
