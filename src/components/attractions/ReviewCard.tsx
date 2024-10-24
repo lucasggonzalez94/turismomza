@@ -8,6 +8,8 @@ import {
   DropdownTrigger,
   Textarea,
 } from '@nextui-org/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { FC, useEffect, useState } from 'react';
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi';
 import { IoEllipsisHorizontal, IoPerson, IoStar } from 'react-icons/io5';
@@ -20,7 +22,6 @@ import { deleteReviewService } from '@/services/attractions/delete-review';
 import CustomModal from '../ui/CustomModal';
 import { Controller, useForm } from 'react-hook-form';
 import StarsRating from '../ui/StarsRating';
-import { ReviewFormData } from './Reviews';
 import { editReviewService } from '@/services/attractions/edit-review';
 import ModalReport from './ModalReport';
 
@@ -32,6 +33,16 @@ interface IPropsReviewCard {
   attractionId: string;
 }
 
+const schema = yup
+  .object({
+    rating: yup
+      .number()
+      .min(1, 'La puntuación debe ser igual o mayor a 1')
+      .required('La puntuación es obligatoria.'),
+    review: yup.string().required('El campo es obligatorio.'),
+  })
+  .required();
+
 const ReviewCard: FC<IPropsReviewCard> = ({
   review,
   expandReview,
@@ -39,7 +50,14 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   setReviews,
   attractionId,
 }) => {
-  const { handleSubmit, control, reset, register } = useForm<ReviewFormData>({
+  const {
+    handleSubmit,
+    control,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
       rating: review?.rating,
       review: review?.content,
@@ -69,7 +87,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
     }
   };
 
-  const handleEdit = async (data: ReviewFormData) => {
+  const handleEdit = async (data: any) => {
     const editedReview = await editReviewService(review?.id, {
       ...data,
       attractionId,
@@ -219,20 +237,30 @@ const ReviewCard: FC<IPropsReviewCard> = ({
         onAction={handleSubmit(handleEdit)}
       >
         <div className="flex flex-col gap-7 items-center">
-          <Controller
-            name="rating"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <StarsRating onRatingChange={onChange} ratingValue={value} />
-            )}
-          />
-          <Textarea
-            label="Opinión"
-            className="w-full"
-            labelPlacement="outside"
-            placeholder="Ingresá tu opinión"
-            {...register('review')}
-          />
+          <div className="flex flex-col gap-1 w-full justify-center items-center">
+            <Controller
+              name="rating"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <StarsRating onRatingChange={onChange} ratingValue={value} />
+              )}
+            />
+            <span className="text-sm text-red-500">
+              {errors.rating?.message}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 w-full">
+            <Textarea
+              label="Opinión"
+              className="w-full"
+              labelPlacement="outside"
+              placeholder="Ingresá tu opinión"
+              {...register('review')}
+            />
+            <span className="text-sm text-red-500">
+              {errors.review?.message}
+            </span>
+          </div>
         </div>
       </CustomModal>
       <ModalReport

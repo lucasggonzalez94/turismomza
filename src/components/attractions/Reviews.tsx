@@ -1,6 +1,8 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { Button, Textarea } from '@nextui-org/react';
 import { InfiniteMovingCards } from './InfiniteMovingCards';
 import Sidedrawer from '../ui/Sidedrawer';
@@ -19,13 +21,22 @@ interface IPropsReviews {
   attractionId: string;
 }
 
-export interface ReviewFormData {
-  rating: number;
-  review: string;
-}
+const schema = yup
+  .object({
+    rating: yup.number().min(1, 'La puntuación debe ser igual o mayor a 1').required('La puntuación es obligatoria.'),
+    review: yup.string().required('El campo es obligatorio.'),
+  })
+  .required();
 
 const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
-  const { handleSubmit, control, reset, register } = useForm<ReviewFormData>({
+  const {
+    handleSubmit,
+    control,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
       rating: 0,
       review: '',
@@ -40,7 +51,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
 
   const user = useStore((state) => state.user);
 
-  const onSubmit = async (data: ReviewFormData) => {
+  const onSubmit = async (data: any) => {
     const newReview = await addReviewService({
       ...data,
       attractionId,
@@ -150,20 +161,30 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
         onAction={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-7 items-center">
-          <Controller
-            name="rating"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <StarsRating onRatingChange={onChange} ratingValue={value} />
-            )}
-          />
-          <Textarea
-            label="Opinión"
-            className="w-full"
-            labelPlacement="outside"
-            placeholder="Ingresá tu opinión"
-            {...register('review')}
-          />
+          <div className="flex flex-col gap-1 w-full justify-center items-center">
+            <Controller
+              name="rating"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <StarsRating onRatingChange={onChange} ratingValue={value} />
+              )}
+            />
+            <span className="text-sm text-red-500">
+              {errors.rating?.message}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 w-full">
+            <Textarea
+              label="Opinión"
+              className="w-full"
+              labelPlacement="outside"
+              placeholder="Ingresá tu opinión"
+              {...register('review')}
+            />
+            <span className="text-sm text-red-500">
+              {errors.review?.message}
+            </span>
+          </div>
         </div>
       </CustomModal>
     </>
