@@ -131,9 +131,9 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
         <div className="flex flex-col gap-1">
           <h1 className="font-bold text-2xl">{title}</h1>
           <h2 className="text-sm text-gray-500">{category}</h2>
-          {price && currencyPrice && (
+          {price && currencyPrice ? (
             <span>{formatPrice(price, currencyPrice)}</span>
-          )}
+          ) : null}
         </div>
         <div className="flex flex-col gap-2 items-end">
           {!reviews?.length ? (

@@ -19,6 +19,7 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
-        {[...reviews, ...reviews].map((review, index) => (
+        {(reviews.length >= 5 ? [...reviews, ...reviews] : reviews).map((review, index) => (
           <div key={`${review.id}-${index}`} className="flex-shrink-0">
             <ReviewCard
               review={review}

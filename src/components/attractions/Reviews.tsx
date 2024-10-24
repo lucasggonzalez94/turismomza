@@ -46,7 +46,6 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
       attractionId,
     });
 
-    debugger;
     setFormattedReviews((prevReviews) => [
       ...prevReviews,
       {
@@ -67,7 +66,6 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
   };
 
   useEffect(() => {
-    debugger;
     setFormattedReviews(
       reviews?.map((review) => ({
         id: review?.id,
@@ -87,7 +85,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
     <>
       <div className="w-full flex flex-col gap-2">
         <h3 className="font-bold ml-1">Opiniones</h3>
-        {reviews?.length ? (
+        {formattedReviews?.length ? (
           <div className="w-full flex flex-col gap-3 items-center">
             <div className="w-full hidden md:block">
               <InfiniteMovingCards

@@ -56,7 +56,6 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   useEffect(() => {
     if (user && socket) {
       socket.on('notification', (data: Notification) => {
-        console.log(data);
         setNotifications((prevNotifications) => [data, ...prevNotifications]);
       });
     }
