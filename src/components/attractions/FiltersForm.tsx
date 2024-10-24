@@ -17,6 +17,7 @@ import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
 import { useStore } from '@/store/store';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { CATEGORIES } from '@/utils/constants';
 
 const schema = yup
   .object({
@@ -26,49 +27,6 @@ const schema = yup
     rating: yup.array(yup.string()),
   })
   .required();
-
-const CATEGORIES = [
-  {
-    key: 'Naturaleza',
-    label: 'Naturaleza',
-  },
-  {
-    key: 'Enoturismo',
-    label: 'Enoturismo',
-  },
-  {
-    key: 'Aventura',
-    label: 'Aventura',
-  },
-  {
-    key: 'Historia',
-    label: 'Historia',
-  },
-  {
-    key: 'Relajación',
-    label: 'Relajación',
-  },
-  {
-    key: 'Cultura',
-    label: 'Cultura',
-  },
-  {
-    key: 'Gastronomía',
-    label: 'Gastronomía',
-  },
-  {
-    key: 'Deportes',
-    label: 'Deportes',
-  },
-  {
-    key: 'Familia',
-    label: 'Familia',
-  },
-  {
-    key: 'Turismo Rural',
-    label: 'Turismo Rural',
-  },
-];
 
 const FiltersForm = () => {
   const { prices, setFilters } = useStore((state) => state);

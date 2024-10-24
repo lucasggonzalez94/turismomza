@@ -1,3 +1,4 @@
+import { CreateFormFirstStep } from '@/interfaces/create-form';
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
@@ -19,6 +20,8 @@ interface State {
   setLoading: (loading: boolean) => void;
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
+  createFirstStepData: CreateFormFirstStep | null;
+  setCreateFirstStepData: (data: CreateFormFirstStep) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -37,4 +40,6 @@ export const useStore = create<State>((set) => ({
   setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),
+  createFirstStepData: null,
+  setCreateFirstStepData: (data) => set(() => ({ createFirstStepData: data })),
 }));
