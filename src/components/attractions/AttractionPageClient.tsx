@@ -57,6 +57,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     webSite,
     instagram,
     facebook,
+    creatorId,
   } = attraction;
 
   const getAttraction = async () => {
@@ -224,7 +225,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       <Reviews
         reviews={reviews || []}
         attractionId={id || ''}
-        creatorId={user?.id}
+        creatorId={creatorId}
       />
     </div>
   );

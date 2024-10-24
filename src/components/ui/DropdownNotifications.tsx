@@ -1,36 +1,79 @@
+'use client';
+
+import { FC, useEffect, useState } from 'react';
 import DropdownButton from './DropdownButton';
 import {
   IoChatbubbleEllipsesOutline,
   IoNotificationsOutline,
 } from 'react-icons/io5';
 import { PiThumbsUp } from 'react-icons/pi';
-import { FC } from 'react';
 import { Badge } from '@nextui-org/react';
+import { Notification } from '@/interfaces/notification';
+import { formatDate } from '@/utils/helpers';
+import { listNotificationsService } from '@/services/notifications/list-notifications';
+import { useStore } from '@/store/store';
 
 interface IPropsDropdownNotifications {
-  notifications: {
-    id: number;
-    type: string;
-    user: string;
-    time: string;
-  }[];
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
 }
 
 const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
-  notifications,
   isOpen,
   onOpen,
   onClose,
 }) => {
+  const [errorService, setErrorService] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [count, setCount] = useState<number | null>(null);
+  const { user, socket } = useStore((state) => state);
+
+  const countUnreadNotifications = (
+    notifications: Notification[],
+  ): number | null => {
+    const countNotifications = notifications.filter(
+      (notification) => !notification.read,
+    ).length;
+    return countNotifications ? countNotifications : null;
+  };
+
+  const getNotifications = async () => {
+    try {
+      const response = await listNotificationsService();
+      setCount(countUnreadNotifications(response));
+      setNotifications(response);
+    } catch {
+      setErrorService(true);
+    }
+  };
+
+  useEffect(() => {
+    getNotifications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (user && socket) {
+      socket.on('notification', (data: Notification) => {
+        console.log(data);
+        setNotifications((prevNotifications) => [data, ...prevNotifications]);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('notification');
+      }
+    };
+  }, [user, socket]);
+
+  useEffect(() => {
+    setCount(countUnreadNotifications(notifications));
+  }, [notifications]);
+
   return (
-    <Badge
-      content={notifications?.length}
-      color="primary"
-      className="border-none"
-    >
+    <Badge content={count} color="primary" className="border-none">
       <DropdownButton
         icon={<IoNotificationsOutline size={25} color="#fff" />}
         position="left"
@@ -62,20 +105,26 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
                     </div>
                     <div className="ml-3">
                       <p className="text-sm font-medium text-gray-900">
-                        <span className="font-bold">{notification.user}</span>{' '}
+                        <span className="font-bold">
+                          {notification?.user?.name}
+                        </span>{' '}
                         {notification.type === 'like' ? 'liked' : 'reviewed on'}{' '}
                         your post
                       </p>
                       <p className="text-xs text-gray-500">
-                        {notification.time}
+                        {formatDate(notification?.creation_date.toString())}
                       </p>
                     </div>
                   </div>
                 </div>
               ))
+            ) : errorService ? (
+              <div className="p-4 text-center text-gray-500">
+                ¡Algo salio mal! Vuelve a intentarlo más tarde
+              </div>
             ) : (
               <div className="p-4 text-center text-gray-500">
-                No notifications at the moment
+                No tienes notificaciones en este momento.
               </div>
             )}
           </div>

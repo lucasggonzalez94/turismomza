@@ -14,13 +14,6 @@ import DropdownNotifications from './DropdownNotifications';
 import DropdownProfile from './DropdownProfile';
 
 const Topbar = () => {
-  const notifications = [
-    { id: 1, user: 'John Doe', type: 'like', time: '2 minutes ago' },
-    { id: 2, user: 'Jane Smith', type: 'review', time: '5 minutes ago' },
-    { id: 3, user: 'Mike Johnson', type: 'like', time: '10 minutes ago' },
-    { id: 4, user: 'Sarah Brown', type: 'review', time: '15 minutes ago' },
-  ];
-
   const verified = useAuth();
   const user = useStore((state) => state.user);
   const pathname = usePathname();
@@ -108,7 +101,6 @@ const Topbar = () => {
           </Button> */}
           {verified && (
             <DropdownNotifications
-              notifications={notifications}
               isOpen={openDropdownIndex === 1}
               onOpen={() => handleOpenDropdown(1)}
               onClose={handleCloseDropdown}

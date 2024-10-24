@@ -1,5 +1,6 @@
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
+import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
 interface Price {
   minPrice: number;
@@ -16,6 +17,8 @@ interface State {
   setLastPath: (path: string) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  socket: Socket | null;
+  setSocket: (socket: Socket) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -32,4 +35,6 @@ export const useStore = create<State>((set) => ({
   setLastPath: (path) => set(() => ({ lastPath: path })),
   loading: true,
   setLoading: (loading) => set(() => ({ loading })),
+  socket: null,
+  setSocket: (socket) => set(() => ({ socket })),
 }));

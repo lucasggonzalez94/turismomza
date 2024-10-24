@@ -46,6 +46,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
       attractionId,
     });
 
+    debugger;
     setFormattedReviews((prevReviews) => [
       ...prevReviews,
       {
@@ -66,6 +67,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
   };
 
   useEffect(() => {
+    debugger;
     setFormattedReviews(
       reviews?.map((review) => ({
         id: review?.id,
@@ -101,14 +103,14 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
             >
               Ver todas las opiniones
             </Button>
-            {user?.id !== creatorId && (
+            {user?.id !== creatorId ? (
               <Button
                 color="primary"
                 onClick={() => setOpenModalAddReview(true)}
               >
                 Agregar opinión
               </Button>
-            )}
+            ) : null}
           </div>
         ) : user?.id !== creatorId ? (
           <div className="w-full min-h-96 flex flex-col gap-4 items-center justify-center">
