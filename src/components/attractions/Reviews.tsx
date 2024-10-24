@@ -23,7 +23,10 @@ interface IPropsReviews {
 
 const schema = yup
   .object({
-    rating: yup.number().min(1, 'La puntuación debe ser igual o mayor a 1').required('La puntuación es obligatoria.'),
+    rating: yup
+      .number()
+      .min(1, 'La puntuación debe ser igual o mayor a 1')
+      .required('La puntuación es obligatoria.'),
     review: yup.string().required('El campo es obligatorio.'),
   })
   .required();

@@ -2,16 +2,12 @@
 
 import { FC, useEffect, useState } from 'react';
 import DropdownButton from './DropdownButton';
-import {
-  IoChatbubbleEllipsesOutline,
-  IoNotificationsOutline,
-} from 'react-icons/io5';
-import { PiThumbsUp } from 'react-icons/pi';
+import { IoNotificationsOutline } from 'react-icons/io5';
 import { Badge } from '@nextui-org/react';
-import { Notification } from '@/interfaces/notification';
-import { formatDate } from '@/utils/helpers';
+import { Notification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useStore } from '@/store/store';
+import Notification from './Notification';
 
 interface IPropsDropdownNotifications {
   isOpen: boolean;
@@ -25,12 +21,13 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   onClose,
 }) => {
   const [errorService, setErrorService] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<INotification[]>([]);
   const [count, setCount] = useState<number | null>(null);
+
   const { user, socket } = useStore((state) => state);
 
   const countUnreadNotifications = (
-    notifications: Notification[],
+    notifications: INotification[],
   ): number | null => {
     const countNotifications = notifications.filter(
       (notification) => !notification.read,
@@ -55,7 +52,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
 
   useEffect(() => {
     if (user && socket) {
-      socket.on('notification', (data: Notification) => {
+      socket.on('notification', (data: INotification) => {
         setNotifications((prevNotifications) => [data, ...prevNotifications]);
       });
     }
@@ -90,32 +87,12 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
           <div className="overflow-y-auto">
             {notifications.length > 0 ? (
               notifications.map((notification) => (
-                <div
+                <Notification
                   key={notification.id}
-                  className="p-4 border-b border-gray-100 hover:bg-gray-50 transition duration-150 ease-in-out"
-                >
-                  <div className="flex items-center cursor-pointer">
-                    <div className="flex-shrink-0">
-                      {notification.type === 'like' ? (
-                        <PiThumbsUp className="w-5 h-5 text-red-400" />
-                      ) : (
-                        <IoChatbubbleEllipsesOutline className="w-5 h-5 text-blue-500" />
-                      )}
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">
-                        <span className="font-bold">
-                          {notification?.user?.name}
-                        </span>{' '}
-                        {notification.type === 'like' ? 'liked' : 'reviewed on'}{' '}
-                        your post
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {formatDate(notification?.creation_date.toString())}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  notification={notification}
+                  notifications={notifications}
+                  setNotifications={setNotifications}
+                />
               ))
             ) : errorService ? (
               <div className="p-4 text-center text-gray-500">
