@@ -79,7 +79,7 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({
     if (images?.length > 3) {
       setCreateFirstStepData({
         ...data,
-        images
+        images,
       });
       setSaved(true);
       setSelectedTab('contact');
@@ -94,131 +94,116 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({
       >
         <div className="flex gap-4 w-full">
           <div className="flex flex-col gap-4 w-1/2">
-            <div className="flex flex-col gap-1">
-              <Input
-                type="text"
-                label="Nombre"
-                labelPlacement="outside"
-                placeholder="Ingresá el nombre del lugar"
-                {...register('name')}
-              />
-              <span className="text-sm text-red-500">
-                {errors.name?.message}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Textarea
-                label="Descripción"
-                className="w-full"
-                labelPlacement="outside"
-                placeholder="Descripción del lugar"
-                {...register('description')}
-              />
-              <span className="text-sm text-red-500">
-                {errors.description?.message}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Controller
-                name="category"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    label="Categoría"
-                    labelPlacement="outside"
-                    placeholder="¿Qué categoría describe mejor este lugar?"
-                    className="w-full"
-                    value={value}
-                    defaultSelectedKeys={[createFirstStepData?.category || '']}
-                    onChange={(e) => {
-                      onChange(e.target.value);
-                    }}
-                  >
-                    {CATEGORIES.map((category) => (
-                      <SelectItem key={category.key} value={category.key}>
-                        {category.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
-              />
-              <span className="text-sm text-red-500">
-                {errors.category?.message}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Controller
-                name="services"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    label="Servicios"
-                    labelPlacement="outside"
-                    placeholder="¿Qué servicios ofrece este lugar?"
-                    selectionMode="multiple"
-                    className="w-full"
-                    value={
-                      (value?.filter((val) => val !== undefined) as string[]) ||
-                      []
-                    }
-                    defaultSelectedKeys={createFirstStepData?.services || []}
-                    onChange={(e) => {
-                      onChange(e.target.value.split(','));
-                    }}
-                  >
-                    {SERVICES.map((service) => (
-                      <SelectItem key={service.key} value={service.key}>
-                        {service.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
-              />
-              <span className="text-sm text-red-500">
-                {errors.services?.message}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <Input
-                label={
-                  <label>
-                    Precio <span className="text-tiny">(Opcional)</span>
+            <Input
+              type="text"
+              label="Nombre"
+              labelPlacement="outside"
+              placeholder="Ingresá el nombre del lugar"
+              isInvalid={!!errors.name?.message}
+              errorMessage={errors.name?.message}
+              {...register('name')}
+            />
+            <Textarea
+              label="Descripción"
+              className="w-full"
+              labelPlacement="outside"
+              placeholder="Descripción del lugar"
+              isInvalid={!!errors.description?.message}
+              errorMessage={errors.description?.message}
+              {...register('description')}
+            />
+            <Controller
+              name="category"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="Categoría"
+                  labelPlacement="outside"
+                  placeholder="¿Qué categoría describe mejor este lugar?"
+                  className="w-full"
+                  value={value}
+                  defaultSelectedKeys={[createFirstStepData?.category || '']}
+                  isInvalid={!!errors.category?.message}
+                  errorMessage={errors.category?.message}
+                  onChange={(e) => {
+                    onChange(e.target.value);
+                  }}
+                >
+                  {CATEGORIES.map((category) => (
+                    <SelectItem key={category.key} value={category.key}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+            <Controller
+              name="services"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="Servicios"
+                  labelPlacement="outside"
+                  placeholder="¿Qué servicios ofrece este lugar?"
+                  selectionMode="multiple"
+                  className="w-full"
+                  isInvalid={!!errors.services?.message}
+                  errorMessage={errors.services?.message}
+                  value={
+                    (value?.filter((val) => val !== undefined) as string[]) ||
+                    []
+                  }
+                  defaultSelectedKeys={createFirstStepData?.services || []}
+                  onChange={(e) => {
+                    onChange(e.target.value.split(','));
+                  }}
+                >
+                  {SERVICES.map((service) => (
+                    <SelectItem key={service.key} value={service.key}>
+                      {service.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+            <Input
+              label={
+                <label>
+                  Precio <span className="text-tiny">(Opcional)</span>
+                </label>
+              }
+              placeholder="0.00"
+              labelPlacement="outside"
+              isInvalid={!!errors.price?.message}
+              errorMessage={errors.price?.message}
+              startContent={
+                <div className="pointer-events-none flex items-center">
+                  <span className="text-default-400 text-small">$</span>
+                </div>
+              }
+              endContent={
+                <div className="flex items-center">
+                  <label className="sr-only" htmlFor="currency">
+                    Currency
                   </label>
-                }
-                placeholder="0.00"
-                labelPlacement="outside"
-                startContent={
-                  <div className="pointer-events-none flex items-center">
-                    <span className="text-default-400 text-small">$</span>
-                  </div>
-                }
-                endContent={
-                  <div className="flex items-center">
-                    <label className="sr-only" htmlFor="currency">
-                      Currency
-                    </label>
-                    <select
-                      className="outline-none border-0 bg-transparent text-default-400 text-small"
-                      id="currency"
-                      {...register('currency')}
-                    >
-                      {CURRENCIES.map((currency) => (
-                        <option key={currency.key} value={currency.key}>
-                          {currency.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                }
-                type="number"
-                {...register('price', {
-                  setValueAs: (value) => (value === '' ? 0.0 : Number(value)),
-                })}
-              />
-              <span className="text-sm text-red-500">
-                {errors.price?.message}
-              </span>
-            </div>
+                  <select
+                    className="outline-none border-0 bg-transparent text-default-400 text-small"
+                    id="currency"
+                    {...register('currency')}
+                  >
+                    {CURRENCIES.map((currency) => (
+                      <option key={currency.key} value={currency.key}>
+                        {currency.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              }
+              type="number"
+              {...register('price', {
+                setValueAs: (value) => (value === '' ? 0.0 : Number(value)),
+              })}
+            />
           </div>
           <div className="flex flex-col gap-1 w-1/2">
             <MapSearch
@@ -228,7 +213,10 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({
             />
           </div>
         </div>
-        <ImageUploader defaultImages={createFirstStepData?.images} onImagesChange={setImages} />
+        <ImageUploader
+          defaultImages={createFirstStepData?.images}
+          onImagesChange={setImages}
+        />
         <Button type="submit" color="primary">
           Guardar y continuar
         </Button>

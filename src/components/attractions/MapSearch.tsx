@@ -141,29 +141,30 @@ const MapSearch: FC<IPropsMapSearch> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-1 w-full">
-        <Autocomplete
-          onLoad={onAutocompleteLoad}
-          onPlaceChanged={handlePlaceChanged}
-        >
-          <Input
-            type="text"
-            label="Buscar lugar"
-            labelPlacement="outside"
-            placeholder="Escribe la dirección"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}
-          />
-        </Autocomplete>
-        <span className="text-sm text-red-500">
-          {errors.address?.lat?.message || errors.address?.lng?.message}
-        </span>
-      </div>
+      <Autocomplete
+        onLoad={onAutocompleteLoad}
+        onPlaceChanged={handlePlaceChanged}
+      >
+        <Input
+          type="text"
+          label="Buscar lugar"
+          labelPlacement="outside"
+          placeholder="Escribe la dirección"
+          value={inputValue}
+          isInvalid={
+            !!errors.address?.lat?.message || !!errors.address?.lng?.message
+          }
+          errorMessage={
+            errors.address?.lat?.message || errors.address?.lng?.message
+          }
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
+        />
+      </Autocomplete>
 
       <GoogleMap
         mapContainerStyle={containerStyle}

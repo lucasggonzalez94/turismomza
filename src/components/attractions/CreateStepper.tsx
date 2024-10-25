@@ -7,6 +7,7 @@ import { Tab, Tabs } from '@nextui-org/react';
 import { PiNumberCircleOneFill, PiNumberCircleTwoFill } from 'react-icons/pi';
 import { FaCircleCheck } from 'react-icons/fa6';
 import FirstStepCreation from './FirstStepCreation';
+import SecondStepCreation from './SecondStepCreation';
 
 const CreateStepper = () => {
   const [selectedTab, setSelectedTab] = useState<string | number>('details');
@@ -41,7 +42,10 @@ const CreateStepper = () => {
             </div>
           }
         >
-          <FirstStepCreation setSaved={setSaved} setSelectedTab={setSelectedTab} />
+          <FirstStepCreation
+            setSaved={setSaved}
+            setSelectedTab={setSelectedTab}
+          />
         </Tab>
         <Tab
           key="contact"
@@ -55,7 +59,7 @@ const CreateStepper = () => {
             </div>
           }
         >
-          <div>Segundo paso</div>
+          <SecondStepCreation />
         </Tab>
       </Tabs>
       <ToastContainer autoClose={10000} />
