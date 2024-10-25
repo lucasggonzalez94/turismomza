@@ -10,4 +10,5 @@ export interface CreateFormFirstStep {
     lng: number;
     formatted_address?: string;
   };
+  images: File[];
 }

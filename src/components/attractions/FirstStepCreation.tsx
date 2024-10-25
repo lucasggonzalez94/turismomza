@@ -5,7 +5,7 @@ import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import MapSearch from './MapSearch';
 import { useStore } from '@/store/store';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import ImageUploader from '../ui/ImageUploader';
 
 export interface Address {
@@ -44,7 +44,13 @@ const schema = yup
   })
   .required();
 
-const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedTab }) => {
+const FirstStepCreation: FC<IPropsFirstStepCreation> = ({
+  setSaved,
+  setSelectedTab,
+}) => {
+  const { createFirstStepData, setCreateFirstStepData } = useStore(
+    (state) => state,
+  );
   const {
     register,
     handleSubmit,
@@ -53,20 +59,32 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedT
     setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      name: createFirstStepData?.name || '',
+      description: createFirstStepData?.description || '',
+      category: createFirstStepData?.category || '',
+      services: createFirstStepData?.services || [],
+      price: createFirstStepData?.price || 0.0,
+      currency: createFirstStepData?.currency || 'ars',
+    },
   });
-  const setCreateFirstStepData = useStore((state) => state.setCreateFirstStepData);
+
+  const [images, setImages] = useState<File[]>([]);
 
   const handleLocationSelected = (address: Address) => {
     setValue('address', address);
   };
 
   const handleSaveAndContinue = (data: any) => {
-    setCreateFirstStepData(data);
-    setSaved(true);
-    setSelectedTab('contact');
+    if (images?.length > 3) {
+      setCreateFirstStepData({
+        ...data,
+        images
+      });
+      setSaved(true);
+      setSelectedTab('contact');
+    }
   };
-
-  console.log(errors)
 
   return (
     <>
@@ -111,6 +129,7 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedT
                     placeholder="¿Qué categoría describe mejor este lugar?"
                     className="w-full"
                     value={value}
+                    defaultSelectedKeys={[createFirstStepData?.category || '']}
                     onChange={(e) => {
                       onChange(e.target.value);
                     }}
@@ -142,6 +161,7 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedT
                       (value?.filter((val) => val !== undefined) as string[]) ||
                       []
                     }
+                    defaultSelectedKeys={createFirstStepData?.services || []}
                     onChange={(e) => {
                       onChange(e.target.value.split(','));
                     }}
@@ -192,8 +212,7 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedT
                 }
                 type="number"
                 {...register('price', {
-                  setValueAs: (value) =>
-                    value === '' ? 0.00 : Number(value),
+                  setValueAs: (value) => (value === '' ? 0.0 : Number(value)),
                 })}
               />
               <span className="text-sm text-red-500">
@@ -202,10 +221,14 @@ const FirstStepCreation: FC<IPropsFirstStepCreation> = ({ setSaved, setSelectedT
             </div>
           </div>
           <div className="flex flex-col gap-1 w-1/2">
-            <MapSearch onLocationSelected={handleLocationSelected} errors={errors} />
+            <MapSearch
+              defaultAddress={createFirstStepData?.address}
+              onLocationSelected={handleLocationSelected}
+              errors={errors}
+            />
           </div>
         </div>
-        <ImageUploader />
+        <ImageUploader defaultImages={createFirstStepData?.images} onImagesChange={setImages} />
         <Button type="submit" color="primary">
           Guardar y continuar
         </Button>

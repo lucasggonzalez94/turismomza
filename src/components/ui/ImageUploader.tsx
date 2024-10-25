@@ -1,28 +1,27 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from 'react-beautiful-dnd';
+import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import { X, Upload, Move } from 'lucide-react';
 
 interface ImageUploaderProps {
+  defaultImages?: File[];
+  minImages?: number;
   maxImages?: number;
   maxSizeMB?: number;
   onImagesChange?: (files: File[]) => void;
 }
 
 const ImageUploader = ({
+  defaultImages,
+  minImages = 4,
   maxImages = 10,
   maxSizeMB = 5,
   onImagesChange,
 }: ImageUploaderProps) => {
-  const [images, setImages] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+
+  const [parent, images, _setValues] = useDragAndDrop<HTMLDivElement, File>([]);
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +46,13 @@ const ImageUploader = ({
         return true;
       });
 
-      setImages((prevImages) => {
+      _setValues((prevImages) => {
         const newImages = [...prevImages, ...validFiles].slice(0, maxImages);
         if (newImages.length === maxImages) {
           setError(`Has alcanzado el límite máximo de ${maxImages} imágenes`);
+        }
+        if (newImages.length < minImages) {
+          setError(`El mínimo de imágenes es de ${minImages}.`);
         }
         return newImages;
       });
@@ -59,48 +61,29 @@ const ImageUploader = ({
   );
 
   const removeImage = useCallback((index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    _setValues((prevImages) => {
+      const newImages = prevImages.filter((_, i) => i !== index);
+      if (newImages.length < minImages) {
+        setError(`El mínimo de imágenes es de ${minImages}.`);
+      } else {
+        setError(null);
+      }
+      return newImages;
+    });
     setError(null);
   }, []);
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      if (!result.destination) return;
-
-      const newImages = Array.from(images);
-      const [reorderedItem] = newImages.splice(result.source.index, 1);
-      newImages.splice(result.destination.index, 0, reorderedItem);
-
-      setImages(newImages);
-    },
-    [images],
-  );
-
-  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      setIsDragging(false);
-      const files = Array.from(e.dataTransfer.files);
-      addImages(files);
-    },
-    [addImages],
-  );
-
   useEffect(() => {
-    if (onImagesChange) {
+    if (images.length && onImagesChange) {
       onImagesChange(images);
     }
   }, [images, onImagesChange]);
+
+  useEffect(() => {
+    if (defaultImages?.length) {
+      _setValues(defaultImages);
+    }
+  }, [defaultImages]);
 
   return (
     <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
@@ -108,12 +91,7 @@ const ImageUploader = ({
         Subida de imágenes
       </h2>
       <div
-        className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 ${
-          isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-        }`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 'border-gray-300`}
       >
         <input
           type="file"
@@ -150,50 +128,33 @@ const ImageUploader = ({
         </div>
       )}
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="images" direction="horizontal">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+      <div
+        ref={parent}
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 cursor-grab"
+      >
+        {images.map((file, index) => (
+          <div
+            data-label={file.name}
+            key={file.name}
+            className={`relative group`}
+          >
+            <img
+              src={URL.createObjectURL(file)}
+              alt={`Uploaded ${index + 1}`}
+              className="w-full h-40 object-cover rounded-lg shadow-md"
+            />
+            <button
+              onClick={() => removeImage(index)}
+              className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              {images.map((file, index) => (
-                <Draggable
-                  key={`${file.name}-${index}`}
-                  draggableId={`${file.name}-${index}`}
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={`relative group ${snapshot.isDragging ? 'z-10' : ''}`}
-                    >
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`Uploaded ${index + 1}`}
-                        className="w-full h-40 object-cover rounded-lg shadow-md"
-                      />
-                      <button
-                        onClick={() => removeImage(index)}
-                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                      {/* <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <Move className="w-6 h-6 text-white" />
-                      </div> */}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
+              <X className="w-4 h-4" />
+            </button>
+            <div className="absolute inset-0 bg-black rounded-lg bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <Move className="w-6 h-6 text-white" />
             </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -17,6 +17,11 @@ type LatLng = {
 };
 
 interface IPropsMapSearch {
+  defaultAddress?: {
+    formatted_address?: string | undefined;
+    lat: number;
+    lng: number;
+  };
   onLocationSelected: (address: Address) => void;
   errors: FieldErrors<{
     price?: number | undefined;
@@ -40,12 +45,18 @@ const containerStyle = {
 
 const libraries: 'places'[] = ['places'];
 
-const MapSearch: FC<IPropsMapSearch> = ({ onLocationSelected, errors }) => {
+const MapSearch: FC<IPropsMapSearch> = ({
+  defaultAddress,
+  onLocationSelected,
+  errors,
+}) => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<LatLng | null>(null);
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>(
+    defaultAddress?.formatted_address || '',
+  );
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -79,7 +90,7 @@ const MapSearch: FC<IPropsMapSearch> = ({ onLocationSelected, errors }) => {
   };
 
   useEffect(() => {
-    if (navigator.geolocation) {
+    if (navigator.geolocation && !defaultAddress) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation = {
@@ -100,6 +111,20 @@ const MapSearch: FC<IPropsMapSearch> = ({ onLocationSelected, errors }) => {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (defaultAddress) {
+      setCurrentPosition({
+        lat: defaultAddress?.lat,
+        lng: defaultAddress?.lng,
+      });
+      setSelectedPosition({
+        lat: defaultAddress?.lat,
+        lng: defaultAddress?.lng,
+      });
+      onLocationSelected(defaultAddress);
+    }
+  }, [defaultAddress]);
 
   if (loadError)
     return (
@@ -135,7 +160,9 @@ const MapSearch: FC<IPropsMapSearch> = ({ onLocationSelected, errors }) => {
             }}
           />
         </Autocomplete>
-        <span className="text-sm text-red-500">{errors.address?.lat?.message || errors.address?.lng?.message}</span>
+        <span className="text-sm text-red-500">
+          {errors.address?.lat?.message || errors.address?.lng?.message}
+        </span>
       </div>
 
       <GoogleMap
