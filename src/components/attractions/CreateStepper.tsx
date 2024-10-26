@@ -21,12 +21,10 @@ import ImageUploader from '../ui/ImageUploader';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useStore } from '@/store/store';
-import { DayConfig, ISchedule } from '@/interfaces/schedule';
-import { validateSchedule } from '@/utils/helpers';
+import { DayConfig } from '@/interfaces/schedule';
 import Schedule from '../ui/Schedule';
 import { createAttractionService } from '@/services/attractions/create-attraction';
 import { useRouter } from 'next/navigation';
-import { Address } from '@/interfaces/address';
 
 const dayConfigSchema = yup.object({
   open24hours: yup.boolean(),
@@ -131,14 +129,13 @@ const CreateStepper = () => {
   const [selectedTab, setSelectedTab] = useState<string | number>('details');
   const [saved, setSaved] = useState(false);
   const [images, setImages] = useState<File[]>([]);
-  const [errorSchedule, setErrorSchedule] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleNavigation = (path: string) => {
     router.push(path);
   };
 
-  console.log(watch('schedule'))
+  console.log(watch('schedule'));
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
@@ -158,45 +155,40 @@ const CreateStepper = () => {
   };
 
   const handleFinish = async (data: any) => {
-    if (validateSchedule(getValues().schedule as ISchedule)) {
-      setErrorSchedule('');
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append('title', data.name);
-      formData.append('description', data.description);
-      formData.append('category', data.category);
-      formData.append('contactNumber', data.phonenumber || '');
-      formData.append('email', data.email || '');
-      formData.append('webSite', data.website || '');
-      formData.append('instagram', data.instagram || '');
-      formData.append('facebook', data.facebook || '');
-      formData.append('services', JSON.stringify(data.services));
+    formData.append('title', data.name);
+    formData.append('description', data.description);
+    formData.append('category', data.category);
+    formData.append('contactNumber', data.phonenumber || '');
+    formData.append('email', data.email || '');
+    formData.append('webSite', data.website || '');
+    formData.append('instagram', data.instagram || '');
+    formData.append('facebook', data.facebook || '');
+    formData.append('services', JSON.stringify(data.services));
 
-      formData.append('location', JSON.stringify(data.address));
+    formData.append('location', JSON.stringify(data.address));
 
-      formData.append('schedule', JSON.stringify(data.schedule));
+    formData.append('schedule', JSON.stringify(data.schedule));
 
-      if (data.price) {
-        formData.append('price', data.price.toString());
-        formData.append('currencyPrice', data.currency || 'ars');
-      }
+    if (data.price) {
+      formData.append('price', data.price.toString());
+      formData.append('currencyPrice', data.currency || 'ars');
+    }
 
-      images.forEach((image) => {
-        formData.append('images', image);
-      });
+    images.forEach((image) => {
+      formData.append('images', image);
+    });
 
-      try {
-        setLoading(true);
-        const attraction = await createAttractionService(formData);
-        reset();
-        handleNavigation(`/attractions/${attraction?.slug}`);
-      } catch {
-        notify();
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setErrorSchedule('Debes configurar al menos un día.');
+    try {
+      setLoading(true);
+      const attraction = await createAttractionService(formData);
+      reset();
+      handleNavigation(`/attractions/${attraction?.slug}`);
+    } catch {
+      notify();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -398,8 +390,6 @@ const CreateStepper = () => {
               <div className="flex flex-col gap-4">
                 <Schedule
                   onSaveSchedule={setSchedule}
-                  error={errorSchedule}
-                  setError={setErrorSchedule}
                 />
                 <Input
                   type="text"

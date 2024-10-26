@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Checkbox, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Checkbox, Input } from '@nextui-org/react';
 import { IoClose } from 'react-icons/io5';
 import { WEEKDAYS } from '@/utils/constants';
 import { useStore } from '@/store/store';
@@ -11,11 +11,9 @@ import { Clock } from 'lucide-react';
 
 interface IPropsSchedule {
   onSaveSchedule: (schedule: Record<string, DayConfig>) => void;
-  error: string;
-  setError: (error: string) => void;
 }
 
-const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
+const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   const { schedule, setSchedule } = useStore((state) => state);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [config, setConfig] = useState<Record<string, DayConfig>>(
@@ -86,28 +84,12 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
   };
 
   const saveConfig = () => {
-    setError('');
     setSaved((prev) => !prev);
     onSaveSchedule(config);
     setSchedule({
       selectedDays,
       config,
     });
-  };
-
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        options.push(
-          <SelectItem key={time} value={time}>
-            {time}
-          </SelectItem>,
-        );
-      }
-    }
-    return options;
   };
 
   useEffect(() => {
@@ -178,30 +160,6 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
               {!config[day].open24hours &&
                 config[day].times.map((time, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
-                    {/* <Select
-                      label="Desde"
-                      defaultSelectedKeys={[time.from]}
-                      value={time.from}
-                      onChange={(e) =>
-                        updateTime(day, index, 'from', e.target.value)
-                      }
-                      size="sm"
-                      className="w-32"
-                    >
-                      {generateTimeOptions()}
-                    </Select>
-                    <Select
-                      label="Hasta"
-                      defaultSelectedKeys={[time.to]}
-                      value={time.to}
-                      onChange={(e) =>
-                        updateTime(day, index, 'to', e.target.value)
-                      }
-                      size="sm"
-                      className="w-32"
-                    >
-                      {generateTimeOptions()}
-                    </Select> */}
                     <Input
                       type="time"
                       label="Desde"
@@ -252,8 +210,6 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
           ))}
         </>
       )}
-
-      <span className="text-sm text-red-500">{error}</span>
 
       <div className="flex justify-start gap-2 mt-4">
         <Button
