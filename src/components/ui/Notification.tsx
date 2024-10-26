@@ -71,7 +71,7 @@ const Notification: FC<IPropsNotification> = ({
           </div>
           <div className="ml-3">
             <p className="text-sm font-medium text-gray-900">
-              <span className="font-bold">{notification?.user?.name}</span>{' '}
+              <span className="font-bold">{notification?.triggeredBy?.name}</span>{' '}
               {notification.type === 'like'
                 ? 'le dió me gusta a tu opinión'
                 : 'comentó tu publicación'}

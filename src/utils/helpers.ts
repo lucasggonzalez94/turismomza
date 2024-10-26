@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import { Review } from '@/interfaces/attraction';
+import { ISchedule } from '@/interfaces/schedule';
+import { SERVICES } from './constants';
 
 export const navigation = (path: string) => {
   redirect(path);
@@ -30,4 +32,24 @@ export const formatDate = (isoDate: string): string => {
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;
+};
+
+export const validateSchedule = (schedule: ISchedule): boolean => {
+  return Object.values(schedule).some((day) => {
+    if (day.open24hours) {
+      return true;
+    }
+    return day.times.some((time) => time.from !== '' && time.to !== '');
+  });
+};
+
+export const mapServices = (services: string[]) => {
+  const servicesObject = SERVICES.reduce((acc: any, service: any) => {
+    acc[service.key] = service.label;
+    return acc;
+  }, {});
+
+  return services.map((service) => {
+    return servicesObject[service];
+  });
 };

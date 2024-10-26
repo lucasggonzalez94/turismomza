@@ -1,17 +1,22 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, FC } from 'react';
 import {
   GoogleMap,
   DirectionsRenderer,
   Marker,
   useJsApiLoader,
 } from '@react-google-maps/api';
+import { Address } from '@/interfaces/address';
 
 type LatLng = {
   lat: number;
   lng: number;
 };
+
+interface IPropsMapRoute {
+  location: string;
+}
 
 const containerStyle = {
   width: '100%',
@@ -19,12 +24,14 @@ const containerStyle = {
   minHeight: '350px',
 };
 
-const destination = { lat: -32.88930366016088, lng: -68.87073591419724 };
-
-const MapRoute = () => {
+const MapRoute: FC<IPropsMapRoute> = ({ location }) => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [directionsResponse, setDirectionsResponse] =
     useState<google.maps.DirectionsResult | null>(null);
+  const [locationParsed, setLocationParsed] = useState<Address>({
+    lat: 0,
+    lng: 0,
+  });
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const { isLoaded: mapsApiLoaded, loadError } = useJsApiLoader({
@@ -53,20 +60,27 @@ const MapRoute = () => {
     try {
       const results = await directionsService.route({
         origin: currentPosition,
-        destination: destination,
+        destination: locationParsed,
         travelMode: google.maps.TravelMode.DRIVING,
       });
       setDirectionsResponse(results);
     } catch (error) {
       console.error('Error al calcular la ruta:', error);
     }
-  }, [currentPosition]);
+  }, [currentPosition, location]);
 
   useEffect(() => {
-    if (currentPosition && mapsApiLoaded) {
+    if (currentPosition && locationParsed && mapsApiLoaded) {
       calculateRoute();
     }
-  }, [currentPosition, mapsApiLoaded, calculateRoute]);
+  }, [currentPosition, mapsApiLoaded, calculateRoute, locationParsed]);
+  
+  useEffect(() => {
+    if (location) {
+      const locationParsed = JSON.parse(location);
+      setLocationParsed(locationParsed);
+    }
+  }, [location]);
 
   if (loadError) return <div>Error al cargar el mapa</div>;
   if (!mapsApiLoaded) return <div>Cargando...</div>;
@@ -74,7 +88,7 @@ const MapRoute = () => {
   return (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={destination || currentPosition || undefined}
+      center={locationParsed || currentPosition || undefined}
       zoom={10}
       onLoad={(map) => {
         mapRef.current = map;
@@ -89,7 +103,7 @@ const MapRoute = () => {
         mapTypeControl: true,
       }}
     >
-      {destination && <Marker position={destination} />}
+      {locationParsed && <Marker position={locationParsed} />}
       {currentPosition && <Marker position={currentPosition} />}
       {directionsResponse && (
         <DirectionsRenderer

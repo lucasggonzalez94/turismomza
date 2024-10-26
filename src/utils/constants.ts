@@ -140,3 +140,5 @@ export const CURRENCIES = [
     label: 'USD',
   },
 ];
+
+export const WEEKDAYS = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];

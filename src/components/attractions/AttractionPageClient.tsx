@@ -1,7 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { calculateAverageRating, formatPrice } from '@/utils/helpers';
+import {
+  calculateAverageRating,
+  formatPrice,
+  mapServices,
+} from '@/utils/helpers';
 import { IoStar } from 'react-icons/io5';
 import ButtonsHeaderAttraction from './ButtonsHeaderAttraction';
 import MapRoute from './MapRoute';
@@ -14,7 +18,6 @@ import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import Spinner from '../ui/Spinner/Spinner';
 import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
-// import useWindowSize from '@/hooks/useWindowSize';
 
 interface IPropsAttractionPageClient {
   slug: string;
@@ -39,7 +42,6 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
 
   const { user, loading, setLoading } = useStore((state) => state);
   const router = useRouter();
-  // const { width } = useWindowSize();
 
   const {
     id,
@@ -58,6 +60,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     instagram,
     facebook,
     creatorId,
+    location,
   } = attraction;
 
   const getAttraction = async () => {
@@ -91,13 +94,14 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     if (reviews?.length) {
       setAverageRating(calculateAverageRating(reviews));
     }
-    if (services?.length) {
+    const mappedServices = mapServices(services || []);
+    if (mappedServices?.length) {
       setServicesAccordion([
         {
           title: 'Servicios',
           content: (
             <ul className="list-disc list-inside">
-              {services?.map((service, index) => (
+              {mappedServices?.map((service, index) => (
                 <li key={index}>{service}</li>
               ))}
             </ul>
@@ -106,20 +110,6 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       ]);
     }
   }, [reviews, services]);
-
-  // useEffect(() => {
-  //   if (width > 1024) {
-  //     setPageSize(8);
-  //   } else {
-  //     setPageSize(6);
-  //   }
-
-  //   if (width < 1536) {
-  //     setHideFilters(true);
-  //   } else {
-  //     setHideFilters(false);
-  //   }
-  // }, [width]);
 
   if (loading) {
     return <Spinner />;
@@ -162,41 +152,8 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       </div>
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="hidden md:grid grid-cols-7 grid-rows-2 gap-4 w-full lg:w-2/3 max-h-[700px]">
-          {/* TODO: Quitar despues de las pruebas */}
-          {!images?.length ? (
-            <>
-              <Image
-                src="/images/default-image.jpg"
-                alt={`Imágen`}
-                width={300}
-                height={200}
-                className="w-full h-full object-cover object-center col-span-4 cursor-pointer hover:brightness-75"
-              />
-              <Image
-                src="/images/default-image.jpg"
-                alt={`Imágen`}
-                width={300}
-                height={200}
-                className="w-full h-full object-cover object-center col-span-3 cursor-pointer hover:brightness-75"
-              />
-              <Image
-                src="/images/default-image.jpg"
-                alt={`Imágen`}
-                width={300}
-                height={200}
-                className="w-full h-full object-cover object-center col-span-3 cursor-pointer hover:brightness-75"
-              />
-              <Image
-                src="/images/default-image.jpg"
-                alt={`Imágen`}
-                width={300}
-                height={200}
-                className="w-full h-full object-cover object-center col-span-4 cursor-pointer hover:brightness-75"
-              />
-            </>
-          ) : null}
           {images
-            ?.slice(0, 3)
+            ?.slice(0, 4)
             ?.map((img, index) => (
               <Image
                 key={img?.public_id}
@@ -205,7 +162,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
                 width={300}
                 height={200}
                 defaultValue="/images/default-image.jpg"
-                className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 1 || index === 4 ? 'col-span-4' : 'col-span-3'}`}
+                className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
               />
             ))}
         </div>
@@ -213,7 +170,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
           <SliderCarousel images={IMAGES} showPrevNextButtons />
         </div>
         <div className="w-full lg:w-1/3 min-h-[350px] rounded-lg overflow-hidden md:rounded-none">
-          <MapRoute />
+          <MapRoute location={location || ''} />
         </div>
       </div>
       <p className="border-b border-gray-300 pb-4">{description}</p>

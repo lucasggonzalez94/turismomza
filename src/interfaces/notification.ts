@@ -6,6 +6,7 @@ export interface Notification {
   read: boolean;
   creation_date: Date;
   user: User;
+  triggeredBy: User;
 }
 
 export interface User {

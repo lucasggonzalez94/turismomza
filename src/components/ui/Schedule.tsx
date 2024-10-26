@@ -1,34 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Checkbox, Select, SelectItem } from '@nextui-org/react';
 import { IoClose } from 'react-icons/io5';
+import { WEEKDAYS } from '@/utils/constants';
+import { useStore } from '@/store/store';
+import { DayConfig } from '@/interfaces/schedule';
+import { validateSchedule } from '@/utils/helpers';
 
-const weekDays = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
-
-interface Time {
-  from: string;
-  to: string;
+interface IPropsSchedule {
+  onSaveSchedule: (schedule: Record<string, DayConfig>) => void;
+  error: string;
+  setError: (error: string) => void;
 }
 
-interface DayConfig {
-  open24hours: boolean;
-  times: Time[];
-}
-
-const Schedule = () => {
+const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
+  const { schedule, setSchedule } = useStore((state) => state);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [config, setConfig] = useState<Record<string, DayConfig>>(
-    Object.fromEntries(
-      weekDays.map((day) => [
-        day,
-        {
-          open24hours: false,
-          times: [{ from: '09:00', to: '18:00' }],
-        },
-      ]),
-    ),
+    schedule?.config ||
+      Object.fromEntries(
+        WEEKDAYS.map((day) => [
+          day,
+          {
+            open24hours: false,
+            times: [{ from: '', to: '' }],
+          },
+        ]),
+      ),
   );
+  const [saved, setSaved] = useState(false);
 
   const toggleSelectedDay = (day: string) => {
     setSelectedDays((prev) =>
@@ -84,8 +85,13 @@ const Schedule = () => {
   };
 
   const saveConfig = () => {
-    console.log('Configuración guardada:', config);
-    // Aquí iría la lógica para guardar la configuración
+    setError('');
+    setSaved((prev) => !prev);
+    onSaveSchedule(config);
+    setSchedule({
+      selectedDays,
+      config,
+    });
   };
 
   const generateTimeOptions = () => {
@@ -103,6 +109,13 @@ const Schedule = () => {
     return options;
   };
 
+  useEffect(() => {
+    if (schedule) {
+      setSelectedDays(schedule?.selectedDays);
+      setConfig(schedule?.config);
+    }
+  }, [schedule]);
+
   return (
     <div className="w-full">
       <h1 className="text-xl font-bold mb-4">Horarios</h1>
@@ -111,84 +124,121 @@ const Schedule = () => {
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
-        {weekDays.map((day) => (
+        {WEEKDAYS.map((day) => (
           <Button
             key={day}
             color={selectedDays.includes(day) ? 'secondary' : 'default'}
             onClick={() => toggleSelectedDay(day)}
             className="rounded-full"
+            isDisabled={saved}
           >
             {day}
           </Button>
         ))}
       </div>
 
-      {selectedDays.map((day) => (
-        <div key={day} className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]">
-          <h2 className="text-lg font-semibold mb-2">{day}</h2>
-          <Checkbox
-            isSelected={config[day].open24hours}
-            onValueChange={() => toggleOpen24Hours(day)}
-            className="mb-2"
-          >
-            Abierto las 24 horas
-          </Checkbox>
-
-          {!config[day].open24hours &&
-            config[day].times.map((horario, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <Select
-                  label="Desde"
-                  value={horario.from}
-                  onChange={(e) =>
-                    updateTime(day, index, 'from', e.target.value)
-                  }
-                  size="sm"
-                  className="w-32"
-                >
-                  {generateTimeOptions()}
-                </Select>
-                <Select
-                  label="Hasta"
-                  value={horario.to}
-                  onChange={(e) => updateTime(day, index, 'to', e.target.value)}
-                  size="sm"
-                  className="w-32"
-                >
-                  {generateTimeOptions()}
-                </Select>
-                <Button
-                  color="danger"
-                  isIconOnly
-                  onClick={() => deleteTime(day, index)}
-                  isDisabled={config[day].times.length === 1}
-                >
-                  <IoClose size={20} />
-                </Button>
-              </div>
-            ))}
-
-          {!config[day].open24hours && (
-            <Button
-              color="secondary"
-              size="sm"
-              onClick={() => addTime(day)}
-              className="mt-2"
+      {saved ? (
+        <>
+          {selectedDays.map((day) => (
+            <div
+              key={day}
+              className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]"
             >
-              Agregar horario
-            </Button>
-          )}
-        </div>
-      ))}
+              <h2 className="text-lg font-semibold mb-2">{day}</h2>
+              {config[day].open24hours && <span>Abierto las 24 horas</span>}
+
+              {!config[day].open24hours &&
+                config[day].times.map((horario, index) => (
+                  <div key={index} className="flex items-center gap-2 mb-2">
+                    <span>Desde: {horario.from}</span>
+                    <span> - </span>
+                    <span>Hasta: {horario.to}</span>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </>
+      ) : (
+        <>
+          {selectedDays.map((day) => (
+            <div
+              key={day}
+              className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]"
+            >
+              <h2 className="text-lg font-semibold mb-2">{day}</h2>
+              <Checkbox
+                isSelected={config[day].open24hours}
+                onValueChange={() => toggleOpen24Hours(day)}
+                className="mb-2"
+              >
+                Abierto las 24 horas
+              </Checkbox>
+
+              {!config[day].open24hours &&
+                config[day].times.map((time, index) => (
+                  <div key={index} className="flex items-center gap-2 mb-2">
+                    <Select
+                      label="Desde"
+                      defaultSelectedKeys={[time.from]}
+                      value={time.from}
+                      onChange={(e) =>
+                        updateTime(day, index, 'from', e.target.value)
+                      }
+                      size="sm"
+                      className="w-32"
+                    >
+                      {generateTimeOptions()}
+                    </Select>
+                    <Select
+                      label="Hasta"
+                      defaultSelectedKeys={[time.to]}
+                      value={time.to}
+                      onChange={(e) =>
+                        updateTime(day, index, 'to', e.target.value)
+                      }
+                      size="sm"
+                      className="w-32"
+                    >
+                      {generateTimeOptions()}
+                    </Select>
+                    <Button
+                      className="text-white bg-red-700 hover:bg-red-500"
+                      isIconOnly
+                      onClick={() => deleteTime(day, index)}
+                      isDisabled={config[day].times.length === 1}
+                    >
+                      <IoClose size={20} />
+                    </Button>
+                  </div>
+                ))}
+
+              {!config[day].open24hours && (
+                <Button
+                  className="bg-black hover:bg-gray-900 text-white mt-2"
+                  size="sm"
+                  onClick={() => addTime(day)}
+                >
+                  Agregar horario
+                </Button>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+
+      <span className="text-sm text-red-500">{error}</span>
 
       <div className="flex justify-start gap-2 mt-4">
-        <Button color="default">Cancelar</Button>
-        <Button color="primary" onClick={saveConfig}>
-          Guardar horarios
+        <Button
+          className="bg-black hover:bg-gray-900 text-white"
+          onClick={saveConfig}
+          isDisabled={!validateSchedule(config)}
+        >
+          {saved ? 'Editar horarios' : 'Guardar horarios'}
         </Button>
       </div>
     </div>
   );
-}
+};
 
 export default Schedule;

@@ -1,7 +1,5 @@
 'use client';
 
-import { Address } from './FirstStepCreation';
-import { FieldErrors } from 'react-hook-form';
 import { FC, useEffect, useRef, useState } from 'react';
 import {
   GoogleMap,
@@ -10,6 +8,7 @@ import {
   useLoadScript,
 } from '@react-google-maps/api';
 import { Input } from '@nextui-org/react';
+import { Address } from './CreateStepper';
 
 type LatLng = {
   lat: number;
@@ -19,23 +18,11 @@ type LatLng = {
 interface IPropsMapSearch {
   defaultAddress?: {
     formatted_address?: string | undefined;
-    lat: number;
-    lng: number;
+    lat?: number;
+    lng?: number;
   };
   onLocationSelected: (address: Address) => void;
-  errors: FieldErrors<{
-    price?: number | undefined;
-    currency?: string | undefined;
-    name: string;
-    description: string;
-    category: string;
-    services: (string | undefined)[];
-    address: {
-      formatted_address?: string | undefined;
-      lat: number;
-      lng: number;
-    };
-  }>;
+  errors: any;
 }
 
 const containerStyle = {
@@ -115,14 +102,14 @@ const MapSearch: FC<IPropsMapSearch> = ({
   useEffect(() => {
     if (defaultAddress) {
       setCurrentPosition({
-        lat: defaultAddress?.lat,
-        lng: defaultAddress?.lng,
+        lat: defaultAddress?.lat || 0,
+        lng: defaultAddress?.lng || 0,
       });
       setSelectedPosition({
-        lat: defaultAddress?.lat,
-        lng: defaultAddress?.lng,
+        lat: defaultAddress?.lat || 0,
+        lng: defaultAddress?.lng || 0,
       });
-      onLocationSelected(defaultAddress);
+      onLocationSelected(defaultAddress as Address);
     }
   }, [defaultAddress]);
 

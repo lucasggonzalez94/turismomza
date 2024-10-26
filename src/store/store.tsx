@@ -1,4 +1,5 @@
-import { CreateFormFirstStep } from '@/interfaces/create-form';
+import { CreateForm } from '@/interfaces/create-form';
+import { DayConfig } from '@/interfaces/schedule';
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
@@ -6,6 +7,10 @@ import { create } from 'zustand';
 interface Price {
   minPrice: number;
   maxPrice: number;
+}
+interface Schedule {
+  selectedDays: string[];
+  config: Record<string, DayConfig>;
 }
 interface State {
   user: User | null;
@@ -20,8 +25,10 @@ interface State {
   setLoading: (loading: boolean) => void;
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
-  createFirstStepData: CreateFormFirstStep | null;
-  setCreateFirstStepData: (data: CreateFormFirstStep) => void;
+  createData: CreateForm | null;
+  setCreateData: (data: CreateForm) => void;
+  schedule: Schedule | null;
+  setSchedule: (schedule: Schedule) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -40,6 +47,8 @@ export const useStore = create<State>((set) => ({
   setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),
-  createFirstStepData: null,
-  setCreateFirstStepData: (data) => set(() => ({ createFirstStepData: data })),
+  createData: null,
+  setCreateData: (data) => set(() => ({ createData: data })),
+  schedule: null,
+  setSchedule: (schedule) => set(() => ({ schedule })),
 }));
