@@ -1,12 +1,13 @@
 'use client';
 
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Checkbox, Select, SelectItem } from '@nextui-org/react';
+import { Button, Checkbox, Input, Select, SelectItem } from '@nextui-org/react';
 import { IoClose } from 'react-icons/io5';
 import { WEEKDAYS } from '@/utils/constants';
 import { useStore } from '@/store/store';
 import { DayConfig } from '@/interfaces/schedule';
 import { validateSchedule } from '@/utils/helpers';
+import { Clock } from 'lucide-react';
 
 interface IPropsSchedule {
   onSaveSchedule: (schedule: Record<string, DayConfig>) => void;
@@ -177,7 +178,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
               {!config[day].open24hours &&
                 config[day].times.map((time, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
-                    <Select
+                    {/* <Select
                       label="Desde"
                       defaultSelectedKeys={[time.from]}
                       value={time.from}
@@ -200,7 +201,33 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, error, setError }) => {
                       className="w-32"
                     >
                       {generateTimeOptions()}
-                    </Select>
+                    </Select> */}
+                    <Input
+                      type="time"
+                      label="Desde"
+                      placeholder="00:00"
+                      value={time.from}
+                      onChange={(e) =>
+                        updateTime(day, index, 'from', e.target.value)
+                      }
+                      startContent={
+                        <Clock className="text-gray-400" size={16} />
+                      }
+                      className="w-32"
+                    />
+                    <Input
+                      type="time"
+                      label="Hasta"
+                      placeholder="00:00"
+                      value={time.to}
+                      onChange={(e) =>
+                        updateTime(day, index, 'to', e.target.value)
+                      }
+                      startContent={
+                        <Clock className="text-gray-400" size={16} />
+                      }
+                      className="w-32"
+                    />
                     <Button
                       className="text-white bg-red-700 hover:bg-red-500"
                       isIconOnly

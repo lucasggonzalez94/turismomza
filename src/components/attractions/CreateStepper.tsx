@@ -138,6 +138,8 @@ const CreateStepper = () => {
     router.push(path);
   };
 
+  console.log(watch('schedule'))
+
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
       position: 'top-left',
