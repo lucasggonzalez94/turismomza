@@ -25,6 +25,7 @@ import { DayConfig } from '@/interfaces/schedule';
 import Schedule from '../ui/Schedule';
 import { createAttractionService } from '@/services/attractions/create-attraction';
 import { useRouter } from 'next/navigation';
+import { Address } from '@/interfaces/address';
 
 const dayConfigSchema = yup.object({
   open24hours: yup.boolean(),
@@ -94,7 +95,6 @@ const CreateStepper = () => {
     setValue,
     getValues,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -135,13 +135,15 @@ const CreateStepper = () => {
     router.push(path);
   };
 
-  console.log(watch('schedule'));
-
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
       position: 'top-left',
       theme: 'dark',
     });
+
+  const handleLocationSelected = (address: Address) => {
+    setValue('address', address);
+  };
 
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
@@ -353,9 +355,7 @@ const CreateStepper = () => {
               <div className="flex flex-col gap-1 w-1/2">
                 <MapSearch
                   defaultAddress={createData?.address}
-                  register={register}
-                  getValues={getValues}
-                  setValue={setValue}
+                  onLocationSelected={handleLocationSelected}
                   errors={errors}
                 />
               </div>
@@ -380,7 +380,7 @@ const CreateStepper = () => {
               <span>Contacto y horarios</span>
             </div>
           }
-          // isDisabled={!saved}
+          isDisabled={!saved}
         >
           <form
             onSubmit={handleSubmit(handleFinish)}
@@ -388,9 +388,7 @@ const CreateStepper = () => {
           >
             <div className="flex gap-4 w-full">
               <div className="flex flex-col gap-4">
-                <Schedule
-                  onSaveSchedule={setSchedule}
-                />
+                <Schedule onSaveSchedule={setSchedule} />
                 <Input
                   type="text"
                   label={

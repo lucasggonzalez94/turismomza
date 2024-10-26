@@ -8,7 +8,7 @@ import {
   useLoadScript,
 } from '@react-google-maps/api';
 import { Input } from '@nextui-org/react';
-import { UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { Address } from '@/interfaces/address';
 
 type LatLng = {
   lat: number;
@@ -21,9 +21,7 @@ interface IPropsMapSearch {
     lat?: number;
     lng?: number;
   };
-  register: UseFormRegister<any>;
-  getValues: UseFormGetValues<any>;
-  setValue: UseFormSetValue<any>;
+  onLocationSelected: (address: Address) => void;
   errors: any;
 }
 
@@ -36,14 +34,14 @@ const libraries: 'places'[] = ['places'];
 
 const MapSearch: FC<IPropsMapSearch> = ({
   defaultAddress,
-  register,
-  getValues,
-  setValue,
+  onLocationSelected,
   errors,
 }) => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<LatLng | null>(null);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>(
+    defaultAddress?.formatted_address || '',
+  );
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -62,7 +60,11 @@ const MapSearch: FC<IPropsMapSearch> = ({
           lng: place.geometry.location?.lng() as number,
         };
         setSelectedPosition(newLocation);
-        setValue('address', place);
+        onLocationSelected({
+          ...newLocation,
+          formatted_address: place.formatted_address || '',
+        });
+        setInputValue(place.formatted_address as string);
         mapRef.current?.panTo(newLocation);
       }
     }
@@ -95,7 +97,7 @@ const MapSearch: FC<IPropsMapSearch> = ({
         },
       );
     }
-  }, []);
+  }, [defaultAddress]);
 
   useEffect(() => {
     if (defaultAddress) {
@@ -108,17 +110,9 @@ const MapSearch: FC<IPropsMapSearch> = ({
         lng: defaultAddress?.lng || 0,
       });
 
-      if (defaultAddress.formatted_address) {
-        setValue('address.formatted_address', defaultAddress.formatted_address);
-      }
+      onLocationSelected(defaultAddress as Address);
     }
-  }, [defaultAddress]);
-  
-  useEffect(() => {
-    if (getValues().address) {
-      setInputValue(getValues().address?.formatted_address)
-    }
-  }, [getValues().address]);
+  }, [defaultAddress, onLocationSelected]);
 
   if (loadError)
     return (
@@ -147,12 +141,12 @@ const MapSearch: FC<IPropsMapSearch> = ({
           placeholder="Escribe la dirección"
           isInvalid={!!errors.address?.formatted_address?.message}
           errorMessage={errors.address?.formatted_address?.message}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
             }
           }}
-          {...register('address.formatted_address')}
         />
       </Autocomplete>
 
