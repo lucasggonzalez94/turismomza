@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { toast, ToastContainer } from 'react-toastify';
 import {
@@ -16,7 +16,6 @@ import { PiNumberCircleOneFill, PiNumberCircleTwoFill } from 'react-icons/pi';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { Controller, useForm } from 'react-hook-form';
 import { CATEGORIES, CURRENCIES, SERVICES, WEEKDAYS } from '@/utils/constants';
-import MapSearch from './MapSearch';
 import ImageUploader from '../ui/ImageUploader';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -26,6 +25,17 @@ import Schedule from '../ui/Schedule';
 import { createAttractionService } from '@/services/attractions/create-attraction';
 import { useRouter } from 'next/navigation';
 import { Address } from '@/interfaces/address';
+import {
+  Autocomplete,
+  GoogleMap,
+  Marker,
+  useLoadScript,
+} from '@react-google-maps/api';
+
+type LatLng = {
+  lat: number;
+  lng: number;
+};
 
 const dayConfigSchema = yup.object({
   open24hours: yup.boolean(),
@@ -84,7 +94,14 @@ const schema = yup
   })
   .required();
 
-const CreateStepper = () => {
+const containerStyle = {
+  width: '100%',
+  height: '100%',
+};
+
+const libraries: 'places'[] = ['places'];
+
+const CreateAttractionForm = () => {
   const router = useRouter();
   const { createData, setCreateData } = useStore((state) => state);
   const {
@@ -95,6 +112,7 @@ const CreateStepper = () => {
     setValue,
     getValues,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -130,6 +148,16 @@ const CreateStepper = () => {
   const [saved, setSaved] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<LatLng | null>(null);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
+  const mapRef = useRef<google.maps.Map | null>(null);
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries,
+  });
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -140,10 +168,6 @@ const CreateStepper = () => {
       position: 'top-left',
       theme: 'dark',
     });
-
-  const handleLocationSelected = (address: Address) => {
-    setValue('address', address);
-  };
 
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
@@ -197,6 +221,56 @@ const CreateStepper = () => {
   const setSchedule = (schedule: Record<string, DayConfig>) => {
     setValue('schedule', schedule);
   };
+
+  const onAutocompleteLoad = (
+    autocompleteInstance: google.maps.places.Autocomplete,
+  ) => {
+    setAutocomplete(autocompleteInstance);
+  };
+
+  const handlePlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        const newLocation = {
+          lat: place.geometry.location?.lat() as number,
+          lng: place.geometry.location?.lng() as number,
+          formatted_address: place.formatted_address,
+        };
+        setSelectedPosition(newLocation);
+        setValue('address', newLocation as Address, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+        mapRef.current?.panTo(newLocation);
+      }
+    }
+  };
+
+  console.log(watch('address'));
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setCurrentPosition(userLocation);
+          setSelectedPosition(userLocation);
+        },
+        (error) => {
+          console.error('Error getting the location: ', error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        },
+      );
+    }
+  }, []);
 
   return (
     <>
@@ -352,13 +426,69 @@ const CreateStepper = () => {
                   })}
                 />
               </div>
-              <div className="flex flex-col gap-1 w-1/2">
-                <MapSearch
-                  defaultAddress={createData?.address}
-                  onLocationSelected={handleLocationSelected}
-                  errors={errors}
-                />
-              </div>
+              {loadError ? (
+                <div className="w-full h-full flex justify-center items-center">
+                  Error al cargar el mapa
+                </div>
+              ) : !isLoaded ? (
+                <div className="w-full h-full flex justify-center items-center">
+                  Cargando...
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1 w-1/2">
+                  <Controller
+                    name="address.formatted_address"
+                    control={control}
+                    render={({ field }) => (
+                      <Autocomplete
+                        onLoad={onAutocompleteLoad}
+                        onPlaceChanged={handlePlaceChanged}
+                      >
+                        <Input
+                          type="text"
+                          label="Buscar lugar"
+                          labelPlacement="outside"
+                          placeholder="Escribe la dirección"
+                          isInvalid={
+                            !!errors.address?.formatted_address?.message
+                          }
+                          errorMessage={
+                            errors.address?.formatted_address?.message
+                          }
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                            }
+                          }}
+                          {...field}
+                        />
+                      </Autocomplete>
+                    )}
+                  />
+
+                  <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={
+                      selectedPosition || currentPosition || { lat: 0, lng: 0 }
+                    }
+                    zoom={currentPosition ? 15 : 2}
+                    onLoad={(map) => {
+                      mapRef.current = map;
+                    }}
+                    options={{
+                      gestureHandling: 'cooperative',
+                      zoomControl: true,
+                      scrollwheel: true,
+                      disableDoubleClickZoom: false,
+                      fullscreenControl: true,
+                      streetViewControl: true,
+                      mapTypeControl: true,
+                    }}
+                  >
+                    {selectedPosition && <Marker position={selectedPosition} />}
+                  </GoogleMap>
+                </div>
+              )}
             </div>
             <ImageUploader
               defaultImages={createData?.images}
@@ -494,4 +624,4 @@ const CreateStepper = () => {
   );
 };
 
-export default CreateStepper;
+export default CreateAttractionForm;
