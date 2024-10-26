@@ -1,5 +1,5 @@
 export interface Address {
   lat: number;
   lng: number;
-  formatted_address?: string;
+  formatted_address: string;
 }

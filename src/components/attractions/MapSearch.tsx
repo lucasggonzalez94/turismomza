@@ -8,7 +8,7 @@ import {
   useLoadScript,
 } from '@react-google-maps/api';
 import { Input } from '@nextui-org/react';
-import { Address } from './CreateStepper';
+import { UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 type LatLng = {
   lat: number;
@@ -21,7 +21,9 @@ interface IPropsMapSearch {
     lat?: number;
     lng?: number;
   };
-  onLocationSelected: (address: Address) => void;
+  register: UseFormRegister<any>;
+  getValues: UseFormGetValues<any>;
+  setValue: UseFormSetValue<any>;
   errors: any;
 }
 
@@ -34,16 +36,16 @@ const libraries: 'places'[] = ['places'];
 
 const MapSearch: FC<IPropsMapSearch> = ({
   defaultAddress,
-  onLocationSelected,
+  register,
+  getValues,
+  setValue,
   errors,
 }) => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<LatLng | null>(null);
+  const [inputValue, setInputValue] = useState('');
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
-  const [inputValue, setInputValue] = useState<string>(
-    defaultAddress?.formatted_address || '',
-  );
   const mapRef = useRef<google.maps.Map | null>(null);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -60,11 +62,7 @@ const MapSearch: FC<IPropsMapSearch> = ({
           lng: place.geometry.location?.lng() as number,
         };
         setSelectedPosition(newLocation);
-        onLocationSelected({
-          ...newLocation,
-          formatted_address: place.formatted_address,
-        });
-        setInputValue(place.formatted_address as string);
+        setValue('address', place);
         mapRef.current?.panTo(newLocation);
       }
     }
@@ -109,9 +107,18 @@ const MapSearch: FC<IPropsMapSearch> = ({
         lat: defaultAddress?.lat || 0,
         lng: defaultAddress?.lng || 0,
       });
-      onLocationSelected(defaultAddress as Address);
+
+      if (defaultAddress.formatted_address) {
+        setValue('address.formatted_address', defaultAddress.formatted_address);
+      }
     }
   }, [defaultAddress]);
+  
+  useEffect(() => {
+    if (getValues().address) {
+      setInputValue(getValues().address?.formatted_address)
+    }
+  }, [getValues().address]);
 
   if (loadError)
     return (
@@ -136,20 +143,16 @@ const MapSearch: FC<IPropsMapSearch> = ({
           type="text"
           label="Buscar lugar"
           labelPlacement="outside"
-          placeholder="Escribe la dirección"
           value={inputValue}
-          isInvalid={
-            !!errors.address?.lat?.message || !!errors.address?.lng?.message
-          }
-          errorMessage={
-            errors.address?.lat?.message || errors.address?.lng?.message
-          }
-          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Escribe la dirección"
+          isInvalid={!!errors.address?.formatted_address?.message}
+          errorMessage={errors.address?.formatted_address?.message}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
             }
           }}
+          {...register('address.formatted_address')}
         />
       </Autocomplete>
 

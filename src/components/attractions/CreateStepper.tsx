@@ -61,7 +61,9 @@ const schema = yup
       .object({
         lat: yup.number().required('La dirección es obligatoria.'),
         lng: yup.number().required('La dirección es obligatoria.'),
-        formatted_address: yup.string(),
+        formatted_address: yup
+          .string()
+          .required('La dirección es obligatoria.'),
       })
       .required('La dirección es obligatoria.'),
     website: yup.string(),
@@ -94,6 +96,7 @@ const CreateStepper = () => {
     setValue,
     getValues,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -140,10 +143,6 @@ const CreateStepper = () => {
       position: 'top-left',
       theme: 'dark',
     });
-
-  const handleLocationSelected = (address: Address) => {
-    setValue('address', address);
-  };
 
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
@@ -360,7 +359,9 @@ const CreateStepper = () => {
               <div className="flex flex-col gap-1 w-1/2">
                 <MapSearch
                   defaultAddress={createData?.address}
-                  onLocationSelected={handleLocationSelected}
+                  register={register}
+                  getValues={getValues}
+                  setValue={setValue}
                   errors={errors}
                 />
               </div>
