@@ -18,6 +18,7 @@ import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import Spinner from '../ui/Spinner/Spinner';
 import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
+import { ISchedule } from '@/interfaces/schedule';
 
 interface IPropsAttractionPageClient {
   slug: string;
@@ -34,6 +35,12 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
   const [attraction, setAttraction] = useState<Partial<Attraction>>({});
   const [averageRating, setAverageRating] = useState(0);
   const [servicesAccordion, setServicesAccordion] = useState<
+    {
+      title: string;
+      content: ReactNode;
+    }[]
+  >([]);
+  const [scheduleAccordion, setScheduleAccordion] = useState<
     {
       title: string;
       content: ReactNode;
@@ -61,6 +68,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
     facebook,
     creatorId,
     location,
+    schedule,
   } = attraction;
 
   const getAttraction = async () => {
@@ -110,6 +118,41 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       ]);
     }
   }, [reviews, services]);
+
+  useEffect(() => {
+    if (schedule) {
+      const parsedSchedule: ISchedule = JSON.parse(schedule);
+      if (Object.entries(parsedSchedule)?.length) {
+        setScheduleAccordion([
+          {
+            title: 'Horarios',
+            content: (
+              <ul className="list-disc list-inside">
+                {Object.entries(parsedSchedule).map(
+                  ([day, { open24hours, times }]) => (
+                    <li key={day}>
+                      <strong>{day}:</strong>{' '}
+                      {open24hours ? (
+                        <span>Abierto las 24 horas</span>
+                      ) : (
+                        <ul>
+                          {times.map((time, index) => (
+                            <li key={index}>
+                              {time.from} - {time.to}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ),
+                )}
+              </ul>
+            ),
+          },
+        ]);
+      }
+    }
+  }, [schedule]);
 
   if (loading) {
     return <Spinner />;
@@ -177,6 +220,11 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       {services?.length ? (
         <div className="border-b border-gray-300 pb-4">
           <AccordionCustom items={servicesAccordion} bold />
+        </div>
+      ) : null}
+      {scheduleAccordion?.length ? (
+        <div className="border-b border-gray-300 pb-4">
+          <AccordionCustom items={scheduleAccordion} bold />
         </div>
       ) : null}
       <Reviews

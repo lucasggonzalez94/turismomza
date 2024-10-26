@@ -13,8 +13,7 @@ export interface Attraction {
   webSite: string | null;
   instagram: string | null;
   facebook: string | null;
-  timeOpen: string | null;
-  timeClose: string | null;
+  schedule: string | null;
   price: number | null;
   currencyPrice: 'ars' | 'usd' | null;
   advertisements?: Advertisement[];
