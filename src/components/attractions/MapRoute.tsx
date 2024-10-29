@@ -7,12 +7,7 @@ import {
   Marker,
   useJsApiLoader,
 } from '@react-google-maps/api';
-import { Address } from '@/interfaces/address';
-
-type LatLng = {
-  lat: number;
-  lng: number;
-};
+import { LatLng } from '@/interfaces/address';
 
 interface IPropsMapRoute {
   location: string;
@@ -28,7 +23,7 @@ const MapRoute: FC<IPropsMapRoute> = ({ location }) => {
   const [currentPosition, setCurrentPosition] = useState<LatLng | null>(null);
   const [directionsResponse, setDirectionsResponse] =
     useState<google.maps.DirectionsResult | null>(null);
-  const [locationParsed, setLocationParsed] = useState<Address>({
+  const [locationParsed, setLocationParsed] = useState<LatLng>({
     lat: 0,
     lng: 0,
   });
@@ -74,10 +69,10 @@ const MapRoute: FC<IPropsMapRoute> = ({ location }) => {
       calculateRoute();
     }
   }, [currentPosition, mapsApiLoaded, calculateRoute, locationParsed]);
-  
+
   useEffect(() => {
     if (location) {
-      const locationParsed = JSON.parse(location);
+      const locationParsed = JSON.parse(JSON.parse(location));
       setLocationParsed(locationParsed);
     }
   }, [location]);

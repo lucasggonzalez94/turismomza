@@ -121,8 +121,11 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
 
   useEffect(() => {
     if (schedule) {
-      const parsedSchedule: ISchedule = JSON.parse(schedule);
-      if (Object.entries(parsedSchedule)?.length) {
+      const parsedSchedule: ISchedule = JSON.parse(JSON.parse(schedule));
+      if (
+        Object.entries(parsedSchedule)?.length &&
+        typeof parsedSchedule === 'object'
+      ) {
         setScheduleAccordion([
           {
             title: 'Horarios',
@@ -135,13 +138,13 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
                       {open24hours ? (
                         <span>Abierto las 24 horas</span>
                       ) : (
-                        <ul>
+                        <>
                           {times.map((time, index) => (
-                            <li key={index}>
+                            <span key={index}>
                               {time.from} - {time.to}
-                            </li>
+                            </span>
                           ))}
-                        </ul>
+                        </>
                       )}
                     </li>
                   ),
@@ -182,7 +185,6 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
           <ButtonsHeaderAttraction
             user={user}
             isFavorite={isFavorite || false}
-            attractionId={id || ''}
             contact={{
               contactNumber,
               email,
@@ -190,6 +192,9 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
               instagram,
               facebook,
             }}
+            attractionId={id}
+            slug={slug}
+            creatorId={creatorId}
           />
         </div>
       </div>

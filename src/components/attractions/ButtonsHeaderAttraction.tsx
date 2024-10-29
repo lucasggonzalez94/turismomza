@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '@nextui-org/react';
 import {
   IoAt,
@@ -29,14 +30,18 @@ interface Contact {
 }
 interface IPropsButtonsHeaderAttraction {
   user: User | null;
-  attractionId: string;
+  slug: string;
+  attractionId?: string;
+  creatorId?: string;
   isFavorite: boolean;
   contact: Contact;
 }
 
 const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
   user,
+  slug,
   attractionId,
+  creatorId,
   isFavorite,
   contact,
 }) => {
@@ -60,11 +65,17 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
       return;
     }
     try {
-      await addFavoriteService(attractionId);
-      setFavorite((prev) => !prev);
+      if (attractionId) {
+        await addFavoriteService(attractionId);
+        setFavorite((prev) => !prev);
+      }
     } catch {
       notify();
     }
+  };
+
+  const handleEdit = () => {
+    router.push(`/attractions/edit/${slug}`);
   };
 
   useEffect(() => {
@@ -89,6 +100,11 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
         <Button color="default" variant="ghost" isIconOnly onClick={() => {}}>
           <IoShareSocialOutline size={25} />
         </Button>
+        {user?.id === creatorId && (
+          <Button color="primary" onClick={handleEdit}>
+            Editar publicación
+          </Button>
+        )}
         <Button color="primary" onClick={() => setOpenModalContact(true)}>
           Consultar
         </Button>

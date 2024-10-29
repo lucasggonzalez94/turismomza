@@ -8,17 +8,17 @@ export interface Attraction {
   creatorId: string;
   creation_date: Date | string | string;
   services: string[];
-  contactNumber: string | null;
-  email: string | null;
-  webSite: string | null;
-  instagram: string | null;
-  facebook: string | null;
-  schedule: string | null;
-  price: number | null;
-  currencyPrice: 'ars' | 'usd' | null;
+  contactNumber?: string;
+  email?: string;
+  webSite?: string;
+  instagram?: string;
+  facebook?: string;
+  schedule?: string;
+  price?: number;
+  currencyPrice?: 'ars' | 'usd';
   advertisements?: Advertisement[];
   isFavorite: boolean;
-  images: Image[];
+  images: IImage[];
   reviews: Review[];
 }
 
@@ -45,7 +45,7 @@ export interface Review {
   reports: any[];
 }
 
-export interface Image {
+export interface IImage {
   public_id: string;
   url: string;
 }

@@ -76,15 +76,8 @@ const Topbar = () => {
 
       <div className="hidden 2xl:block col-span-5">
         <nav className="flex gap-4 items-center justify-end">
-          <AnimatedLink href="attractions">ATRACTIVOS</AnimatedLink>
-          <AnimatedLink href="about">SOBRE NOSOTROS</AnimatedLink>
-          <LinkToSection
-            idToScroll="contact"
-            className="text-white relative group transition-all duration-300 hover:font-bold"
-          >
-            CONTACTO
-            <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
-          </LinkToSection>
+          <AnimatedLink href="/attractions">ATRACTIVOS</AnimatedLink>
+          <AnimatedLink href="/about">SOBRE NOSOTROS</AnimatedLink>
           <Button
             as={Link}
             color="secondary"
