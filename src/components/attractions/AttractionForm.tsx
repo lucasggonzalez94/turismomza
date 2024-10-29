@@ -102,7 +102,7 @@ const containerStyle = {
 
 const libraries: 'places'[] = ['places'];
 
-const CreateAttractionForm = () => {
+const AttractionForm = () => {
   const router = useRouter();
   const { createData, setCreateData } = useStore((state) => state);
   const {
@@ -625,4 +625,4 @@ const CreateAttractionForm = () => {
   );
 };
 
-export default CreateAttractionForm;
+export default AttractionForm;
