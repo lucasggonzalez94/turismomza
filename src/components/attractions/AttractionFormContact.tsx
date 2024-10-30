@@ -206,7 +206,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
                 </label>
               }
               labelPlacement="outside"
-              className="w-1/2"
+              className="w-full md:w-1/2"
               isInvalid={!!errors.website?.message}
               errorMessage={errors.website?.message}
               placeholder="https://"
@@ -220,7 +220,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
                 </label>
               }
               labelPlacement="outside"
-              className="w-1/2"
+              className="w-full md:w-1/2"
               placeholder="https://"
               isInvalid={!!errors.instagram?.message}
               errorMessage={errors.instagram?.message}
@@ -234,7 +234,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
                 </label>
               }
               labelPlacement="outside"
-              className="w-1/2"
+              className="w-full md:w-1/2"
               placeholder="https://"
               isInvalid={!!errors.facebook?.message}
               errorMessage={errors.facebook?.message}
@@ -249,7 +249,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
               }
               labelPlacement="outside"
               placeholder="Email de contacto"
-              className="w-1/2"
+              className="w-full md:w-1/2"
               isInvalid={!!errors.email?.message}
               errorMessage={errors.email?.message}
               {...register('email')}
@@ -262,7 +262,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
                 </label>
               }
               labelPlacement="outside"
-              className="w-1/2"
+              className="w-full md:w-1/2"
               startContent={
                 <div className="pointer-events-none flex items-center">
                   <span className="text-default-400 text-small">+54</span>

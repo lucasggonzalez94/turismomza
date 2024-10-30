@@ -49,6 +49,7 @@ const schema = yup
 const containerStyle = {
   width: '100%',
   height: '100%',
+  minHeight: '400px',
 };
 
 const libraries: 'places'[] = ['places'];
@@ -178,8 +179,8 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
       onSubmit={handleSubmit(handleSaveAndContinue)}
       className="flex flex-col gap-4 items-start"
     >
-      <div className="flex gap-4 w-full">
-        <div className="flex flex-col gap-4 w-1/2">
+      <div className="flex flex-col lg:flex-row gap-4 w-full">
+        <div className="flex flex-col gap-4 w-full lg:w-1/2">
           <Input
             type="text"
             label="Nombre"
@@ -299,7 +300,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             Cargando...
           </div>
         ) : (
-          <div className="flex flex-col gap-1 w-1/2">
+          <div className="flex flex-col gap-1 w-full lg:w-1/2 h-100%">
             <Controller
               name="address.formatted_address"
               control={control}

@@ -11,6 +11,7 @@ import { IAttractionForm } from '@/interfaces/attraction-form';
 import { IImage } from '@/interfaces/attraction';
 import { useStore } from '@/store/store';
 import { fetchImageAsFile } from '@/utils/helpers';
+import useWindowSize from '@/hooks/useWindowSize';
 
 type AttractionFormWithCustomImages = Omit<IAttractionForm, 'images'> & {
   images?: IImage[];
@@ -28,8 +29,10 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
   attractionId,
 }) => {
   const { setAttractionFormData } = useStore((state) => state);
+  const { width } = useWindowSize();
 
   const [selectedTab, setSelectedTab] = useState<string | number>('details');
+  const [hideTextTabs, setHideTextTabs] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isDataReady, setIsDataReady] = useState(false);
 
@@ -59,6 +62,14 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing, dataAttraction]);
 
+  useEffect(() => {
+    if (width > 420) {
+      setHideTextTabs(false);
+    } else {
+      setHideTextTabs(true);
+    }
+  }, [width]);
+
   if (!isDataReady) return <div>Cargando datos...</div>;
 
   return (
@@ -82,7 +93,7 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
                   color={selectedTab === 'details' ? '#E95718' : '#676767'}
                 />
               )}
-              <span>Detalles de la ubicación</span>
+              {!hideTextTabs && <span>Detalles de la ubicación</span>}
             </div>
           }
         >
@@ -99,7 +110,7 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
                 size={25}
                 color={selectedTab === 'contact' ? '#E95718' : '#676767'}
               />
-              <span>Contacto y horarios</span>
+              {!hideTextTabs && <span>Contacto y horarios</span>}
             </div>
           }
           isDisabled={!saved}
