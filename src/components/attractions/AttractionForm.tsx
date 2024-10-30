@@ -45,6 +45,8 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
         );
         setAttractionFormData({
           ...restDataAttraction,
+          address: JSON.parse(dataAttraction?.address?.toString() || ''),
+          schedule: JSON.parse(dataAttraction?.schedule?.toString() || ''),
           images: imagesAsFile,
         });
         setIsDataReady(true);

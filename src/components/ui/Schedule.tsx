@@ -10,10 +10,11 @@ import { validateSchedule } from '@/utils/helpers';
 import { Clock } from 'lucide-react';
 
 interface IPropsSchedule {
+  defaultValue?: Record<string, DayConfig>;
   onSaveSchedule: (schedule: Record<string, DayConfig>) => void;
 }
 
-const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
+const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
   const { schedule, setSchedule } = useStore((state) => state);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [config, setConfig] = useState<Record<string, DayConfig>>(
