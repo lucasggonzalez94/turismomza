@@ -31,6 +31,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
       ),
   );
   const [saved, setSaved] = useState(false);
+  const [setedDefaultValue, setSetedDefaultValue] = useState(false);
 
   const toggleSelectedDay = (day: string) => {
     setSelectedDays((prev) =>
@@ -102,11 +103,13 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
   }, [schedule]);
 
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue && !setedDefaultValue) {
       setConfig(defaultValue);
       setSelectedDays(Object.keys(defaultValue));
       setSaved(true);
+      setSetedDefaultValue(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   return (
