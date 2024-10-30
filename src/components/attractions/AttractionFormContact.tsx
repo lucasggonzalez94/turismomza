@@ -176,7 +176,28 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
       >
         <div className="flex gap-4 w-full">
           <div className="flex flex-col gap-4">
-            <Schedule onSaveSchedule={setSchedule} />
+            <Schedule
+              onSaveSchedule={setSchedule}
+              defaultValue={
+                attractionFormData?.schedule
+                  ? Object.entries(attractionFormData.schedule).reduce(
+                      (acc, [day, config]) => ({
+                        ...acc,
+                        [day]: {
+                          open24hours: config.open24hours ?? false,
+                          times: (config.times ?? [{ from: '', to: '' }]).map(
+                            (time) => ({
+                              from: time.from || '',
+                              to: time.to || '',
+                            }),
+                          ),
+                        },
+                      }),
+                      {} as Record<string, DayConfig>,
+                    )
+                  : undefined
+              }
+            />
             <Input
               type="text"
               label={

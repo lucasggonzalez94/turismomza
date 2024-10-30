@@ -18,7 +18,8 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
   const { schedule, setSchedule } = useStore((state) => state);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [config, setConfig] = useState<Record<string, DayConfig>>(
-    schedule?.config ||
+    defaultValue ||
+      schedule?.config ||
       Object.fromEntries(
         WEEKDAYS.map((day) => [
           day,
@@ -99,6 +100,14 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
       setConfig(schedule?.config);
     }
   }, [schedule]);
+
+  useEffect(() => {
+    if (defaultValue) {
+      setConfig(defaultValue);
+      setSelectedDays(Object.keys(defaultValue));
+      setSaved(true);
+    }
+  }, [defaultValue]);
 
   return (
     <div className="w-full">
