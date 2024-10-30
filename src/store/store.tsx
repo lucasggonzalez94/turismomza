@@ -4,6 +4,7 @@ import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
+import { ErrorFeedback } from '@/interfaces/errorFeedback';
 interface Price {
   minPrice: number;
   maxPrice: number;
@@ -29,6 +30,8 @@ interface State {
   setAttractionFormData: (data: IAttractionForm) => void;
   schedule: Schedule | null;
   setSchedule: (schedule: Schedule) => void;
+  errorFeedback: ErrorFeedback | null;
+  setErrorFeedback: (error: ErrorFeedback) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -51,4 +54,6 @@ export const useStore = create<State>((set) => ({
   setAttractionFormData: (data) => set(() => ({ attractionFormData: data })),
   schedule: null,
   setSchedule: (schedule) => set(() => ({ schedule })),
+  errorFeedback: null,
+  setErrorFeedback: (errorFeedback) => set(() => ({ errorFeedback })),
 }));

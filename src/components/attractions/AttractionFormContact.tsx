@@ -6,12 +6,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Schedule from '../ui/Schedule';
 import { WEEKDAYS } from '@/utils/constants';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useStore } from '@/store/store';
 import { useForm } from 'react-hook-form';
 import { createAttractionService } from '@/services/attractions/create-attraction';
 import { DayConfig } from '@/interfaces/schedule';
 import { editAttractionService } from '@/services/attractions/edit-attraction';
+import { ErrorFeedback } from '@/interfaces/errorFeedback';
 
 interface IPropsAttractionFormContact {
   isEditing?: boolean;
@@ -59,9 +60,8 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
   attractionId,
 }) => {
   const router = useRouter();
-  const { attractionFormData, setAttractionFormData } = useStore(
-    (state) => state,
-  );
+  const { attractionFormData, setAttractionFormData, setErrorFeedback } =
+    useStore((state) => state);
   const {
     register,
     handleSubmit,
@@ -90,6 +90,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
         ),
     },
   });
+  const pathname = usePathname();
 
   const [loading, setLoading] = useState(false);
 
@@ -141,7 +142,16 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
       }
     } catch (error) {
       console.log(error);
-      notify();
+      const err = error as ErrorFeedback;
+      if (err.status === 406) {
+        setErrorFeedback({
+          ...err,
+          pathname,
+        });
+        handleNavigation('/error');
+      } else {
+        notify();
+      }
     } finally {
       setLoading(false);
     }
