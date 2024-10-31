@@ -219,7 +219,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
               className="w-full md:w-1/2"
               isInvalid={!!errors.website?.message}
               errorMessage={errors.website?.message}
-              placeholder="https://"
+              placeholder="https://..."
               {...register('website')}
             />
             <Input
@@ -231,7 +231,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
               }
               labelPlacement="outside"
               className="w-full md:w-1/2"
-              placeholder="https://"
+              placeholder="https://..."
               isInvalid={!!errors.instagram?.message}
               errorMessage={errors.instagram?.message}
               {...register('instagram')}
@@ -245,7 +245,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
               }
               labelPlacement="outside"
               className="w-full md:w-1/2"
-              placeholder="https://"
+              placeholder="https://..."
               isInvalid={!!errors.facebook?.message}
               errorMessage={errors.facebook?.message}
               {...register('facebook')}
