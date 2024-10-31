@@ -46,6 +46,8 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       content: ReactNode;
     }[]
   >([]);
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+  const [initialIndex, setInitialIndex] = useState(0);
 
   const { user, loading, setLoading } = useStore((state) => state);
   const router = useRouter();
@@ -82,6 +84,11 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
         setLoading(false);
       }, 500);
     }
+  };
+
+  const handleImageClick = (index: number) => {
+    setInitialIndex(index);
+    setIsCarouselOpen(true);
   };
 
   useEffect(() => {
@@ -162,7 +169,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
   }
 
   return (
-    <div className="flex flex-col flex-grow gap-4 p-4 md:p-12">
+    <div className="flex flex-col flex-grow gap-4 p-4 md:p-12 relative">
       <div className="flex justify-between items-center border-b border-gray-300 pb-4">
         <div className="flex flex-col gap-1">
           <h1 className="font-bold text-2xl">{title}</h1>
@@ -211,6 +218,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
                 height={200}
                 defaultValue="/images/default-image.jpg"
                 className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
+                onClick={() => handleImageClick(index)}
               />
             ))}
         </div>
@@ -237,6 +245,16 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
         attractionId={id || ''}
         creatorId={creatorId}
       />
+      {isCarouselOpen && images?.length && (
+        <SliderCarousel
+          images={images?.map((img) => img.url)}
+          initialIndex={initialIndex}
+          fullscreen
+          showPrevNextButtons
+          showDots
+          onClose={() => setIsCarouselOpen(false)}
+        />
+      )}
     </div>
   );
 };
