@@ -87,7 +87,7 @@ const AttractionsHome = () => {
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-rows-2 gap-4">
           {loading ? (
             Array.from({ length: pageSize }).map((_, index) => (
-              <CardSkeleton key={index} className="w-full" />
+              <CardSkeleton key={index} />
             ))
           ) : !attractions.length ? (
             <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">

@@ -1,20 +1,22 @@
-import ContentLoader from 'react-content-loader';
+import { Card, Skeleton } from '@nextui-org/react';
 
-const CardSkeleton = (props: any) => (
-  <ContentLoader
-    speed={1}
-    viewBox="0 0 300 280"
-    height={280}
-    width={500}
-    backgroundColor="#f3f3f3"
-    foregroundColor="#ecebeb"
-    {...props}
-  >
-    <rect x="3" y="3" rx="10" ry="10" width="300" height="180" />
-    <rect x="4" y="190" rx="0" ry="0" width="292" height="20" />
-    <rect x="4" y="215" rx="0" ry="0" width="239" height="20" />
-    <rect x="4" y="240" rx="0" ry="0" width="274" height="20" />
-  </ContentLoader>
+const CardSkeleton = () => (
+  <Card className="w-full space-y-5 p-3" radius="lg">
+    <Skeleton className="rounded-lg">
+      <div className="h-48 rounded-lg bg-default-300"></div>
+    </Skeleton>
+    <div className="space-y-3">
+      <Skeleton className="w-3/5 rounded-lg">
+        <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
+      </Skeleton>
+      <Skeleton className="w-4/5 rounded-lg">
+        <div className="h-3 w-4/5 rounded-lg bg-default-200"></div>
+      </Skeleton>
+      <Skeleton className="w-2/5 rounded-lg">
+        <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
+      </Skeleton>
+    </div>
+  </Card>
 );
 
 export default CardSkeleton;
