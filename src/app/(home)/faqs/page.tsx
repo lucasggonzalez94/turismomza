@@ -1,11 +1,17 @@
 import AccordionCustom from '@/components/ui/AccordionCustom';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Turismomza | FAQs',
+  description: '...',
+};
 
 export default function FAQsPage() {
   const FAQs = [
     {
       title: '¿Qué puedo hacer en esta plataforma?',
       content:
-        'En esta plataforma, puedes descubrir atractivos turísticos de Mendoza, ver reseñas de otros usuarios, calificar y comentar sobre tus visitas, guardar tus lugares favoritos y recibir notificaciones sobre novedades y eventos locales.',
+        'En esta plataforma, puedes descubrir lugares turísticos de Mendoza, ver reseñas de otros usuarios, calificar y comentar sobre tus visitas, guardar tus lugares favoritos y recibir notificaciones sobre novedades y eventos locales.',
     },
     {
       title: '¿Cómo puedo crear una publicación sobre un atractivo turístico?',
@@ -65,7 +71,7 @@ export default function FAQsPage() {
     {
       title: '¿Qué tipo de notificaciones puedo recibir?',
       content:
-        'Puedes recibir notificaciones sobre nuevos atractivos turísticos, actualizaciones de tus publicaciones, comentarios en tus reseñas, y ofertas o promociones especiales relacionadas con el turismo en Mendoza.',
+        'Puedes recibir notificaciones sobre nuevos lugares turísticos, actualizaciones de tus publicaciones, comentarios en tus reseñas, y ofertas o promociones especiales relacionadas con el turismo en Mendoza.',
     },
     {
       title: '¿Qué hago si olvidé mi contraseña?',

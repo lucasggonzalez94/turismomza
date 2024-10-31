@@ -66,7 +66,7 @@ const AttractionsHome = () => {
     <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
       <div className="flex gap-7 items-center">
         <Link href="/attractions" className="font-bold text-3xl">
-          Atractivos
+          Lugares
         </Link>
         <Link
           href="/attractions"
@@ -80,7 +80,7 @@ const AttractionsHome = () => {
         <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
           <IoAlertCircle size={30} className="text-red-600" />
           <span>
-            Tuvimos un error al cargar los atractivos, te pedimos disculpas.
+            Tuvimos un error al cargar los lugares, te pedimos disculpas.
           </span>
         </div>
       ) : (
@@ -91,7 +91,7 @@ const AttractionsHome = () => {
             ))
           ) : !attractions.length ? (
             <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
-              <span>Todavía no hay atractivos creados.</span>
+              <span>Todavía no hay lugares creados.</span>
             </div>
           ) : (
             attractions.map((attraction: Attraction) => (

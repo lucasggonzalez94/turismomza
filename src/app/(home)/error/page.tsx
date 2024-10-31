@@ -1,4 +1,10 @@
 import FeedbackError from '@/components/ui/FeedbackError';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Turismomza | Error',
+  description: '...',
+};
 
 export default function ErrorPage() {
   return (

@@ -82,7 +82,7 @@ const AttractionsWithFilters = () => {
     <>
       <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-3xl">Atractivos turísticos</h2>
+          <h2 className="font-bold text-3xl">Lugares turísticos</h2>
           {hideFilters && (
             <Button
               color="default"
@@ -102,19 +102,18 @@ const AttractionsWithFilters = () => {
               <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
                 <IoAlertCircle size={30} className="text-red-600" />
                 <span>
-                  Tuvimos un error al cargar los atractivos, te pedimos
-                  disculpas.
+                  Tuvimos un error al cargar los lugares, te pedimos disculpas.
                 </span>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {loading ? (
                   Array.from({ length: pageSize }).map((_, index) => (
-                    <CardSkeleton key={index} className="w-full" />
+                    <CardSkeleton key={index} />
                   ))
                 ) : !attractions.length ? (
                   <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
-                    <span>Todavía no hay atractivos creados.</span>
+                    <span>Todavía no hay lugares creados.</span>
                   </div>
                 ) : (
                   attractions.map((attraction: Attraction) => (

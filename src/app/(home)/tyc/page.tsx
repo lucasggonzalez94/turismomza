@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Turismomza | TyC',
+  description: '...',
+};
+
 export default function TyCPage() {
   return (
     <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
@@ -19,7 +26,7 @@ export default function TyCPage() {
             <li>
               <b>Propósito del Sitio Web:</b> Turismomza es una plataforma
               destinada a la creación y visualización de publicaciones sobre
-              atractivos turísticos de Mendoza. Nuestro objetivo es proporcionar
+              lugares turísticos de Mendoza. Nuestro objetivo es proporcionar
               una guía completa y accesible para que tanto visitantes como
               residentes descubran y disfruten de todo lo que Mendoza tiene para
               ofrecer.
@@ -37,7 +44,7 @@ export default function TyCPage() {
           <ol className="list-decimal ml-6">
             <li>
               <b>Publicaciones:</b> Los usuarios pueden crear y compartir
-              publicaciones sobre atractivos turísticos de Mendoza. Al hacerlo,
+              publicaciones sobre lugares turísticos de Mendoza. Al hacerlo,
               garantizas que toda la información proporcionada es precisa y no
               infringe los derechos de terceros.
             </li>

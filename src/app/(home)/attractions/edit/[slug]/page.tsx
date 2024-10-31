@@ -1,12 +1,18 @@
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import AttractionForm from '@/components/attractions/AttractionForm';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 interface IPropsEditAttractionPage {
   params: {
     slug: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: 'Turismomza | Editar',
+  description: '...',
+};
 
 const EditAttractionPage = async ({ params }: IPropsEditAttractionPage) => {
   const { slug } = params;

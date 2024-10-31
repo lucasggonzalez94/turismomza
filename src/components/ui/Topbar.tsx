@@ -76,7 +76,7 @@ const Topbar = () => {
 
       <div className="hidden 2xl:block col-span-5">
         <nav className="flex gap-4 items-center justify-end">
-          <AnimatedLink href="/attractions">ATRACTIVOS</AnimatedLink>
+          <AnimatedLink href="/attractions">LUGARES</AnimatedLink>
           <AnimatedLink href="/about">SOBRE NOSOTROS</AnimatedLink>
           <Button
             as={Link}

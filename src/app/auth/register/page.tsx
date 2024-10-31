@@ -1,5 +1,11 @@
 import RegisterForm from '@/components/auth/RegisterForm';
 import { Link } from '@nextui-org/react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Turismomza | Registro',
+  description: '...',
+};
 
 export default function RegisterPage() {
   return (
