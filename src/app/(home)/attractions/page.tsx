@@ -2,7 +2,7 @@ import AttractionsWithFilters from '@/components/attractions/AttractionsWithFilt
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Turismomza | Lugares',
+  title: 'Lugares',
   description: '...',
 };
 

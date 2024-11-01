@@ -3,7 +3,7 @@ import { Link } from '@nextui-org/react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Turismomza | Registro',
+  title: 'Registro',
   description: '...',
 };
 

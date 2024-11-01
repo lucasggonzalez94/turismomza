@@ -106,7 +106,7 @@ const AttractionsWithFilters = () => {
                 </span>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
                 {loading ? (
                   Array.from({ length: pageSize }).map((_, index) => (
                     <CardSkeleton key={index} />

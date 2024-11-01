@@ -2,7 +2,7 @@ import AttractionForm from '@/components/attractions/AttractionForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Turismomza | Publicar',
+  title: 'Publicar',
 };
 
 export default function CreateAttractionPage() {

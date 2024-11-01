@@ -10,7 +10,7 @@ interface IPropsEditAttractionPage {
 }
 
 export const metadata: Metadata = {
-  title: 'Turismomza | Editar',
+  title: 'Editar',
   description: '...',
 };
 

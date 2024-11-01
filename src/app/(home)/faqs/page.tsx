@@ -2,7 +2,7 @@ import AccordionCustom from '@/components/ui/AccordionCustom';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Turismomza | FAQs',
+  title: 'FAQs',
   description: '...',
 };
 
