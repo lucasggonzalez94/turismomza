@@ -12,7 +12,7 @@ import MapRoute from './MapRoute';
 import AccordionCustom from '../ui/AccordionCustom';
 import Reviews from './Reviews';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Attraction } from '@/interfaces/attraction';
+import { Attraction, IImage } from '@/interfaces/attraction';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
@@ -23,13 +23,6 @@ import { ISchedule } from '@/interfaces/schedule';
 interface IPropsAttractionPageClient {
   slug: string;
 }
-
-const IMAGES = [
-  '/images/portones.jpg',
-  '/images/puente-uspallata.jpg',
-  '/images/portada_auth.jpeg',
-  '/images/portones.jpg',
-];
 
 const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
   const [attraction, setAttraction] = useState<Partial<Attraction>>({});
@@ -207,9 +200,29 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       </div>
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="hidden md:grid grid-cols-7 grid-rows-2 gap-4 w-full lg:w-2/3 max-h-[700px]">
-          {images
-            ?.slice(0, 4)
-            ?.map((img, index) => (
+          {images?.slice(0, 4)?.map((img, index) => {
+            if (images?.length > 4 && index === 3) {
+              return (
+                <div
+                  key={img?.public_id}
+                  className="relative hover:brightness-75 col-span-4 cursor-pointer"
+                  onClick={() => handleImageClick(index)}
+                >
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-60 z-10 flex justify-center items-center">
+                    <span className="text-white font-bold">Ver más...</span>
+                  </div>
+                  <Image
+                    src={img?.url}
+                    alt={`Imágen ${index}`}
+                    width={300}
+                    height={200}
+                    defaultValue="/images/default-image.jpg"
+                    className={`w-full h-full object-cover object-center`}
+                  />
+                </div>
+              );
+            }
+            return (
               <Image
                 key={img?.public_id}
                 src={img?.url}
@@ -220,10 +233,14 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
                 className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
                 onClick={() => handleImageClick(index)}
               />
-            ))}
+            );
+          })}
         </div>
         <div className="w-full md:hidden h-[450px]">
-          <SliderCarousel images={IMAGES} showPrevNextButtons />
+          <SliderCarousel
+            images={images?.map((img) => img.url) as string[]}
+            showPrevNextButtons
+          />
         </div>
         <div className="w-full lg:w-1/3 min-h-[350px] rounded-lg overflow-hidden md:rounded-none">
           <MapRoute location={location || ''} />
