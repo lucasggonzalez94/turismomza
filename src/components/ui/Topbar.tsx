@@ -82,7 +82,7 @@ const Topbar = () => {
             as={Link}
             color="secondary"
             className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-            href={verified ? '/attractions/create' : 'auth/login'}
+            href={verified ? '/attractions/create' : '/auth/login'}
           >
             Publicar
           </Button>

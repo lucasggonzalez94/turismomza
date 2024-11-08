@@ -35,17 +35,12 @@ const MapRoute: FC<IPropsMapRoute> = ({ location }) => {
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentPosition({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.error('Error obteniendo la ubicación: ', error);
-      },
-    );
+    navigator.geolocation.getCurrentPosition((position) => {
+      setCurrentPosition({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
   }, []);
 
   const calculateRoute = useCallback(async () => {
