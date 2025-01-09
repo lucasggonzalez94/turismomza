@@ -47,9 +47,9 @@ const Topbar = () => {
   }, [pathname]);
 
   return (
-    <>
+    <div className="z-20">
       <div
-        className={`grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full z-20 ${black ? 'relative bg-black' : 'absolute'}`}
+        className={`grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full ${black ? 'relative bg-black' : 'absolute'}`}
       >
         <div className="col-span-5 flex">
           <Link href="/">
@@ -114,7 +114,7 @@ const Topbar = () => {
           <InputSearch />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

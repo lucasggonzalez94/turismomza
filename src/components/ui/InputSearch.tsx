@@ -16,7 +16,7 @@ const InputSearch = () => {
       radius="md"
       classNames={{
         input: ['text-black', 'placeholder:text-default-900/50'],
-        inputWrapper: ['shadow-xl', 'bg-slate-50/100'],
+        inputWrapper: ['shadow-xl', 'bg-slate-200'],
       }}
       placeholder="Buscar..."
       startContent={
