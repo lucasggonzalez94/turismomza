@@ -84,7 +84,6 @@ const FiltersForm = () => {
       onSubmit={handleSubmit(handleFilter)}
       className="flex flex-col gap-3 max-w-80"
     >
-      <h3 className="font-bold mb-4 text-lg">Filtros</h3>
       <div className="flex flex-col gap-8">
         <Input
           type="text"

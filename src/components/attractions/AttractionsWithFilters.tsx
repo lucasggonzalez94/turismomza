@@ -140,7 +140,11 @@ const AttractionsWithFilters = () => {
         </div>
       </div>
       {hideFilters && (
-        <Sidedrawer isOpen={openSidedrawer} setIsOpen={setOpenSidedrawer}>
+        <Sidedrawer
+          isOpen={openSidedrawer}
+          setIsOpen={setOpenSidedrawer}
+          title="Filtros"
+        >
           <FiltersForm />
         </Sidedrawer>
       )}

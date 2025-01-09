@@ -57,7 +57,7 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
               : '-translate-x-full'
         }`}
       >
-        <div className="flex justify-between items-center border-b border-gray-300 pb-3">
+        <div className="flex justify-between items-center pb-3 border-b border-gray-300">
           {title && <h2 className="text-lg font-semibold">{title}</h2>}
           <button
             onClick={() => setIsOpen(false)}
