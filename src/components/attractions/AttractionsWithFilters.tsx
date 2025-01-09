@@ -50,19 +50,18 @@ const AttractionsWithFilters = () => {
   useEffect(() => {
     const getAttractions = async () => {
       try {
-        const { data, totalPages, minPrice, maxPrice } =
-          await getAttractionsService(
-            {
-              filters,
-              page: currentPage,
-              pageSize: pageSize,
-            },
-            userData?.id,
-          );
+        const { data, totalPages, maxPrice } = await getAttractionsService(
+          {
+            filters,
+            page: currentPage,
+            pageSize: pageSize,
+          },
+          userData?.id,
+        );
         setAttractions(data);
         setTotalPages(totalPages);
         setPrices({
-          minPrice,
+          minPrice: 0,
           maxPrice,
         });
         setLoading(false);
@@ -113,7 +112,7 @@ const AttractionsWithFilters = () => {
                   ))
                 ) : !attractions.length ? (
                   <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
-                    <span>Todavía no hay lugares creados.</span>
+                    <span>No se encontraron lugares.</span>
                   </div>
                 ) : (
                   attractions.map((attraction: Attraction) => (

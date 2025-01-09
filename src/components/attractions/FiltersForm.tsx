@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -48,6 +48,8 @@ const FiltersForm = () => {
     prices?.maxPrice,
   ];
 
+  const [maxPrice, setMaxPrice] = useState(prices?.maxPrice);
+
   const handleFilter = async (data: any) => {
     const { priceRange, ...restData } = data;
     const filteredData = {
@@ -68,6 +70,7 @@ const FiltersForm = () => {
 
   useEffect(() => {
     setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
+    setMaxPrice(prices?.maxPrice);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prices]);
 
@@ -126,7 +129,7 @@ const FiltersForm = () => {
               placeholder="0"
               labelPlacement="outside"
               startContent={<IoLogoUsd />}
-              value={String(priceRange[0])}
+              value={priceRange[0]?.toString()}
               onChange={(e) => {
                 const minPrice = Number(e.target.value);
                 setValue('priceRange', [minPrice, priceRange[1]]);
@@ -138,7 +141,7 @@ const FiltersForm = () => {
               placeholder="0"
               labelPlacement="outside"
               startContent={<IoLogoUsd />}
-              value={String(priceRange[1])}
+              value={priceRange[1]?.toString()}
               onChange={(e) => {
                 const maxPrice = Number(e.target.value);
                 setValue('priceRange', [priceRange[0], maxPrice]);
@@ -148,13 +151,14 @@ const FiltersForm = () => {
           <Controller
             name="priceRange"
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <Slider
                 step={10}
                 size="sm"
-                minValue={prices?.minPrice}
-                maxValue={prices?.maxPrice}
-                value={value as number[]}
+                minValue={0}
+                maxValue={maxPrice}
+                defaultValue={[0, maxPrice]}
+                value={priceRange as number[]}
                 onChange={(newValue) => {
                   onChange(newValue);
                   setValue('priceRange', newValue as number[]);
