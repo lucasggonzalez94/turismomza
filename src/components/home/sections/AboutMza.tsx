@@ -43,7 +43,7 @@ const AboutMza = () => {
           excepcional, Mendoza te espera con los brazos abiertos. ¡No te lo
           pierdas!
         </p>
-        <Button
+        {/* <Button
           as={Link}
           href="https://es.wikipedia.org/wiki/Mendoza_(Argentina)"
           target="_blank"
@@ -52,7 +52,7 @@ const AboutMza = () => {
           className="w-fit"
         >
           Leer más...
-        </Button>
+        </Button> */}
       </div>
       <div className="hidden w-1/2 h-full lg:flex justify-center items-center p-16">
         <SliderCarousel

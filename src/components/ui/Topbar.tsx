@@ -9,7 +9,6 @@ import { useStore } from '@/store/store';
 import { usePathname } from 'next/navigation';
 import DropdownSearch from './DropdownSearch';
 import AnimatedLink from './AnimatedLink';
-import LinkToSection from './LinkToSection';
 import DropdownNotifications from './DropdownNotifications';
 import DropdownProfile from './DropdownProfile';
 
