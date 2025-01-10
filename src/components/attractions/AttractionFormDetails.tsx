@@ -151,28 +151,32 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
         lat: attractionFormData?.address?.lat || 0,
         lng: attractionFormData?.address?.lng || 0,
       });
-    } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+    } else if (navigator.geolocation && isLoaded) {
+      navigator.geolocation.watchPosition(
+        function () {},
+        function () {},
+        {},
+      );
+      navigator.geolocation.watchPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
           const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: latitude,
+            lng: longitude,
           };
           setCurrentPosition(userLocation);
           setSelectedPosition(userLocation);
         },
-        (error) => {
-          console.error('Error getting the location: ', error);
-        },
+        () => {},
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 0,
+          maximumAge: 30000,
         },
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attractionFormData]);
+  }, [attractionFormData, isLoaded]);
 
   return (
     <form
