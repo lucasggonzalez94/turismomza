@@ -3,7 +3,7 @@
 import { Input } from '@nextui-org/react';
 import { IoSearch } from 'react-icons/io5';
 import DropdownButton from './DropdownButton';
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface IPropsDropdownSearch {
@@ -18,8 +18,15 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
   onClose,
 }) => {
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
 
   return (
     <DropdownButton
@@ -30,6 +37,7 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
     >
       <div className="flex items-center bg-gray-800/60 rounded-md p-4 shadow-md">
         <Input
+          ref={inputRef}
           isClearable
           radius="md"
           classNames={{
