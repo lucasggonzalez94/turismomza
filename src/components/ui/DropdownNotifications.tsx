@@ -11,12 +11,14 @@ import Notification from './Notification';
 
 interface IPropsDropdownNotifications {
   isOpen: boolean;
+  setIsOpen: (isOpen: number | null) => void;
   onOpen: () => void;
   onClose: () => void;
 }
 
 const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   isOpen,
+  setIsOpen,
   onOpen,
   onClose,
 }) => {
@@ -92,6 +94,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
                   notification={notification}
                   notifications={notifications}
                   setNotifications={setNotifications}
+                  onClick={() => setIsOpen(null)}
                 />
               ))
             ) : errorService ? (

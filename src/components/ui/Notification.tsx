@@ -17,12 +17,14 @@ interface IPropsNotification {
   notification: INotification;
   notifications: INotification[];
   setNotifications: (notifications: INotification[]) => void;
+  onClick: () => void;
 }
 
 const Notification: FC<IPropsNotification> = ({
   notification,
   notifications,
   setNotifications,
+  onClick,
 }) => {
   const [readed, setReaded] = useState(false);
 
@@ -60,6 +62,7 @@ const Notification: FC<IPropsNotification> = ({
       <div
         key={notification.id}
         className="p-4 border-b border-gray-100 hover:bg-gray-50 transition duration-150 ease-in-out"
+        onClick={onClick}
       >
         <div className="flex items-center cursor-pointer">
           <div className="flex-shrink-0">
@@ -71,7 +74,9 @@ const Notification: FC<IPropsNotification> = ({
           </div>
           <div className="ml-3">
             <p className="text-sm font-medium text-gray-900">
-              <span className="font-bold">{notification?.triggeredBy?.name}</span>{' '}
+              <span className="font-bold">
+                {notification?.triggeredBy?.name}
+              </span>{' '}
               {notification.type === 'like'
                 ? 'le dió me gusta a tu opinión'
                 : 'comentó tu publicación'}

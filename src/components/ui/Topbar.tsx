@@ -39,7 +39,7 @@ const Topbar = () => {
     } else {
       setBlack(true);
     }
-    if (pathname === '/attractions') {
+    if (pathname !== '/') {
       setHideSearch(true);
     } else {
       setHideSearch(false);
@@ -96,6 +96,7 @@ const Topbar = () => {
             {verified && (
               <DropdownNotifications
                 isOpen={openDropdownIndex === 1}
+                setIsOpen={setOpenDropdownIndex}
                 onOpen={() => handleOpenDropdown(1)}
                 onClose={handleCloseDropdown}
               />
@@ -103,6 +104,7 @@ const Topbar = () => {
             <DropdownProfile
               user={user}
               isOpen={openDropdownIndex === 2}
+              setIsOpen={setOpenDropdownIndex}
               onOpen={() => handleOpenDropdown(2)}
               onClose={handleCloseDropdown}
             />

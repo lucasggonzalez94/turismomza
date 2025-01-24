@@ -1,7 +1,7 @@
 import AboutMza from '@/components/home/sections/AboutMza';
 import AttractionsHome from '@/components/home/sections/AttranctionsHome';
 import Banner from '@/components/home/sections/Banner';
-import ContactAndDonations from '@/components/home/sections/ContactAndDonations';
+import Donations from '@/components/home/sections/Donations';
 export default function HomePage() {
   return (
     <div className="flex flex-col">
@@ -11,7 +11,7 @@ export default function HomePage() {
       <div className="w-full flex justify-center">
         <hr className="border-gray-300 w-[95%]" />
       </div>
-      <ContactAndDonations />
+      <Donations />
     </div>
   );
 }

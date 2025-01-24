@@ -2,15 +2,10 @@ import { Button } from '@nextui-org/react';
 import { SiMercadopago } from 'react-icons/si';
 import { PiPaypalLogoLight } from 'react-icons/pi';
 
-import ContactForm from '@/components/contact/ContactForm';
-
-const ContactAndDonations = () => {
+const Donations = () => {
   return (
-    <div
-      className="flex flex-col lg:flex-row justify-between items-start lg:gap-4 min-h-fit h-auto"
-      id="contact"
-    >
-      <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
+    <div className="flex flex-col lg:flex-row justify-center items-center min-h-fit h-auto">
+      {/* <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
         <div className="flex flex-col items-start justify-start gap-8 h-full">
           <h2 className="font-bold text-3xl">Contacto</h2>
           <p className="text-sm">
@@ -22,7 +17,7 @@ const ContactAndDonations = () => {
           </p>
           <ContactForm />
         </div>
-      </div>
+      </div> */}
       <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
         <div className="flex flex-col items-center justify-center gap-8 h-full">
           <h2 className="font-bold text-3xl">Apoyá nuestro proyecto</h2>
@@ -56,4 +51,4 @@ const ContactAndDonations = () => {
   );
 };
 
-export default ContactAndDonations;
+export default Donations;

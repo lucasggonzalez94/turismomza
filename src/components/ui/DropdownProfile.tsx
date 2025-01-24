@@ -15,6 +15,7 @@ import { useStore } from '@/store/store';
 interface IPropsDropdownProfile {
   user: IUser | null;
   isOpen: boolean;
+  setIsOpen: (isOpen: number | null) => void;
   onOpen: () => void;
   onClose: () => void;
 }
@@ -30,6 +31,7 @@ interface IPropsMenuOption {
 const DropdownProfile: FC<IPropsDropdownProfile> = ({
   user,
   isOpen,
+  setIsOpen,
   onOpen,
   onClose,
 }) => {
@@ -200,6 +202,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
                 onClick={() => {
                   if (option?.onClick) {
                     option.onClick();
+                    setIsOpen(null);
                   }
                 }}
               >
