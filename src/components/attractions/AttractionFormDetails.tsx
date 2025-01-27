@@ -13,6 +13,7 @@ import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { useStore } from '@/store/store';
 import { Address, LatLng } from '@/interfaces/address';
+import MapForm from './MapForm';
 
 interface IPropsAttractionFormDetails {
   setSaved: (saved: boolean) => void;
@@ -295,7 +296,10 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             })}
           />
         </div>
-        {loadError ? (
+        <div className="flex flex-col gap-1 w-full lg:w-1/2 h-100%">
+          <MapForm />
+        </div>
+        {/* {loadError ? (
           <div className="w-full h-full flex justify-center items-center">
             Error al cargar el mapa
           </div>
@@ -357,7 +361,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
               {selectedPosition && <Marker position={selectedPosition} />}
             </GoogleMap>
           </div>
-        )}
+        )} */}
       </div>
       <ImageUploader
         defaultImages={attractionFormData?.images}
