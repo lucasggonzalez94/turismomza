@@ -42,7 +42,7 @@ const EditAttractionPage = async ({ params }: IPropsEditAttractionPage) => {
 
   return (
     <div className="flex flex-col items-center md:items-start flex-grow gap-6 py-8 px-4 xl:px-[20%]">
-      <h2 className="font-bold text-3xl">Editar publicación</h2>
+      <h2 className="font-bold text-xl">Editar publicación</h2>
       <AttractionForm
         isEditing={true}
         dataAttraction={formData}

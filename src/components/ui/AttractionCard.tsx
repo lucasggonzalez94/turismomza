@@ -116,8 +116,10 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
 
       <div className="flex flex-col gap-2 p-3 w-full">
         <div className="flex flex-col w-full">
-          <div className="flex justify-between items-center gap-4 text-lg md:text-sm lg:text-md 2xl:text-lg">
-            <h3 className="font-bold line-clamp-1">{title}</h3>
+          <div className="flex justify-between items-center gap-4">
+            <h3 className="font-bold line-clamp-1 text-sm lg:text-md">
+              {title}
+            </h3>
             {price && currencyPrice ? (
               <span className="font-bold text-gray-500 text-sm">
                 {formatPrice(price, currencyPrice)}

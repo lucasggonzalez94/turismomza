@@ -11,7 +11,7 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col gap-10 min-w-96">
       <div>
-        <h2 className="text-4xl font-bold">Crea una cuenta</h2>
+        <h2 className="text-3xl font-bold">Crea una cuenta</h2>
         <span>¡Bienvenido a Mendoza!</span>
       </div>
 

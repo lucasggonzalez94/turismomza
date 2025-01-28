@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function TyCPage() {
   return (
     <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
-      <h2 className="font-bold text-3xl">Términos y condiciones</h2>
+      <h2 className="font-bold text-xl">Términos y condiciones</h2>
       <div className="flex flex-col gap-3">
         <div>
           <h4 className="font-bold">Introducción</h4>

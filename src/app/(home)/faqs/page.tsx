@@ -114,7 +114,7 @@ export default function FAQsPage() {
   ];
   return (
     <div className="flex flex-col flex-grow gap-6 p-8 md:p-12">
-      <h2 className="font-bold text-3xl">Preguntas frecuentes (FAQs)</h2>
+      <h2 className="font-bold text-xl">Preguntas frecuentes (FAQs)</h2>
       <AccordionCustom items={FAQs} />
     </div>
   );

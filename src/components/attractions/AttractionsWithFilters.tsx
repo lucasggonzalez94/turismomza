@@ -81,7 +81,7 @@ const AttractionsWithFilters = () => {
     <>
       <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-3xl">Lugares turísticos</h2>
+          <h2 className="font-bold text-xl">Lugares turísticos</h2>
           {hideFilters && (
             <Button
               color="default"
@@ -105,7 +105,7 @@ const AttractionsWithFilters = () => {
                 </span>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                 {loading ? (
                   Array.from({ length: pageSize }).map((_, index) => (
                     <CardSkeleton key={index} />

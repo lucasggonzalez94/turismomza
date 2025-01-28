@@ -20,7 +20,7 @@ const Donations = () => {
       </div> */}
       <div className="flex justify-center items-start lg:w-1/2 p-8 md:p-14">
         <div className="flex flex-col items-center justify-center gap-8 h-full">
-          <h2 className="font-bold text-3xl">Apoyá nuestro proyecto</h2>
+          <h2 className="font-bold text-2xl">Apoyá nuestro proyecto</h2>
           <p className="text-sm text-center">
             Tus donaciones nos ayudan a mantener este sitio funcionando y
             mejorar nuestros servicios. ¡Gracias por tu apoyo!

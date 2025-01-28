@@ -87,8 +87,8 @@ const ImageUploader = ({
 
   return (
     <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">
-        Subida de imágenes
+      <h2 className="text-xl font-semibold text-center mb-6">
+        Subí tus imágenes
       </h2>
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 'border-gray-300`}

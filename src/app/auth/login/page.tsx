@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col gap-10 min-w-96">
       <div>
-        <h2 className="text-4xl font-bold">Bienvenido de nuevo</h2>
+        <h2 className="text-3xl font-bold">Bienvenido de nuevo</h2>
         <span>¡Mendoza te espera! Introduce tus datos.</span>
       </div>
 

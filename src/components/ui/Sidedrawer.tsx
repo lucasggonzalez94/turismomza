@@ -6,7 +6,6 @@ import { IoMdClose } from 'react-icons/io';
 interface IPropSidedrawer {
   title?: string;
   children: ReactNode;
-  side?: 'right' | 'left';
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
 }
@@ -14,7 +13,6 @@ interface IPropSidedrawer {
 const Sidedrawer: FC<IPropSidedrawer> = ({
   title,
   children,
-  side = 'right',
   isOpen,
   setIsOpen,
 }) => {
@@ -47,22 +45,13 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
         />
       )}
       <div
-        className={`fixed top-0 h-screen bg-white shadow-lg z-50 transition-all duration-300 p-4 ${
-          side === 'right' ? 'right-0' : 'left-0'
-        } ${
-          isOpen
-            ? 'translate-x-0'
-            : side === 'right'
-              ? 'translate-x-full'
-              : '-translate-x-full'
+        className={`fixed top-0 bottom-0 bg-white shadow-lg z-50 transition-all duration-300 p-4 right-0 my-3 rounded-xl ${
+          isOpen ? 'translate-x-0 mx-3' : 'translate-x-full mx-0'
         }`}
       >
         <div className="flex justify-between items-center pb-3 border-b border-gray-300">
           {title && <h2 className="text-lg font-semibold">{title}</h2>}
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-xl absolute top-4 right-4"
-          >
+          <button onClick={() => setIsOpen(false)} className="text-xl">
             <IoMdClose size={24} />
           </button>
         </div>
