@@ -1,18 +1,18 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  Autocomplete,
-  GoogleMap,
-  Marker,
-  useLoadScript,
-} from '@react-google-maps/api';
+// import {
+//   Autocomplete,
+//   GoogleMap,
+//   Marker,
+//   useLoadScript,
+// } from '@react-google-maps/api';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { useStore } from '@/store/store';
-import { Address, LatLng } from '@/interfaces/address';
+// import { Address, LatLng } from '@/interfaces/address';
 
 interface IPropsAttractionFormDetails {
   setSaved: (saved: boolean) => void;
@@ -34,25 +34,17 @@ const schema = yup
       .required('El campo es obligatorio.'),
     price: yup.number().optional(),
     currency: yup.string(),
-    address: yup
-      .object({
-        lat: yup.number().required('La dirección es obligatoria.'),
-        lng: yup.number().required('La dirección es obligatoria.'),
-        formatted_address: yup
-          .string()
-          .required('La dirección es obligatoria.'),
-      })
-      .required('La dirección es obligatoria.'),
+    address: yup.string().required('La dirección es obligatoria.'),
   })
   .required();
 
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-  minHeight: '300px',
-};
+// const containerStyle = {
+//   width: '100%',
+//   height: '100%',
+//   minHeight: '300px',
+// };
 
-const libraries: 'places'[] = ['places'];
+// const libraries: 'places'[] = ['places'];
 
 const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
   setSaved,
@@ -67,8 +59,8 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
-    reset,
+    // setValue,
+    // reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -85,23 +77,23 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
     },
   });
 
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-    libraries,
-  });
+  // const { isLoaded, loadError } = useLoadScript({
+  //   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+  //   libraries,
+  // });
 
   const [images, setImages] = useState<File[]>([]);
-  const [currentPosition, setCurrentPosition] = useState<LatLng | null>({
-    lat: attractionFormData?.address?.lat || 0,
-    lng: attractionFormData?.address?.lng || 0,
-  });
-  const [selectedPosition, setSelectedPosition] = useState<LatLng | null>({
-    lat: attractionFormData?.address?.lat || 0,
-    lng: attractionFormData?.address?.lng || 0,
-  });
-  const [autocomplete, setAutocomplete] =
-    useState<google.maps.places.Autocomplete | null>(null);
-  const mapRef = useRef<google.maps.Map | null>(null);
+  // const [currentPosition, setCurrentPosition] = useState<LatLng | null>({
+  //   lat: attractionFormData?.address?.lat || 0,
+  //   lng: attractionFormData?.address?.lng || 0,
+  // });
+  // const [selectedPosition, setSelectedPosition] = useState<LatLng | null>({
+  //   lat: attractionFormData?.address?.lat || 0,
+  //   lng: attractionFormData?.address?.lng || 0,
+  // });
+  // const [autocomplete, setAutocomplete] =
+  //   useState<google.maps.places.Autocomplete | null>(null);
+  // const mapRef = useRef<google.maps.Map | null>(null);
 
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
@@ -115,68 +107,68 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
     }
   };
 
-  const onAutocompleteLoad = (
-    autocompleteInstance: google.maps.places.Autocomplete,
-  ) => {
-    setAutocomplete(autocompleteInstance);
-  };
+  // const onAutocompleteLoad = (
+  //   autocompleteInstance: google.maps.places.Autocomplete,
+  // ) => {
+  //   setAutocomplete(autocompleteInstance);
+  // };
 
-  const handlePlaceChanged = () => {
-    if (autocomplete !== null) {
-      const place = autocomplete.getPlace();
-      if (place.geometry) {
-        const newLocation = {
-          lat: place.geometry.location?.lat() as number,
-          lng: place.geometry.location?.lng() as number,
-          formatted_address: place.formatted_address,
-        };
-        setSelectedPosition(newLocation);
-        setValue('address', newLocation as Address, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-        mapRef.current?.panTo(newLocation);
-      }
-    }
-  };
+  // const handlePlaceChanged = () => {
+  //   if (autocomplete !== null) {
+  //     const place = autocomplete.getPlace();
+  //     if (place.geometry) {
+  //       const newLocation = {
+  //         lat: place.geometry.location?.lat() as number,
+  //         lng: place.geometry.location?.lng() as number,
+  //         formatted_address: place.formatted_address,
+  //       };
+  //       setSelectedPosition(newLocation);
+  //       setValue('address', newLocation as Address, {
+  //         shouldValidate: true,
+  //         shouldDirty: true,
+  //       });
+  //       mapRef.current?.panTo(newLocation);
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    if (attractionFormData) {
-      reset(attractionFormData);
-      setCurrentPosition({
-        lat: attractionFormData?.address?.lat || 0,
-        lng: attractionFormData?.address?.lng || 0,
-      });
-      setSelectedPosition({
-        lat: attractionFormData?.address?.lat || 0,
-        lng: attractionFormData?.address?.lng || 0,
-      });
-    } else if (navigator.geolocation && isLoaded) {
-      navigator.geolocation.watchPosition(
-        function () {},
-        function () {},
-        {},
-      );
-      navigator.geolocation.watchPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          const userLocation = {
-            lat: latitude,
-            lng: longitude,
-          };
-          setCurrentPosition(userLocation);
-          setSelectedPosition(userLocation);
-        },
-        () => {},
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 30000,
-        },
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attractionFormData, isLoaded]);
+  // useEffect(() => {
+  //   if (attractionFormData) {
+  //     reset(attractionFormData);
+  //     setCurrentPosition({
+  //       lat: attractionFormData?.address?.lat || 0,
+  //       lng: attractionFormData?.address?.lng || 0,
+  //     });
+  //     setSelectedPosition({
+  //       lat: attractionFormData?.address?.lat || 0,
+  //       lng: attractionFormData?.address?.lng || 0,
+  //     });
+  //   } else if (navigator.geolocation && isLoaded) {
+  //     navigator.geolocation.watchPosition(
+  //       function () {},
+  //       function () {},
+  //       {},
+  //     );
+  //     navigator.geolocation.watchPosition(
+  //       async (position) => {
+  //         const { latitude, longitude } = position.coords;
+  //         const userLocation = {
+  //           lat: latitude,
+  //           lng: longitude,
+  //         };
+  //         setCurrentPosition(userLocation);
+  //         setSelectedPosition(userLocation);
+  //       },
+  //       () => {},
+  //       {
+  //         enableHighAccuracy: true,
+  //         timeout: 10000,
+  //         maximumAge: 30000,
+  //       },
+  //     );
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [attractionFormData, isLoaded]);
 
   return (
     <form
@@ -184,12 +176,13 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
       className="flex flex-col gap-4 items-start"
     >
       <div className="flex flex-col lg:flex-row gap-4 w-full">
-        <div className="flex flex-col gap-4 w-full lg:w-1/2">
+        <div className="flex flex-col gap-4 w-full">
           <Input
             type="text"
             label="Nombre"
             labelPlacement="outside"
             placeholder="Ingresá el nombre del lugar"
+            variant="faded"
             isInvalid={!!errors.name?.message}
             errorMessage={errors.name?.message}
             {...register('name')}
@@ -199,6 +192,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             className="w-full"
             labelPlacement="outside"
             placeholder="Descripción del lugar"
+            variant="faded"
             isInvalid={!!errors.description?.message}
             errorMessage={errors.description?.message}
             {...register('description')}
@@ -219,6 +213,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
                 onChange={(e) => {
                   onChange(e.target.value);
                 }}
+                variant="faded"
               >
                 {CATEGORIES.map((category) => (
                   <SelectItem key={category.key} value={category.key}>
@@ -247,6 +242,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
                 onChange={(e) => {
                   onChange(e.target.value.split(','));
                 }}
+                variant="faded"
               >
                 {SERVICES.map((service) => (
                   <SelectItem key={service.key} value={service.key}>
@@ -257,6 +253,16 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             )}
           />
           <Input
+            type="text"
+            label="Dirección"
+            labelPlacement="outside"
+            placeholder="Ingresá la dirección del lugar"
+            variant="faded"
+            isInvalid={!!errors.address?.message}
+            errorMessage={errors.address?.message}
+            {...register('address')}
+          />
+          <Input
             label={
               <label>
                 Precio <span className="text-tiny">(Opcional)</span>
@@ -264,6 +270,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             }
             placeholder="0.00"
             labelPlacement="outside"
+            variant="faded"
             isInvalid={!!errors.price?.message}
             errorMessage={errors.price?.message}
             startContent={
@@ -295,7 +302,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
             })}
           />
         </div>
-        {loadError ? (
+        {/* {loadError ? (
           <div className="w-full h-full flex justify-center items-center">
             Error al cargar el mapa
           </div>
@@ -357,7 +364,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
               {selectedPosition && <Marker position={selectedPosition} />}
             </GoogleMap>
           </div>
-        )}
+        )} */}
       </div>
       <ImageUploader
         defaultImages={attractionFormData?.images}

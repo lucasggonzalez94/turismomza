@@ -5,11 +5,7 @@ export interface IAttractionForm {
   services?: string[];
   price?: number;
   currency?: string;
-  address?: {
-    lat: number;
-    lng: number;
-    formatted_address: string;
-  };
+  address?: string;
   images?: File[];
   website?: string;
   instagram?: string;

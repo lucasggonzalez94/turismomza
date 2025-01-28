@@ -121,7 +121,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
 
   useEffect(() => {
     if (schedule) {
-      const parsedSchedule: ISchedule = JSON.parse(JSON.parse(schedule));
+      const parsedSchedule: ISchedule = JSON.parse(schedule);
       if (
         Object.entries(parsedSchedule)?.length &&
         typeof parsedSchedule === 'object'
@@ -199,7 +199,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
         </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-2">
-        <div className="hidden md:grid grid-cols-7 grid-rows-2 gap-4 w-full lg:w-2/3 max-h-[700px]">
+        <div className="hidden md:grid grid-cols-7 grid-rows-2 gap-4 w-full max-h-[700px]">
           {images?.slice(0, 4)?.map((img, index) => {
             if (images?.length > 4 && index === 3) {
               return (
@@ -242,9 +242,9 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
             showPrevNextButtons
           />
         </div>
-        <div className="w-full lg:w-1/3 min-h-[350px] rounded-lg overflow-hidden md:rounded-none">
+        {/* <div className="w-full lg:w-1/3 min-h-[350px] rounded-lg overflow-hidden md:rounded-none">
           <MapRoute location={location || ''} />
-        </div>
+        </div> */}
       </div>
       <p className="border-b border-gray-300 pb-4">{description}</p>
       {services?.length ? (

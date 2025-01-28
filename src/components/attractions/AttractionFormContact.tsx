@@ -111,7 +111,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
     formData.append('description', attractionFormData?.description || '');
     formData.append('category', attractionFormData?.category || '');
     formData.append('services', JSON.stringify(attractionFormData?.services));
-    formData.append('location', JSON.stringify(attractionFormData?.address));
+    formData.append('location', attractionFormData?.address || '');
     if (attractionFormData?.price) {
       formData.append('price', attractionFormData?.price.toString());
       formData.append('currencyPrice', attractionFormData?.currency || 'ars');
@@ -122,7 +122,10 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
       });
     }
 
-    formData.append('contactNumber', `+54${data.phonenumber}`);
+    formData.append(
+      'contactNumber',
+      data.phonenumber ? `+54${data.phonenumber}` : '',
+    );
     formData.append('email', data.email);
     formData.append('webSite', data.website);
     formData.append('instagram', data.instagram);

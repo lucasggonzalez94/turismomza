@@ -81,7 +81,7 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
 
       <div ref={emblaRef} className="w-full h-full">
         <div className="flex w-full h-full">
-          {images.map((src, index) => (
+          {images?.map((src, index) => (
             <div
               key={index}
               className="flex-[0_0_100%] flex justify-center items-center w-full h-full"
