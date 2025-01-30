@@ -136,7 +136,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
             color="primary"
             onClick={() => handleNavigation(`/attractions/${slug}`)}
           >
-            Ver más
+            Detalle
           </Button>
           <div className="flex flex-col justify-between items-end h-full w-full">
             <div className="flex flex-col justify-end h-full text-end">

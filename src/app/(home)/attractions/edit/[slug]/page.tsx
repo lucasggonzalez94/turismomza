@@ -30,7 +30,7 @@ const EditAttractionPage = async ({ params }: IPropsEditAttractionPage) => {
     services: attraction.services,
     price: attraction.price || undefined,
     currency: attraction.currencyPrice || 'ars',
-    address: JSON.parse(attraction.location),
+    address: attraction.location,
     website: attraction.webSite,
     instagram: attraction.instagram,
     facebook: attraction.facebook,

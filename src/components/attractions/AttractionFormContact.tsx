@@ -144,7 +144,6 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
         handleNavigation(`/attractions/${attraction?.slug}`);
       }
     } catch (error) {
-      console.log(error);
       const err = error as ErrorFeedback;
       if (err.status === 406) {
         setErrorFeedback({

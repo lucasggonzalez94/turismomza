@@ -65,8 +65,8 @@ const AttractionsHome = () => {
   return (
     <div id="attractions" className="flex flex-col gap-4 h-auto p-8 md:p-12">
       <div className="flex gap-7 items-center">
-        <Link href="/attractions" className="font-bold text-3xl">
-          Lugares
+        <Link href="/attractions" className="font-bold text-xl">
+          Lugares destacados
         </Link>
         <Link
           href="/attractions"

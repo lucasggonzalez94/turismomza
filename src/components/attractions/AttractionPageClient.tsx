@@ -8,11 +8,10 @@ import {
 } from '@/utils/helpers';
 import { IoStar } from 'react-icons/io5';
 import ButtonsHeaderAttraction from './ButtonsHeaderAttraction';
-import MapRoute from './MapRoute';
 import AccordionCustom from '../ui/AccordionCustom';
 import Reviews from './Reviews';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Attraction, IImage } from '@/interfaces/attraction';
+import { Attraction } from '@/interfaces/attraction';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
