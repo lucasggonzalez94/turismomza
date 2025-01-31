@@ -71,7 +71,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
 
   return (
     <div
-      className={`flex flex-col rounded-lg w-full bg-white overflow-hidden border cursor-pointer transition-transform duration-300 transform hover:scale-105 ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
+      className={`flex flex-col justify-between rounded-lg w-full bg-white overflow-hidden border cursor-pointer transition-transform duration-300 transform hover:scale-105 ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
       onClick={() => handleNavigation(`/attractions/${slug}`)}
     >
       <div className="relative">
@@ -98,7 +98,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
             alt={`Foto ${title}`}
             width={300}
             height={200}
-            className="object-cover w-full h-full max-h-64"
+            className="object-cover w-full h-full max-h-56"
             // TODO: Modificar si se carga
             priority
           />
