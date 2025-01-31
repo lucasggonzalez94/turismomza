@@ -99,7 +99,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
       {!hidden && (
         <div
-          className={`absolute top-0 left-0 transition-all duration-500 w-96 shadow-md overflow-hidden mt-2 bg-gray-200 rounded-md ${
+          className={`absolute top-0 left-0 transition-all duration-500 w-96 shadow-md overflow-hidden mt-2 rounded-md ${
             isOpen
               ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
               : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`

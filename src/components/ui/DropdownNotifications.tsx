@@ -85,7 +85,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
             Notificationes
           </h3>
         </div>
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto bg-gray-200">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <Notification
