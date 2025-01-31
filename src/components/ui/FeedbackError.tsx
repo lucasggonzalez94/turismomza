@@ -25,7 +25,7 @@ const FeedbackError = () => {
       </p>
       <Button
         color="primary"
-        onClick={() => {
+        onPress={() => {
           if (errorFeedback?.pathname) {
             router.push(errorFeedback.pathname);
           }

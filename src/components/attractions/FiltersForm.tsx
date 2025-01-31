@@ -241,7 +241,7 @@ const FiltersForm = () => {
           <Button
             color="primary"
             variant="ghost"
-            onClick={() => {
+            onPress={() => {
               reset();
               setFilters(null);
             }}

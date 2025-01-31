@@ -88,14 +88,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
       getAttraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
-
-  useEffect(() => {
-    if (user) {
-      getAttraction();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [slug, user]);
 
   useEffect(() => {
     if (reviews?.length) {

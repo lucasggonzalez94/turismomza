@@ -83,7 +83,7 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
         ) : null}
         <Button
           isIconOnly
-          className="absolute right-2 top-2"
+          className="absolute right-2 top-2 shadow-md"
           onClick={handleFavorite}
         >
           {favorite ? (
@@ -120,11 +120,11 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
             <h3 className="font-bold line-clamp-1 text-sm lg:text-md">
               {title}
             </h3>
-            {price && currencyPrice ? (
-              <span className="font-bold text-gray-500 text-sm">
-                {formatPrice(price, currencyPrice)}
-              </span>
-            ) : null}
+            <span className="font-bold text-gray-500 text-sm">
+              {price && currencyPrice
+                ? formatPrice(price, currencyPrice)
+                : 'Gratis'}
+            </span>
           </div>
           <span className="text-tiny text-gray-400">{category}</span>
         </div>
@@ -134,7 +134,8 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
         <div className="flex justify-between items-center">
           <Button
             color="primary"
-            onClick={() => handleNavigation(`/attractions/${slug}`)}
+            size="sm"
+            onPress={() => handleNavigation(`/attractions/${slug}`)}
           >
             Detalle
           </Button>

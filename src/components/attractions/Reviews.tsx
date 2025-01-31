@@ -111,14 +111,14 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
             <Button
               color="primary"
               variant="light"
-              onClick={() => setOpenSidedrawer(true)}
+              onPress={() => setOpenSidedrawer(true)}
             >
               Ver todas las opiniones
             </Button>
             {user?.id !== creatorId ? (
               <Button
                 color="primary"
-                onClick={() => setOpenModalAddReview(true)}
+                onPress={() => setOpenModalAddReview(true)}
               >
                 Agregar opinión
               </Button>
@@ -127,7 +127,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
         ) : user?.id !== creatorId ? (
           <div className="w-full min-h-96 flex flex-col gap-4 items-center justify-center">
             <span>Todavía no hay opiniones, sé el primero en agregar una.</span>
-            <Button color="primary" onClick={() => setOpenModalAddReview(true)}>
+            <Button color="primary" onPress={() => setOpenModalAddReview(true)}>
               Agregar opinión
             </Button>
           </div>

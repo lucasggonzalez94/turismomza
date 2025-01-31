@@ -89,7 +89,7 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
           color="default"
           variant="ghost"
           isIconOnly
-          onClick={handleFavorite}
+          onPress={handleFavorite}
         >
           {favorite ? (
             <IoHeart className="text-red-600" size={25} />
@@ -97,15 +97,15 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
             <IoHeartOutline size={25} />
           )}
         </Button>
-        <Button color="default" variant="ghost" isIconOnly onClick={() => {}}>
+        <Button color="default" variant="ghost" isIconOnly onPress={() => {}}>
           <IoShareSocialOutline size={25} />
         </Button>
         {user?.id === creatorId && (
-          <Button color="primary" onClick={handleEdit}>
+          <Button color="primary" onPress={handleEdit}>
             Editar publicación
           </Button>
         )}
-        <Button color="primary" onClick={() => setOpenModalContact(true)}>
+        <Button color="primary" onPress={() => setOpenModalContact(true)}>
           Consultar
         </Button>
       </div>

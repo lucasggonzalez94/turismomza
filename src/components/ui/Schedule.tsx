@@ -124,7 +124,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
           <Button
             key={day}
             color={selectedDays.includes(day) ? 'secondary' : 'default'}
-            onClick={() => toggleSelectedDay(day)}
+            onPress={() => toggleSelectedDay(day)}
             className="rounded-full"
             isDisabled={saved}
           >
@@ -202,7 +202,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
                     <Button
                       className="text-white bg-red-700 hover:bg-red-500"
                       isIconOnly
-                      onClick={() => deleteTime(day, index)}
+                      onPress={() => deleteTime(day, index)}
                       isDisabled={config[day].times.length === 1}
                     >
                       <IoClose size={20} />
@@ -214,7 +214,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
                 <Button
                   className="bg-black hover:bg-gray-900 text-white mt-2"
                   size="sm"
-                  onClick={() => addTime(day)}
+                  onPress={() => addTime(day)}
                 >
                   Agregar horario
                 </Button>
@@ -227,7 +227,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
       <div className="flex justify-start gap-2 mt-4">
         <Button
           className="bg-black hover:bg-gray-900 text-white"
-          onClick={saveConfig}
+          onPress={saveConfig}
           isDisabled={!validateSchedule(config)}
         >
           {saved ? 'Editar horarios' : 'Guardar horarios'}

@@ -80,33 +80,31 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
         onOpen={onOpen}
         onClose={onClose}
       >
-        <div className="mt-2 bg-gray-200 rounded-md shadow-ms overflow-hidden">
-          <div className="p-4 bg-gray-100 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Notificationes
-            </h3>
-          </div>
-          <div className="overflow-y-auto">
-            {notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <Notification
-                  key={notification.id}
-                  notification={notification}
-                  notifications={notifications}
-                  setNotifications={setNotifications}
-                  onClick={() => setIsOpen(null)}
-                />
-              ))
-            ) : errorService ? (
-              <div className="p-4 text-center text-gray-500">
-                ¡Algo salio mal! Vuelve a intentarlo más tarde
-              </div>
-            ) : (
-              <div className="p-4 text-center text-gray-500">
-                No tienes notificaciones en este momento.
-              </div>
-            )}
-          </div>
+        <div className="p-4 bg-gray-100 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Notificationes
+          </h3>
+        </div>
+        <div className="overflow-y-auto">
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <Notification
+                key={notification.id}
+                notification={notification}
+                notifications={notifications}
+                setNotifications={setNotifications}
+                onClick={() => setIsOpen(null)}
+              />
+            ))
+          ) : errorService ? (
+            <div className="p-4 text-center text-gray-500">
+              ¡Algo salio mal! Vuelve a intentarlo más tarde
+            </div>
+          ) : (
+            <div className="p-4 text-center text-gray-500">
+              No tienes notificaciones en este momento.
+            </div>
+          )}
         </div>
       </DropdownButton>
     </Badge>

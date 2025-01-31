@@ -88,7 +88,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
         isIconOnly={!!icon || profile}
         variant="light"
         className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
-        onClick={onOpen}
+        onPress={onOpen}
       >
         {profile ? (
           <IoPerson size={25} color="#000" className="mb-[2px]" />
@@ -99,7 +99,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
       {!hidden && (
         <div
-          className={`absolute top-0 left-0 transition-all duration-500 w-96 ${
+          className={`absolute top-0 left-0 transition-all duration-500 w-96 shadow-md overflow-hidden mt-2 bg-gray-200 rounded-md ${
             isOpen
               ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
               : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`

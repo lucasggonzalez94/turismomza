@@ -9,7 +9,7 @@ interface ButtonProps {
 
 export const PrevButton: React.FC<ButtonProps> = ({ onClick }) => (
   <Button
-    onClick={onClick}
+    onPress={onClick}
     color="secondary"
     className="w-12 h-12 absolute left-4 top-1/2 transform -translate-y-1/2 rounded-full"
     isIconOnly
@@ -20,7 +20,7 @@ export const PrevButton: React.FC<ButtonProps> = ({ onClick }) => (
 
 export const NextButton: React.FC<ButtonProps> = ({ onClick }) => (
   <Button
-    onClick={onClick}
+    onPress={onClick}
     color="secondary"
     className="w-12 h-12 absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full"
     isIconOnly
