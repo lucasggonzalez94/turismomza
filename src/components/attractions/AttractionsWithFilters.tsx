@@ -87,7 +87,7 @@ const AttractionsWithFilters = () => {
               color="default"
               variant="ghost"
               isIconOnly
-              onPress={() => setOpenSidedrawer((prev) => !prev)}
+              onClick={() => setOpenSidedrawer((prev) => !prev)}
             >
               <IoOptionsOutline size={25} />
             </Button>

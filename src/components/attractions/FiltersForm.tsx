@@ -92,6 +92,7 @@ const FiltersForm = () => {
           type="text"
           label="Título"
           placeholder="Buscar por título"
+          variant="faded"
           labelPlacement="outside"
           {...register('title')}
         />
@@ -104,6 +105,7 @@ const FiltersForm = () => {
               labelPlacement="outside"
               placeholder="Seleccioná las categorías"
               selectionMode="multiple"
+              variant="faded"
               className="w-full"
               value={
                 (value?.filter((val) => val !== undefined) as string[]) || []
@@ -128,6 +130,7 @@ const FiltersForm = () => {
               label="Desde"
               placeholder="0"
               labelPlacement="outside"
+              variant="faded"
               startContent={<IoLogoUsd />}
               value={priceRange[0]?.toString()}
               onChange={(e) => {
@@ -140,6 +143,7 @@ const FiltersForm = () => {
               label="Hasta"
               placeholder="0"
               labelPlacement="outside"
+              variant="faded"
               startContent={<IoLogoUsd />}
               value={priceRange[1]?.toString()}
               onChange={(e) => {

@@ -21,6 +21,7 @@ const InputPassword = forwardRef<HTMLInputElement, IPropsInputPassword>(
         label="Contraseña"
         labelPlacement="outside"
         placeholder="Ingresá tu contraseña"
+        variant="faded"
         endContent={
           <button
             className="focus:outline-none"

@@ -79,6 +79,7 @@ const ContactForm = () => {
               label="Nombre"
               labelPlacement="outside"
               placeholder="Ingresá tu nombre"
+              variant="faded"
               {...register('name')}
             />
             <span className="text-sm text-red-500">{errors.name?.message}</span>
@@ -89,6 +90,7 @@ const ContactForm = () => {
               label="Asunto"
               labelPlacement="outside"
               placeholder="Ingresá el asunto"
+              variant="faded"
               {...register('subject')}
             />
             <span className="text-sm text-red-500">
@@ -101,6 +103,7 @@ const ContactForm = () => {
               label="Email"
               labelPlacement="outside"
               placeholder="Ingresá tu email"
+              variant="faded"
               {...register('email')}
             />
             <span className="text-sm text-red-500">
@@ -113,6 +116,7 @@ const ContactForm = () => {
               className="w-full"
               labelPlacement="outside"
               placeholder="Ingresá el mensaje"
+              variant="faded"
               {...register('message')}
             />
             <span className="text-sm text-red-500">

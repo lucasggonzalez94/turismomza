@@ -75,6 +75,7 @@ const LoginForm = () => {
               type="email"
               label="Email"
               labelPlacement="outside"
+              variant="faded"
               placeholder="Ingresá tu email"
               {...register('email')}
             />

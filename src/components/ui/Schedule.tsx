@@ -177,6 +177,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
                       type="time"
                       label="Desde"
                       placeholder="00:00"
+                      variant="faded"
                       value={time.from}
                       onChange={(e) =>
                         updateTime(day, index, 'from', e.target.value)
@@ -190,6 +191,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule, defaultValue }) => {
                       type="time"
                       label="Hasta"
                       placeholder="00:00"
+                      variant="faded"
                       value={time.to}
                       onChange={(e) =>
                         updateTime(day, index, 'to', e.target.value)

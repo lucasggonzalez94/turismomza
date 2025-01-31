@@ -84,6 +84,7 @@ const RegisterForm = () => {
                 label="Nombre"
                 labelPlacement="outside"
                 placeholder="Ingresá tu nombre"
+                variant="faded"
                 {...register('name')}
               />
               <span className="text-sm text-red-500">
@@ -96,6 +97,7 @@ const RegisterForm = () => {
                 label="Apellido"
                 labelPlacement="outside"
                 placeholder="Ingresá tu apellido"
+                variant="faded"
                 {...register('lastname')}
               />
               <span className="text-sm text-red-500">
@@ -109,6 +111,7 @@ const RegisterForm = () => {
               label="Email"
               labelPlacement="outside"
               placeholder="Ingresá tu email"
+              variant="faded"
               {...register('email')}
             />
             <span className="text-sm text-red-500">
