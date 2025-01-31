@@ -32,14 +32,15 @@ const dayConfigSchema = yup.object({
 
 const configSchema = yup
   .object()
-  .shape(Object.fromEntries(WEEKDAYS.map((day) => [day, dayConfigSchema])));
+  .shape(Object.fromEntries(WEEKDAYS.map((day) => [day, dayConfigSchema])))
+  .nullable();
 
 const schema = yup
   .object({
-    website: yup.string(),
-    instagram: yup.string(),
-    facebook: yup.string(),
-    phonenumber: yup.string(),
+    website: yup.string().optional(),
+    instagram: yup.string().optional(),
+    facebook: yup.string().optional(),
+    phonenumber: yup.string().optional(),
     email: yup
       .string()
       .optional()
@@ -72,22 +73,12 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      website: attractionFormData?.website,
-      instagram: attractionFormData?.instagram,
-      facebook: attractionFormData?.facebook,
-      phonenumber: attractionFormData?.phonenumber,
-      email: attractionFormData?.email,
-      schedule:
-        attractionFormData?.schedule ||
-        Object.fromEntries(
-          WEEKDAYS.map((day) => [
-            day,
-            {
-              open24hours: false,
-              times: [],
-            },
-          ]),
-        ),
+      website: attractionFormData?.website || '',
+      instagram: attractionFormData?.instagram || '',
+      facebook: attractionFormData?.facebook || '',
+      phonenumber: attractionFormData?.phonenumber || '',
+      email: attractionFormData?.email || '',
+      schedule: attractionFormData?.schedule,
     },
   });
   const pathname = usePathname();

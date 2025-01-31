@@ -173,7 +173,7 @@ const AttractionFormDetails: FC<IPropsAttractionFormDetails> = ({
   return (
     <form
       onSubmit={handleSubmit(handleSaveAndContinue)}
-      className="flex flex-col gap-4 items-start"
+      className="flex flex-col gap-4 items-start w-full"
     >
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="flex flex-col gap-4 w-full">

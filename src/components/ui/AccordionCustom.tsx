@@ -9,14 +9,16 @@ interface IPropsAccordion {
     content: string | ReactNode;
   }[];
   bold?: boolean;
+  expanded?: boolean;
 }
 
-const AccordionCustom: FC<IPropsAccordion> = ({ items, bold }) => {
+const AccordionCustom: FC<IPropsAccordion> = ({ items, bold, expanded }) => {
   return (
     <Accordion
       itemClasses={{
         title: bold && 'font-bold text-base',
       }}
+      defaultExpandedKeys={expanded ? ['0'] : []}
     >
       {items.map((item, i) => (
         <AccordionItem

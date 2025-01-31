@@ -84,7 +84,7 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 w-full justify-end">
         <Button
           color="default"
           variant="ghost"
@@ -105,9 +105,15 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
             Editar publicación
           </Button>
         )}
-        <Button color="primary" onPress={() => setOpenModalContact(true)}>
-          Consultar
-        </Button>
+        {(contact?.contactNumber ||
+          contact?.email ||
+          contact?.webSite ||
+          contact?.instagram ||
+          contact?.facebook) && (
+          <Button color="primary" onPress={() => setOpenModalContact(true)}>
+            Contacto
+          </Button>
+        )}
       </div>
       <ToastContainer autoClose={10000} />
       <CustomModal

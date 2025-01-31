@@ -97,7 +97,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, attractionId, creatorId }) => {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2 border-t border-gray-300 pt-6">
         <h3 className="font-bold ml-1">Opiniones</h3>
         {formattedReviews?.length ? (
           <div className="w-full flex flex-col gap-3 items-center">

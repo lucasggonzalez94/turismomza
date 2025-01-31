@@ -73,55 +73,53 @@ const AttractionForm: FC<IPropsAttractionForm> = ({
   if (!isDataReady) return <div>Cargando datos...</div>;
 
   return (
-    <>
-      <Tabs
-        aria-label="Pasos para publicar"
-        selectedKey={selectedTab}
-        onSelectionChange={(key) => {
-          setSelectedTab(key);
-        }}
-      >
-        <Tab
-          key="details"
-          title={
-            <div className="flex items-center space-x-2">
-              {saved ? (
-                <FaCircleCheck size={21} color="#E95718" />
-              ) : (
-                <PiNumberCircleOneFill
-                  size={25}
-                  color={selectedTab === 'details' ? '#E95718' : '#676767'}
-                />
-              )}
-              {!hideTextTabs && <span>Detalles de la ubicación</span>}
-            </div>
-          }
-        >
-          <AttractionFormDetails
-            setSaved={setSaved}
-            setSelectedTab={setSelectedTab}
-          />
-        </Tab>
-        <Tab
-          key="contact"
-          title={
-            <div className="flex items-center space-x-2">
-              <PiNumberCircleTwoFill
+    <Tabs
+      aria-label="Pasos para publicar"
+      selectedKey={selectedTab}
+      onSelectionChange={(key) => {
+        setSelectedTab(key);
+      }}
+    >
+      <Tab
+        key="details"
+        title={
+          <div className="flex items-center space-x-2">
+            {saved ? (
+              <FaCircleCheck size={21} color="#E95718" />
+            ) : (
+              <PiNumberCircleOneFill
                 size={25}
-                color={selectedTab === 'contact' ? '#E95718' : '#676767'}
+                color={selectedTab === 'details' ? '#E95718' : '#676767'}
               />
-              {!hideTextTabs && <span>Contacto y horarios</span>}
-            </div>
-          }
-          isDisabled={!saved}
-        >
-          <AttractionFormContact
-            isEditing={isEditing}
-            attractionId={attractionId}
-          />
-        </Tab>
-      </Tabs>
-    </>
+            )}
+            {!hideTextTabs && <span>Detalles de la ubicación</span>}
+          </div>
+        }
+      >
+        <AttractionFormDetails
+          setSaved={setSaved}
+          setSelectedTab={setSelectedTab}
+        />
+      </Tab>
+      <Tab
+        key="contact"
+        title={
+          <div className="flex items-center space-x-2">
+            <PiNumberCircleTwoFill
+              size={25}
+              color={selectedTab === 'contact' ? '#E95718' : '#676767'}
+            />
+            {!hideTextTabs && <span>Contacto y horarios</span>}
+          </div>
+        }
+        isDisabled={!saved}
+      >
+        <AttractionFormContact
+          isEditing={isEditing}
+          attractionId={attractionId}
+        />
+      </Tab>
+    </Tabs>
   );
 };
 

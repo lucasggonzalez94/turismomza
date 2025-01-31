@@ -14,12 +14,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const attraction = await getAttractionBySlugService(slug);
 
   return {
-    title: `${attraction.title}`,
-    description: attraction.description,
+    title: `${attraction?.title}`,
+    description: attraction?.description,
     openGraph: {
-      title: `${attraction.title} | Turismomza`,
-      description: attraction.description,
-      images: [attraction.images[0].url],
+      title: `${attraction?.title} | Turismomza`,
+      description: attraction?.description,
+      images: [attraction?.images[0]?.url],
     },
   };
 }

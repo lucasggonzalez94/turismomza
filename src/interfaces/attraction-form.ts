@@ -21,5 +21,5 @@ export interface IAttractionForm {
       open24hours?: boolean;
       times?: { from?: string; to?: string }[];
     };
-  };
+  } | null;
 }
