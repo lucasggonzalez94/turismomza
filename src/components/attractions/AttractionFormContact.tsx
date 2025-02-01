@@ -128,10 +128,12 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
       if (isEditing && attractionId) {
         const attraction = await editAttractionService(formData, attractionId);
         reset();
+        setAttractionFormData(null);
         handleNavigation(`/attractions/${attraction?.slug}`);
       } else {
         const attraction = await createAttractionService(formData);
         reset();
+        setAttractionFormData(null);
         handleNavigation(`/attractions/${attraction?.slug}`);
       }
     } catch (error) {

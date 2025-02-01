@@ -27,7 +27,7 @@ interface State {
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
   attractionFormData: IAttractionForm | null;
-  setAttractionFormData: (data: IAttractionForm) => void;
+  setAttractionFormData: (data: IAttractionForm | null) => void;
   schedule: Schedule | null;
   setSchedule: (schedule: Schedule) => void;
   errorFeedback: ErrorFeedback | null;
