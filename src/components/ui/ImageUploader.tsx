@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import { X, Upload, Move } from 'lucide-react';
+import Image from 'next/image';
 
 interface ImageUploaderProps {
   defaultImages?: File[];
@@ -19,28 +20,21 @@ const ImageUploader = ({
   maxSizeMB = 5,
   onImagesChange,
 }: ImageUploaderProps) => {
-  const [error, setError] = useState<string | null>(null);
+  const [errorMinMax, setErrorMinMax] = useState<string | null>(null);
+  const [errorImages, setErrorImages] = useState<string | null>(null);
 
   const [parent, images, _setValues] = useDragAndDrop<HTMLDivElement, File>([]);
 
-  const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(e.target.files || []);
-      addImages(files);
-    },
-    [],
-  );
-
   const addImages = useCallback(
     (files: File[]) => {
-      setError(null);
+      setErrorMinMax(null);
       const validFiles = files.filter((file) => {
-        if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-          setError('Solo se permiten archivos .jpg, .jpeg y .png');
+        if (file.size > maxSizeMB * 1024 * 1024) {
+          setErrorImages(`El tamaño máximo por imagen es ${maxSizeMB}MB`);
           return false;
         }
-        if (file.size > maxSizeMB * 1024 * 1024) {
-          setError(`El tamaño máximo por imagen es ${maxSizeMB}MB`);
+        if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+          setErrorImages('Solo se permiten archivos .jpg, .jpeg y .png');
           return false;
         }
         return true;
@@ -49,29 +43,42 @@ const ImageUploader = ({
       _setValues((prevImages) => {
         const newImages = [...prevImages, ...validFiles].slice(0, maxImages);
         if (newImages.length === maxImages) {
-          setError(`Has alcanzado el límite máximo de ${maxImages} imágenes`);
+          setErrorMinMax(
+            `Has alcanzado el límite máximo de ${maxImages} imágenes`,
+          );
         }
         if (newImages.length < minImages) {
-          setError(`El mínimo de imágenes es de ${minImages}.`);
+          setErrorMinMax(`El mínimo de imágenes es de ${minImages}.`);
         }
         return newImages;
       });
     },
-    [maxImages, maxSizeMB],
+    [_setValues, maxImages, maxSizeMB, minImages],
   );
 
-  const removeImage = useCallback((index: number) => {
-    _setValues((prevImages) => {
-      const newImages = prevImages.filter((_, i) => i !== index);
-      if (newImages.length < minImages) {
-        setError(`El mínimo de imágenes es de ${minImages}.`);
-      } else {
-        setError(null);
-      }
-      return newImages;
-    });
-    setError(null);
-  }, []);
+  const removeImage = useCallback(
+    (index: number) => {
+      _setValues((prevImages) => {
+        const newImages = prevImages.filter((_, i) => i !== index);
+        if (newImages.length < minImages) {
+          setErrorMinMax(`El mínimo de imágenes es de ${minImages}.`);
+        } else {
+          setErrorMinMax(null);
+        }
+        return newImages;
+      });
+      setErrorMinMax(null);
+    },
+    [_setValues, minImages],
+  );
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      addImages(files);
+    },
+    [addImages],
+  );
 
   useEffect(() => {
     if (images.length && onImagesChange) {
@@ -83,7 +90,7 @@ const ImageUploader = ({
     if (defaultImages?.length) {
       _setValues(defaultImages);
     }
-  }, [defaultImages]);
+  }, [_setValues, defaultImages]);
 
   return (
     <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
@@ -113,18 +120,28 @@ const ImageUploader = ({
         </p>
       </div>
 
-      <div className="text-center mb-4">
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800">
-          <span className="mr-1">ℹ️</span> Formatos aceptados: .jpg, .jpeg, .png
-        </span>
+      <div className="text-center mb-4 w-full flex justify-center items-center">
+        <div className="flex flex-col w-fit items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800">
+          <span className="mr-1">ℹ️</span>
+          <span>Formatos aceptados: .jpg, .jpeg, .png</span>
+          <span>Tamaño máximo: 5Mb</span>
+        </div>
       </div>
 
-      {error && (
+      {errorMinMax && (
         <div
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
           role="alert"
         >
-          <span className="block sm:inline">{error}</span>
+          <span className="block sm:inline">{errorMinMax}</span>
+        </div>
+      )}
+      {errorImages && (
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+          role="alert"
+        >
+          <span className="block sm:inline">{errorImages}</span>
         </div>
       )}
 
@@ -138,10 +155,12 @@ const ImageUploader = ({
             key={file.name}
             className={`relative group`}
           >
-            <img
+            <Image
               src={URL.createObjectURL(file)}
               alt={`Uploaded ${index + 1}`}
               className="w-full h-40 object-cover rounded-lg shadow-md"
+              width={180}
+              height={160}
             />
             <button
               onClick={() => removeImage(index)}
