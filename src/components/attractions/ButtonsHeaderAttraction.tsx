@@ -147,7 +147,12 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
           {contact?.webSite && (
             <div className="flex gap-2 items-center">
               <IoCloud size={25} className="text-[#E95718]" />
-              <Link href={contact?.webSite} className="hover:underline">
+              <Link
+                href={contact?.webSite}
+                className="hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {contact?.webSite}
               </Link>
             </div>
@@ -155,7 +160,12 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
           {contact?.instagram && (
             <div className="flex gap-2 items-center">
               <IoLogoInstagram size={25} className="text-[#E95718]" />
-              <Link href={contact?.instagram} className="hover:underline">
+              <Link
+                href={contact?.instagram}
+                className="hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {contact?.instagram}
               </Link>
             </div>
@@ -163,7 +173,12 @@ const ButtonsHeaderAttraction: FC<IPropsButtonsHeaderAttraction> = ({
           {contact?.facebook && (
             <div className="flex gap-2 items-center">
               <AiOutlineFacebook size={25} className="text-[#E95718]" />
-              <Link href={contact?.facebook} className="hover:underline">
+              <Link
+                href={contact?.facebook}
+                className="hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {contact?.facebook}
               </Link>
             </div>

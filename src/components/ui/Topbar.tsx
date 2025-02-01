@@ -19,7 +19,8 @@ const Topbar = () => {
   const pathname = usePathname();
 
   const [black, setBlack] = useState(false);
-  const [hideSearch, setHideSearch] = useState(false);
+  const [hideSearchInput, setHideSearchInput] = useState(false);
+  const [hideSearchDropdown, setHideSearchDropdown] = useState(false);
 
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
@@ -39,10 +40,17 @@ const Topbar = () => {
     } else {
       setBlack(true);
     }
+
     if (pathname !== '/') {
-      setHideSearch(true);
+      setHideSearchInput(true);
     } else {
-      setHideSearch(false);
+      setHideSearchInput(false);
+    }
+
+    if (pathname === '/attractions') {
+      setHideSearchDropdown(true);
+    } else {
+      setHideSearchDropdown(false);
     }
   }, [pathname]);
 
@@ -65,7 +73,7 @@ const Topbar = () => {
 
         <div className="hidden md:block">
           <div className="flex items-center justify-center">
-            {!hideSearch && (
+            {!hideSearchDropdown && (
               <DropdownSearch
                 isOpen={openDropdownIndex === 0}
                 onOpen={() => handleOpenDropdown(0)}
@@ -111,7 +119,7 @@ const Topbar = () => {
           </nav>
         </div>
       </div>
-      {!hideSearch && (
+      {!hideSearchInput && (
         <div className="sm:flex justify-center align-center absolute w-full top-24 p-4 md:hidden">
           <InputSearch />
         </div>
