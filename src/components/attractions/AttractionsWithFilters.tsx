@@ -79,7 +79,7 @@ const AttractionsWithFilters = () => {
 
   return (
     <>
-      <div className="flex flex-col flex-grow gap-4 p-8 md:p-12">
+      <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl">Lugares turísticos</h2>
           {hideFilters && (

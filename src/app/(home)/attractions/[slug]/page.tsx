@@ -1,4 +1,5 @@
 import AttractionPageClient from '@/components/attractions/AttractionPageClient';
+import Chevron from '@/components/ui/Chevron';
 import { getAttractionBySlugService } from '@/services/attractions/get-attraction-by-slug';
 import { Metadata } from 'next';
 
@@ -27,5 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AttractionPage({ params }: Props) {
   const { slug } = params;
 
-  return <AttractionPageClient slug={slug} />;
+  return (
+    <>
+      <Chevron />
+      <AttractionPageClient slug={slug} />
+    </>
+  );
 }

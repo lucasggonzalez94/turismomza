@@ -32,6 +32,8 @@ interface State {
   setSchedule: (schedule: Schedule) => void;
   errorFeedback: ErrorFeedback | null;
   setErrorFeedback: (error: ErrorFeedback) => void;
+  backPath: string;
+  setBackPath: (path: string) => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -56,4 +58,6 @@ export const useStore = create<State>((set) => ({
   setSchedule: (schedule) => set(() => ({ schedule })),
   errorFeedback: null,
   setErrorFeedback: (errorFeedback) => set(() => ({ errorFeedback })),
+  backPath: '/',
+  setBackPath: (path) => set(() => ({ backPath: path })),
 }));

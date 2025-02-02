@@ -1,4 +1,5 @@
 import AttractionsWithFilters from '@/components/attractions/AttractionsWithFilters';
+import Chevron from '@/components/ui/Chevron';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function AttractionsPage() {
-  return <AttractionsWithFilters />;
+  return (
+    <>
+      <Chevron />
+      <AttractionsWithFilters />
+    </>
+  );
 }

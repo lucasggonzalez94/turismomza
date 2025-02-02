@@ -1,0 +1,26 @@
+'use client';
+
+import { useStore } from '@/store/store';
+import Link from 'next/link';
+import React, { FC } from 'react';
+import { IoChevronBack } from 'react-icons/io5';
+
+interface IChevron {
+  path?: string;
+}
+
+const Chevron: FC<IChevron> = ({ path }) => {
+  const { backPath } = useStore((state) => state);
+
+  return (
+    <Link
+      href={path || backPath}
+      className="flex items-center gap-1 px-3 py-4 w-fit font-bold text-primary hover:transform hover:scale-110 transition-all"
+    >
+      <IoChevronBack />
+      <span>Volver</span>
+    </Link>
+  );
+};
+
+export default Chevron;

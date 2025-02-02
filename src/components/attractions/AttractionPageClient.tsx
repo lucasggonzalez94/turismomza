@@ -154,7 +154,7 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
   }
 
   return (
-    <div className="flex flex-col flex-grow gap-6 p-4 md:p-12 relative">
+    <div className="flex flex-col flex-grow gap-6 px-4 pb-8 relative">
       <div className="flex flex-col gap-3 lg:flex-row justify-between items-center border-b border-gray-300 pb-4">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center gap-2 justify-between w-full">
@@ -258,14 +258,15 @@ const AttractionPageClient: FC<IPropsAttractionPageClient> = ({ slug }) => {
           <MapRoute location={location || ''} />
         </div> */}
         </div>
-        <div className="w-full xl:w-1/2 flex flex-col gap-4">
+
+        <div className="w-full xl:w-1/2 flex flex-col">
           <div>
-            <h3 className="font-bold text-base mb-3">Descripción</h3>
+            <h3 className="font-bold text-base py-4">Descripción</h3>
             <p className="border-b border-gray-300 pb-4">{description}</p>
           </div>
           {location ? (
             <div>
-              <h3 className="font-bold text-base mb-3">Dirección</h3>
+              <h3 className="font-bold text-base py-4">Dirección</h3>
               <div className="border-b border-gray-300 pb-4">{location}</div>
             </div>
           ) : null}
