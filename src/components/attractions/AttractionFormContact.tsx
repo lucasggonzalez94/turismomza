@@ -6,13 +6,14 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Schedule from '../ui/Schedule';
 import { WEEKDAYS } from '@/utils/constants';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/store';
 import { useForm } from 'react-hook-form';
 import { createAttractionService } from '@/services/attractions/create-attraction';
 import { DayConfig } from '@/interfaces/schedule';
 import { editAttractionService } from '@/services/attractions/edit-attraction';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
+import useNavigation from '@/hooks/useNavigation';
 
 interface IPropsAttractionFormContact {
   isEditing?: boolean;
@@ -60,7 +61,7 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
   isEditing,
   attractionId,
 }) => {
-  const router = useRouter();
+  const { handleNavigation } = useNavigation();
   const { attractionFormData, setAttractionFormData, setErrorFeedback } =
     useStore((state) => state);
   const {
@@ -84,10 +85,6 @@ const AttractionFormContact: FC<IPropsAttractionFormContact> = ({
   const pathname = usePathname();
 
   const [loading, setLoading] = useState(false);
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {

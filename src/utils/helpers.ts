@@ -1,11 +1,6 @@
-import { redirect } from 'next/navigation';
 import { Review } from '@/interfaces/attraction';
 import { ISchedule } from '@/interfaces/schedule';
 import { SERVICES } from './constants';
-
-export const navigation = (path: string) => {
-  redirect(path);
-};
 
 export const calculateAverageRating = (reviews: Review[]) => {
   if (!reviews || reviews.length === 0) return 0;

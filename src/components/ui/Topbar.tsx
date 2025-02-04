@@ -15,7 +15,7 @@ import InputSearch from './InputSearch';
 
 const Topbar = () => {
   const verified = useAuth();
-  const user = useStore((state) => state.user);
+  const { user, setBackPath } = useStore((state) => state);
   const pathname = usePathname();
 
   const [black, setBlack] = useState(false);
@@ -85,13 +85,21 @@ const Topbar = () => {
 
         <div className="hidden xl:block col-span-5">
           <nav className="flex gap-4 items-center justify-end">
-            <AnimatedLink href="/attractions">LUGARES</AnimatedLink>
-            <AnimatedLink href="/about">SOBRE NOSOTROS</AnimatedLink>
+            <AnimatedLink
+              href="/attractions"
+              onClick={() => setBackPath(pathname)}
+            >
+              LUGARES
+            </AnimatedLink>
+            <AnimatedLink href="/help" onClick={() => setBackPath(pathname)}>
+              CONTACTO
+            </AnimatedLink>
             <Button
               as={Link}
               color="secondary"
               className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
               href={verified ? '/attractions/create' : '/auth/login'}
+              onPress={() => setBackPath(pathname)}
             >
               Publicar
             </Button>

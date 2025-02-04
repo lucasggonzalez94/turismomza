@@ -1,7 +1,24 @@
+'use client';
+
+import { useStore } from '@/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
+  const { setBackPath } = useStore((state) => state);
+  const pathname = usePathname();
+
+  const links = [
+    { text: 'FAQs', href: '/faqs', onClick: () => setBackPath(pathname) },
+    { text: 'CONTACTO', href: '/', onClick: () => setBackPath(pathname) },
+    {
+      text: 'TÉRMINOS Y CONDICIONES',
+      href: '/tyc',
+      onClick: () => setBackPath(pathname),
+    },
+  ];
+
   return (
     <div className="p-6 min-h-28 h-auto w-full hidden md:flex justify-between items-center bg-black">
       <Link href="/" className="col-span-5">
@@ -14,10 +31,11 @@ const Footer = () => {
         ></Image>
       </Link>
       <nav className="flex flex-col items-end lg:flex-row gap-4 lg:items-center lg:justify-end text-end text-sm text-gray-300 md:text-md">
-        <Link href="/faqs">FAQs</Link>
-        <Link href="/">CONTACTO</Link>
-        <Link href="/about">SOBRE NOSOTROS</Link>
-        <Link href="/tyc">TÉRMINOS Y CONDICIONES</Link>
+        {links.map((link) => (
+          <Link key={link.text} href={link.href} onClick={link.onClick}>
+            {link.text}
+          </Link>
+        ))}
       </nav>
     </div>
   );

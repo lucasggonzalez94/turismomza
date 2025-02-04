@@ -6,11 +6,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import InputPassword from '../ui/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
-import { useRouter } from 'next/navigation';
 import { register as registerService } from '@/services/auth/register';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import useNavigation from '@/hooks/useNavigation';
 
 const schema = yup
   .object({
@@ -34,7 +34,7 @@ const schema = yup
   .required();
 
 const RegisterForm = () => {
-  const router = useRouter();
+  const { handleNavigation } = useNavigation();
   const {
     register,
     handleSubmit,
@@ -51,10 +51,6 @@ const RegisterForm = () => {
       position: 'bottom-right',
       theme: 'dark',
     });
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   const handleRegister = async (data: any) => {
     try {

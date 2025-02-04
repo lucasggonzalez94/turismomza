@@ -2,7 +2,7 @@
 
 import { FC, ReactElement, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { IoLogOutOutline } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import { User as IUser } from '@/interfaces/user';
 import { ROLS } from '@/utils/constants';
 import { logout } from '@/services/auth/logout';
 import { useStore } from '@/store/store';
+import useNavigation from '@/hooks/useNavigation';
 
 interface IPropsDropdownProfile {
   user: IUser | null;
@@ -35,8 +36,10 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   onOpen,
   onClose,
 }) => {
+  const { handleNavigation } = useNavigation();
   const router = useRouter();
-  const setUser = useStore((state) => state.setUser);
+  const pathname = usePathname();
+  const { setUser, setBackPath } = useStore((state) => state);
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
@@ -45,10 +48,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
     });
 
   const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   const handleLogout = async () => {
     try {
@@ -77,7 +76,10 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       {
         id: 'help',
         text: 'Ayuda',
-        onClick: () => handleNavigation('/faqs'),
+        onClick: () => {
+          handleNavigation('/faqs');
+          setBackPath(pathname);
+        },
       },
     ];
 
@@ -87,18 +89,27 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {
             id: 'profile',
             text: 'Ver datos del perfil',
-            onClick: () => handleNavigation('/profile'),
+            onClick: () => {
+              handleNavigation('/profile');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
             id: 'preferences',
             text: 'Preferencias',
-            onClick: () => handleNavigation('/profile/preferences'),
+            onClick: () => {
+              handleNavigation('/profile/preferences');
+              setBackPath(pathname);
+            },
           },
           {
             id: 'help',
             text: 'Ayuda',
-            onClick: () => handleNavigation('/faqs'),
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
@@ -113,23 +124,35 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {
             id: 'profile',
             text: 'Ver datos del perfil',
-            onClick: () => handleNavigation('/profile'),
+            onClick: () => {
+              handleNavigation('/profile');
+              setBackPath(pathname);
+            },
           },
           {
             id: 'publications',
             text: 'Mis publicaciones',
-            onClick: () => handleNavigation('/profile/publications'),
+            onClick: () => {
+              handleNavigation('/profile/publications');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
             id: 'preferences',
             text: 'Preferencias',
-            onClick: () => handleNavigation('/profile/preferences'),
+            onClick: () => {
+              handleNavigation('/profile/preferences');
+              setBackPath(pathname);
+            },
           },
           {
             id: 'help',
             text: 'Ayuda',
-            onClick: () => handleNavigation('/faqs'),
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
@@ -144,18 +167,27 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           {
             id: 'profile',
             text: 'Ver datos del perfil',
-            onClick: () => handleNavigation('/profile'),
+            onClick: () => {
+              handleNavigation('/profile');
+              setBackPath(pathname);
+            },
           },
           {
             id: 'admin',
             text: 'Administrar',
-            onClick: () => handleNavigation('/admin'),
+            onClick: () => {
+              handleNavigation('/admin');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
             id: 'preferences',
             text: 'Preferencias',
-            onClick: () => handleNavigation('/profile/preferences'),
+            onClick: () => {
+              handleNavigation('/profile/preferences');
+              setBackPath(pathname);
+            },
             divider: true,
           },
           {
@@ -187,6 +219,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
               <Link
                 href="/profile"
                 className="text-lg font-semibold text-gray-800"
+                onClick={() => setBackPath(pathname)}
               >
                 {user?.name}
               </Link>
@@ -203,6 +236,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
                   if (option?.onClick) {
                     option.onClick();
                     setIsOpen(null);
+                    setBackPath(pathname);
                   }
                 }}
               >

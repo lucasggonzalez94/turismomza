@@ -4,7 +4,6 @@ import { Button, Input, Link } from '@nextui-org/react';
 import React, { useState } from 'react';
 import InputPassword from '../ui/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
-import { useRouter } from 'next/navigation';
 import { login } from '@/services/auth/login';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +11,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useStore } from '@/store/store';
+import useNavigation from '@/hooks/useNavigation';
 
 const schema = yup
   .object({
@@ -27,7 +27,7 @@ const schema = yup
   .required();
 
 const LoginForm = () => {
-  const router = useRouter();
+  const { handleNavigation } = useNavigation();
   const lastPath = useStore((state) => state.lastPath);
 
   const {
@@ -46,10 +46,6 @@ const LoginForm = () => {
       position: 'bottom-right',
       theme: 'dark',
     });
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   const handleLogin = async (data: any) => {
     try {

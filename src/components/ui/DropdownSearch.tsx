@@ -4,7 +4,8 @@ import { Input } from '@nextui-org/react';
 import { IoSearch } from 'react-icons/io5';
 import DropdownButton from './DropdownButton';
 import { FC, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useStore } from '@/store/store';
 
 interface IPropsDropdownSearch {
   isOpen: boolean;
@@ -19,6 +20,8 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
 }) => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
+  const { setBackPath } = useStore((state) => state);
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -52,6 +55,7 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={({ key }) => {
             if (key === 'Enter') {
+              setBackPath(pathname);
               router.push(`/attractions?search=${searchValue}`);
             }
           }}

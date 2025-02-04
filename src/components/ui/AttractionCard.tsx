@@ -7,10 +7,11 @@ import { useStore } from '@/store/store';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
 import { User } from '@/interfaces/user';
+import useNavigation from '@/hooks/useNavigation';
 
 interface IPropsAttractionCard {
   user: User | null;
@@ -34,9 +35,9 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
   const averageRating = calculateAverageRating(reviews);
   const imageCard = images?.length ? images[0]?.url : null;
 
+  const { handleNavigation } = useNavigation();
   const pathname = usePathname();
-  const router = useRouter();
-  const setLastPath = useStore((state) => state.setLastPath);
+  const { setLastPath, setBackPath } = useStore((state) => state);
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
@@ -45,10 +46,6 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
     });
 
   const [favorite, setFavorite] = useState(false);
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -72,7 +69,10 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
   return (
     <div
       className={`flex flex-col justify-between rounded-lg w-full bg-white overflow-hidden border cursor-pointer transition-transform duration-300 transform hover:scale-105 ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
-      onClick={() => handleNavigation(`/attractions/${slug}`)}
+      onClick={() => {
+        handleNavigation(`/attractions/${slug}`);
+        setBackPath(pathname);
+      }}
     >
       <div className="relative">
         {advertisements?.length ? (
@@ -135,7 +135,10 @@ const AttractionCard: FC<IPropsAttractionCard> = ({ user, attraction }) => {
           <Button
             color="primary"
             size="sm"
-            onPress={() => handleNavigation(`/attractions/${slug}`)}
+            onClick={() => {
+              handleNavigation(`/attractions/${slug}`);
+              setBackPath(pathname);
+            }}
           >
             Detalle
           </Button>
