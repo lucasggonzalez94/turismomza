@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -50,17 +50,15 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSaved,
   setSelectedTab,
 }) => {
-  const { placeFormData, setPlaceFormData } = useStore(
-    (state) => state,
-  );
+  const { placeFormData, setPlaceFormData } = useStore((state) => state);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    reset,
     // setValue,
-    // reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -169,6 +167,11 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [placeFormData, isLoaded]);
+
+  useEffect(() => {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form

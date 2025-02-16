@@ -1,5 +1,4 @@
 import { IPlaceForm } from '@/interfaces/place-form';
-import { DayConfig } from '@/interfaces/schedule';
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
@@ -9,10 +8,7 @@ interface Price {
   minPrice: number;
   maxPrice: number;
 }
-interface Schedule {
-  selectedDays: string[];
-  config: Record<string, DayConfig>;
-}
+
 interface State {
   user: User | null;
   setUser: (user: User | null) => void;
@@ -28,8 +24,6 @@ interface State {
   setSocket: (socket: Socket) => void;
   placeFormData: IPlaceForm | null;
   setPlaceFormData: (data: IPlaceForm | null) => void;
-  schedule: Schedule | null;
-  setSchedule: (schedule: Schedule) => void;
   errorFeedback: ErrorFeedback | null;
   setErrorFeedback: (error: ErrorFeedback) => void;
   backPath: string;
@@ -54,8 +48,6 @@ export const useStore = create<State>((set) => ({
   setSocket: (socket) => set(() => ({ socket })),
   placeFormData: null,
   setPlaceFormData: (data) => set(() => ({ placeFormData: data })),
-  schedule: null,
-  setSchedule: (schedule) => set(() => ({ schedule })),
   errorFeedback: null,
   setErrorFeedback: (errorFeedback) => set(() => ({ errorFeedback })),
   backPath: '/',

@@ -23,11 +23,7 @@ interface IPropsPlaceForm {
   placeId?: string;
 }
 
-const PlaceForm: FC<IPropsPlaceForm> = ({
-  isEditing,
-  dataPlace,
-  placeId,
-}) => {
+const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
   const { setPlaceFormData } = useStore((state) => state);
   const { width } = useWindowSize();
 
@@ -49,7 +45,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({
         setPlaceFormData({
           ...restDataPlace,
           address: dataPlace?.address?.toString() || '',
-          // schedule: JSON.parse(dataPlace?.schedule?.toString() || ''),
+          schedule: JSON.parse(dataPlace?.schedule?.toString() || ''),
           images: imagesAsFile,
         });
         setIsDataReady(true);
@@ -96,10 +92,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({
           </div>
         }
       >
-        <PlaceFormDetails
-          setSaved={setSaved}
-          setSelectedTab={setSelectedTab}
-        />
+        <PlaceFormDetails setSaved={setSaved} setSelectedTab={setSelectedTab} />
       </Tab>
       <Tab
         key="contact"

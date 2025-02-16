@@ -131,7 +131,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
                         <span>Abierto las 24 horas</span>
                       ) : (
                         <>
-                          {times.map((time, index) => (
+                          {times?.map((time, index) => (
                             <span key={index}>
                               {time.from} - {time.to}
                             </span>

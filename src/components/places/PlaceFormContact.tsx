@@ -62,8 +62,9 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   placeId,
 }) => {
   const { handleNavigation } = useNavigation();
-  const { placeFormData, setPlaceFormData, setErrorFeedback } =
-    useStore((state) => state);
+  const { placeFormData, setPlaceFormData, setErrorFeedback } = useStore(
+    (state) => state,
+  );
   const {
     register,
     handleSubmit,
