@@ -27,46 +27,28 @@ const Navigation: FC = () => {
   const pathname = usePathname();
   const { user, socket } = useStore((state) => state);
 
-  const NAV_ITEMS: NavItem[] = verified
-    ? [
-        { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
-        {
-          id: 2,
-          icon: <IoNotifications size={25} />,
-          text: 'Notificaciones',
-          path: '/notifications',
-        },
-        {
-          id: 3,
-          icon: <MdPlace size={25} />,
-          text: 'Lugares',
-          path: '/places',
-        },
-        {
-          id: 4,
-          icon: <IoSettingsSharp size={25} />,
-          text: 'Configuración',
-          path: '/settings',
-        },
-      ]
-    : [
-        { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
-        {
-          id: 3,
-          icon: <MdPlace size={25} />,
-          text: 'Lugares',
-          path: '/places',
-        },
-        {
-          id: 4,
-          icon: <IoSettingsSharp size={25} />,
-          text: 'Configuración',
-          path: '/settings',
-        },
-      ];
-
+  const [navItems, setNavItems] = useState([
+    { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
+    { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
+    {
+      id: 2,
+      icon: <IoNotifications size={25} />,
+      text: 'Notificaciones',
+      path: '/notifications',
+    },
+    {
+      id: 3,
+      icon: <MdPlace size={25} />,
+      text: 'Lugares',
+      path: '/places',
+    },
+    {
+      id: 4,
+      icon: <IoSettingsSharp size={25} />,
+      text: 'Configuración',
+      path: '/settings',
+    },
+  ]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [count, setCount] = useState<number | null>(null);
@@ -114,15 +96,59 @@ const Navigation: FC = () => {
   }, [notifications]);
 
   useEffect(() => {
-    const activeItem = NAV_ITEMS.findIndex((item) => item.path === pathname);
+    const activeItem = navItems.findIndex((item) => item.path === pathname);
     setActiveIndex(activeItem);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [navItems, pathname]);
+
+  useEffect(() => {
+    if (verified) {
+      setNavItems([
+        { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
+        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
+        {
+          id: 2,
+          icon: <IoNotifications size={25} />,
+          text: 'Notificaciones',
+          path: '/notifications',
+        },
+        {
+          id: 3,
+          icon: <MdPlace size={25} />,
+          text: 'Lugares',
+          path: '/places',
+        },
+        {
+          id: 4,
+          icon: <IoSettingsSharp size={25} />,
+          text: 'Configuración',
+          path: '/settings',
+        },
+      ]);
+    } else {
+      setNavItems([
+        { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
+        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
+        {
+          id: 3,
+          icon: <MdPlace size={25} />,
+          text: 'Lugares',
+          path: '/places',
+        },
+        {
+          id: 4,
+          icon: <IoSettingsSharp size={25} />,
+          text: 'Configuración',
+          path: '/settings',
+        },
+      ]);
+    }
+  }, [verified]);
 
   return (
     <div className="fixed bottom-0 w-full h-[70px] bg-white flex md:hidden justify-center items-center rounded-tl-lg rounded-tr-lg z-50">
       <ul className="flex w-[350px] relative">
-        {NAV_ITEMS.map((item, index) => (
+        {navItems.map((item, index) => (
           <li
             key={item.id}
             className="relative list-none w-[70px] h-[70px] z-10"

@@ -1,8 +1,9 @@
 'use client';
 
 import { INotification as INotification } from '@/interfaces/notification';
-import { markAsReadedService } from '@/services/notifications/mark-as-readed';
+import { markAsReadService } from '@/services/notifications/mark-as-read';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { formatDate } from '@/utils/helpers';
 import { Tooltip } from '@nextui-org/react';
 import { FC, useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import {
   IoEllipseOutline,
 } from 'react-icons/io5';
 import { PiThumbsUp } from 'react-icons/pi';
+import { markAsUnreadService } from '@/services/notifications/mark-as-unread';
 
 interface IPropsNotification {
   notification: INotification;
@@ -20,7 +22,7 @@ interface IPropsNotification {
   onClick: () => void;
 }
 
-const Notification: FC<IPropsNotification> = ({
+const NotificationItem: FC<IPropsNotification> = ({
   notification,
   notifications,
   setNotifications,
@@ -36,7 +38,26 @@ const Notification: FC<IPropsNotification> = ({
 
   const markAsRead = async (notificationId: string) => {
     try {
-      await markAsReadedService(notificationId);
+      await markAsReadService(notificationId);
+      const newNotifications = notifications.map((not) => {
+        if (not.id === notification.id) {
+          return {
+            ...notification,
+            read: !notification.read,
+          };
+        }
+        return not;
+      });
+      setNotifications(newNotifications);
+      setReaded((prev) => !prev);
+    } catch {
+      notify();
+    }
+  };
+
+  const markAsUnread = async (notificationId: string) => {
+    try {
+      await markAsUnreadService(notificationId);
       const newNotifications = notifications.map((not) => {
         if (not.id === notification.id) {
           return {
@@ -90,7 +111,7 @@ const Notification: FC<IPropsNotification> = ({
               <div className="flex flex-grow justify-end items-center">
                 <IoCheckmarkCircleSharp
                   className="text-blue-400 cursor-pointer hover:border-1 hover:border-blue-400 rounded-full"
-                  onClick={() => markAsRead(notification.id)}
+                  onClick={() => markAsUnread(notification.id)}
                 />
               </div>
             </Tooltip>
@@ -111,4 +132,4 @@ const Notification: FC<IPropsNotification> = ({
   );
 };
 
-export default Notification;
+export default NotificationItem;

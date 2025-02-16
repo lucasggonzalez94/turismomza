@@ -1,4 +1,4 @@
-import NotificationsPageClient from '@/components/notifications/NotificationsPageClient';
+import NotificationsList from '@/components/ui/NotificationsList';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function NotificationsPage() {
   return (
     <div>
-      <NotificationsPageClient />
+      <NotificationsList />
     </div>
   );
 }

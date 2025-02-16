@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 
-import Notification from '../ui/Notification';
+import NotificationItem from './NotificationItem';
 import { useStore } from '@/store/store';
 import { INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 
-const NotificationsPageClient = () => {
+const NotificationsList = () => {
   const { user, socket } = useStore((state) => state);
 
   const [errorService, setErrorService] = useState(false);
@@ -49,7 +49,7 @@ const NotificationsPageClient = () => {
       <div className="overflow-y-auto bg-gray-200">
         {notifications.length > 0 ? (
           notifications.map((notification) => (
-            <Notification
+            <NotificationItem
               key={notification.id}
               notification={notification}
               notifications={notifications}
@@ -71,4 +71,4 @@ const NotificationsPageClient = () => {
   );
 };
 
-export default NotificationsPageClient;
+export default NotificationsList;

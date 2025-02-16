@@ -7,7 +7,7 @@ import { Badge } from '@nextui-org/react';
 import { INotification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useStore } from '@/store/store';
-import Notification from './Notification';
+import NotificationItem from './NotificationItem';
 
 interface IPropsDropdownNotifications {
   isOpen: boolean;
@@ -88,7 +88,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
         <div className="overflow-y-auto bg-gray-200">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
-              <Notification
+              <NotificationItem
                 key={notification.id}
                 notification={notification}
                 notifications={notifications}
