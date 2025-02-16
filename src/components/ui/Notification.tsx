@@ -1,6 +1,6 @@
 'use client';
 
-import { Notification as INotification } from '@/interfaces/notification';
+import { INotification as INotification } from '@/interfaces/notification';
 import { markAsReadedService } from '@/services/notifications/mark-as-readed';
 import { ToastContainer, toast } from 'react-toastify';
 import { formatDate } from '@/utils/helpers';
@@ -82,7 +82,7 @@ const Notification: FC<IPropsNotification> = ({
                 : 'comentó tu publicación'}
             </p>
             <p className="text-xs text-gray-500">
-              {formatDate(notification?.creation_date.toString())}
+              {formatDate(notification?.creationDate.toString())}
             </p>
           </div>
           {readed ? (

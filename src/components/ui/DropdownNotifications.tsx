@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import DropdownButton from './DropdownButton';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { Badge } from '@nextui-org/react';
-import { Notification as INotification } from '@/interfaces/notification';
+import { INotification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useStore } from '@/store/store';
 import Notification from './Notification';
@@ -82,7 +82,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
       >
         <div className="p-4 bg-gray-100 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-800">
-            Notificationes
+            Notificaciones
           </h3>
         </div>
         <div className="overflow-y-auto bg-gray-200">

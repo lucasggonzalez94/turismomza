@@ -1,15 +1,15 @@
-export interface Notification {
+export interface INotification {
   id: string;
   userId: string;
   type: 'like' | 'review';
   message: string;
   read: boolean;
-  creation_date: Date;
-  user: User;
-  triggeredBy: User;
+  creationDate: Date;
+  user: IUser;
+  triggeredBy: IUser;
 }
 
-export interface User {
+export interface IUser {
   id: string;
   name: string;
 }

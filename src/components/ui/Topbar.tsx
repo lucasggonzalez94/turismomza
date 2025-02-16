@@ -57,7 +57,7 @@ const Topbar = () => {
   return (
     <div className="z-20">
       <div
-        className={`grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full ${black ? 'relative bg-black' : 'absolute'}`}
+        className={`flex justify-center md:grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full ${black ? 'relative bg-black' : 'absolute'}`}
       >
         <div className="col-span-5 flex">
           <Link href="/">
@@ -67,7 +67,7 @@ const Topbar = () => {
               width={250}
               height={100}
               priority
-              className="h-14 object-contain object-left"
+              className="h-14 object-contain md:object-left"
             ></Image>
           </Link>
         </div>
