@@ -19,7 +19,7 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  
+
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,23 +78,25 @@ export const InfiniteMovingCards: FC<IPropsInfiniteMovingCards> = ({
       <div
         ref={sliderRef}
         className="flex overflow-hidden space-x-6 cursor-grab"
-        style={{ width: 'calc(100% + 1.5rem)' }}
+        style={{ width: 'calc(100% + 1.5rem)', maxWidth: '100%' }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
-        {(reviews.length >= 5 ? [...reviews, ...reviews] : reviews).map((review, index) => (
-          <div key={`${review.id}-${index}`} className="flex-shrink-0">
-            <ReviewCard
-              review={review}
-              reviews={reviews}
-              setReviews={setReviews}
-              placeId={placeId}
-            />
-          </div>
-        ))}
+        {(reviews.length >= 5 ? [...reviews, ...reviews] : reviews).map(
+          (review, index) => (
+            <div key={`${review.id}-${index}`} className="flex-shrink-0">
+              <ReviewCard
+                review={review}
+                reviews={reviews}
+                setReviews={setReviews}
+                placeId={placeId}
+              />
+            </div>
+          ),
+        )}
       </div>
     </div>
   );

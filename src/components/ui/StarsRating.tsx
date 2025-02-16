@@ -33,7 +33,7 @@ const StarsRating: FC<IPropsStarsRating> = ({
           <IoStar
             className={`w-8 h-8 sm:w-10 sm:h-10 ${
               star <= (hover || ratingValue)
-                ? 'text-[#E95718]'
+                ? 'text-trinidad-600'
                 : 'text-gray-400'
             }`}
           />

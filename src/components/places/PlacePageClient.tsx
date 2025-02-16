@@ -164,8 +164,8 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
                 <span className="text-sm text-gray-500">Sin opiniones</span>
               ) : (
                 <div className="flex gap-1 items-center">
-                  <div className="text-sm text-gray-500">{`(${reviews.length} opiniones)`}</div>
-                  <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
+                  <div className="text-sm text-gray-500">{`(${reviews?.length} ${reviews?.length === 1 ? 'opinón' : 'opiniones'})`}</div>
+                  <span className="font-bold text-trinidad-600 flex justify-end items-center gap-1">
                     <IoStar className="mb-[2px]" /> {averageRating}
                   </span>
                 </div>
@@ -185,8 +185,8 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
               <div className="text-sm text-gray-500">Sin opiniones</div>
             ) : (
               <div className="flex gap-1 items-center">
-                <div className="text-sm text-gray-500">{`(${reviews.length} opiniones)`}</div>
-                <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
+                <div className="text-sm text-gray-500">{`(${reviews?.length} ${reviews?.length === 1 ? 'opinón' : 'opiniones'})`}</div>
+                <span className="font-bold text-trinidad-600 flex justify-end items-center gap-1">
                   <IoStar className="mb-[2px]" /> {averageRating}
                 </span>
               </div>

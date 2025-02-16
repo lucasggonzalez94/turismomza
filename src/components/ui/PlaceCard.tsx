@@ -145,13 +145,13 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
           <div className="flex flex-col justify-between items-end h-full w-full">
             <div className="flex flex-col justify-end h-full text-end">
               {reviews?.length ? (
-                <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
+                <span className="font-bold text-trinidad-600 flex justify-end items-center gap-1">
                   <IoStar className="mb-[2px]" /> {averageRating}
                 </span>
               ) : null}
               <span className="text-tiny text-gray-400">
                 {reviews?.length
-                  ? `(${reviews?.length} opiniones)`
+                  ? `(${reviews?.length} ${reviews?.length === 1 ? 'opinón' : 'opiniones'})`
                   : 'Sin opiniones'}
               </span>
             </div>

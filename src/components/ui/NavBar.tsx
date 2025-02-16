@@ -27,7 +27,7 @@ const Navigation: FC = () => {
   const pathname = usePathname();
   const { user, socket } = useStore((state) => state);
 
-  const [navItems, setNavItems] = useState([
+  const [navItems, setNavItems] = useState<NavItem[]>([
     { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
     { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
     {

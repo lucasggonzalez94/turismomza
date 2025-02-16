@@ -156,8 +156,9 @@ const ReviewCard: FC<IPropsReviewCard> = ({
               </span>
             </div>
           </div>
-          <span className="font-bold text-[#E95718] flex justify-end items-center gap-1">
-            <IoStar className="mb-[2px]" /> <span>{review.rating}</span>
+          <span className="font-bold text-trinidad-600 flex justify-end items-center gap-1">
+            <IoStar className="mb-[2px]" />{' '}
+            <span>{review.rating?.toFixed(1)}</span>
           </span>
         </div>
         <p className={`text-sm ${expandReview ? '' : 'line-clamp-4'}`}>
@@ -169,13 +170,13 @@ const ReviewCard: FC<IPropsReviewCard> = ({
             {liked ? (
               <PiThumbsUpFill
                 size={23}
-                className="mb-[2px] text-[#E95718] cursor-pointer"
+                className="mb-[2px] text-trinidad-600 cursor-pointer"
                 onClick={() => handleLike(review.id)}
               />
             ) : (
               <PiThumbsUp
                 size={23}
-                className="mb-[2px] hover:text-[#E95718] cursor-pointer"
+                className="mb-[2px] hover:text-trinidad-600 cursor-pointer"
                 onClick={() => handleLike(review.id)}
               />
             )}

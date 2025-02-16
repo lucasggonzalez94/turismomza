@@ -36,7 +36,7 @@ interface DotButtonProps {
 
 export const DotButton: React.FC<DotButtonProps> = ({ selected, onClick }) => (
   <button
-    className={`w-2 h-2 border-1 border-gray-700 rounded-full ${selected ? 'bg-[#E95718]' : 'bg-gray-400'} focus:outline-none`}
+    className={`w-2 h-2 border-1 border-gray-700 rounded-full ${selected ? 'bg-trinidad-600' : 'bg-gray-400'} focus:outline-none`}
     onClick={onClick}
   />
 );

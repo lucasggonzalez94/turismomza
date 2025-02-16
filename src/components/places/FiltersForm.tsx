@@ -192,35 +192,35 @@ const FiltersForm = () => {
               >
                 <Checkbox value="5">
                   <div className="flex items-center gap-1">
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
                   </div>
                 </Checkbox>
                 <Checkbox value="4">
                   <div className="flex items-center gap-1">
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
                     <IoStar className="text-gray-400" />
                   </div>
                 </Checkbox>
                 <Checkbox value="3">
                   <div className="flex items-center gap-1">
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
                     <IoStar className="text-gray-400" />
                     <IoStar className="text-gray-400" />
                   </div>
                 </Checkbox>
                 <Checkbox value="2">
                   <div className="flex items-center gap-1">
-                    <IoStar className="text-[#E95718]" />
-                    <IoStar className="text-[#E95718]" />
+                    <IoStar className="text-trinidad-600" />
+                    <IoStar className="text-trinidad-600" />
                     <IoStar className="text-gray-400" />
                     <IoStar className="text-gray-400" />
                     <IoStar className="text-gray-400" />
@@ -228,7 +228,7 @@ const FiltersForm = () => {
                 </Checkbox>
                 <Checkbox value="1">
                   <div className="flex items-center gap-1">
-                    <IoStar className="text-[#E95718]" />
+                    <IoStar className="text-trinidad-600" />
                     <IoStar className="text-gray-400" />
                     <IoStar className="text-gray-400" />
                     <IoStar className="text-gray-400" />

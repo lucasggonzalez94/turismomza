@@ -124,7 +124,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
         <div className="flex flex-col gap-7 p-5">
           {contact?.contactNumber && (
             <div className="flex gap-2 items-center">
-              <IoCall size={25} className="text-[#E95718]" />
+              <IoCall size={25} className="text-trinidad-600" />
               <Link
                 href={`tel:${contact?.contactNumber}`}
                 className="hover:underline"
@@ -135,7 +135,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           )}
           {contact?.email && (
             <div className="flex gap-2 items-center">
-              <IoAt size={25} className="text-[#E95718]" />
+              <IoAt size={25} className="text-trinidad-600" />
               <Link
                 href={`mailto:${contact?.email}`}
                 className="hover:underline"
@@ -146,7 +146,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           )}
           {contact?.webSite && (
             <div className="flex gap-2 items-center">
-              <IoCloud size={25} className="text-[#E95718]" />
+              <IoCloud size={25} className="text-trinidad-600" />
               <Link
                 href={contact?.webSite}
                 className="hover:underline"
@@ -159,7 +159,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           )}
           {contact?.instagram && (
             <div className="flex gap-2 items-center">
-              <IoLogoInstagram size={25} className="text-[#E95718]" />
+              <IoLogoInstagram size={25} className="text-trinidad-600" />
               <Link
                 href={contact?.instagram}
                 className="hover:underline"
@@ -172,7 +172,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           )}
           {contact?.facebook && (
             <div className="flex gap-2 items-center">
-              <AiOutlineFacebook size={25} className="text-[#E95718]" />
+              <AiOutlineFacebook size={25} className="text-trinidad-600" />
               <Link
                 href={contact?.facebook}
                 className="hover:underline"
