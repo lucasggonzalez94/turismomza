@@ -30,7 +30,7 @@ interface IPropsReviewCard {
   expandReview?: boolean;
   reviews: FormattedReview[];
   setReviews: (reviews: FormattedReview[]) => void;
-  attractionId: string;
+  placeId: string;
 }
 
 const schema = yup
@@ -48,7 +48,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   expandReview,
   reviews,
   setReviews,
-  attractionId,
+  placeId,
 }) => {
   const {
     handleSubmit,
@@ -90,7 +90,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   const handleEdit = async (data: any) => {
     const editedReview = await editReviewService(review?.id, {
       ...data,
-      attractionId,
+      placeId,
     });
 
     const pushEditedReview = reviews?.map((review) => {
