@@ -1,4 +1,4 @@
-import { IAttractionForm } from '@/interfaces/attraction-form';
+import { IPlaceForm } from '@/interfaces/place-form';
 import { DayConfig } from '@/interfaces/schedule';
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
@@ -26,8 +26,8 @@ interface State {
   setLoading: (loading: boolean) => void;
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
-  attractionFormData: IAttractionForm | null;
-  setAttractionFormData: (data: IAttractionForm | null) => void;
+  placeFormData: IPlaceForm | null;
+  setPlaceFormData: (data: IPlaceForm | null) => void;
   schedule: Schedule | null;
   setSchedule: (schedule: Schedule) => void;
   errorFeedback: ErrorFeedback | null;
@@ -52,8 +52,8 @@ export const useStore = create<State>((set) => ({
   setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),
-  attractionFormData: null,
-  setAttractionFormData: (data) => set(() => ({ attractionFormData: data })),
+  placeFormData: null,
+  setPlaceFormData: (data) => set(() => ({ placeFormData: data })),
   schedule: null,
   setSchedule: (schedule) => set(() => ({ schedule })),
   errorFeedback: null,

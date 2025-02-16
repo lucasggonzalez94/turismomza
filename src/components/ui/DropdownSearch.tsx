@@ -56,7 +56,7 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
           onKeyDown={({ key }) => {
             if (key === 'Enter') {
               setBackPath(pathname);
-              router.push(`/attractions?search=${searchValue}`);
+              router.push(`/places?search=${searchValue}`);
             }
           }}
         />

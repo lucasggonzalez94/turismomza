@@ -1,14 +1,14 @@
-import { Review } from '@/interfaces/attraction';
+import { Review } from '@/interfaces/place';
 import { ISchedule } from '@/interfaces/schedule';
 import { SERVICES } from './constants';
 
-export const calculateAverageRating = (reviews: Review[]) => {
-  if (!reviews || reviews.length === 0) return 0;
+export const calculateAverageRating = (reviews: Review[]): string => {
+  if (!reviews || reviews.length === 0) return '0';
 
   const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
   const averageRating = totalRating / reviews.length;
 
-  return parseFloat(averageRating.toFixed(1));
+  return averageRating.toFixed(1);
 };
 
 export const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {

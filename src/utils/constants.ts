@@ -57,7 +57,7 @@ export const SERVICES = [
     label: 'Estacionamiento',
   },
   {
-    key: 'cafeteria',
+    key: 'coffee_shop',
     label: 'Cafetería',
   },
   {

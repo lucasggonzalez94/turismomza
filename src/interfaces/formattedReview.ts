@@ -1,4 +1,4 @@
-import { Like } from './attraction';
+import { Like } from './place';
 
 export interface FormattedReview {
   id: string;

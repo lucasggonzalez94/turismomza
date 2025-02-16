@@ -1,6 +1,6 @@
 export interface Filters {
+  searchTerm?: string;
   rating?: string[];
-  title?: string;
   categories?: string[];
   priceMin?: number;
   priceMax?: number;

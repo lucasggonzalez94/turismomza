@@ -26,7 +26,7 @@ const InputSearch = () => {
       onChange={(e) => setSearchValue(e.target.value)}
       onKeyDown={({ key }) => {
         if (key === 'Enter') {
-          router.push(`/attractions?search=${searchValue}`);
+          router.push(`/places?search=${searchValue}`);
         }
       }}
     />

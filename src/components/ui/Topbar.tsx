@@ -47,7 +47,7 @@ const Topbar = () => {
       setHideSearchInput(false);
     }
 
-    if (pathname === '/attractions') {
+    if (pathname === '/places') {
       setHideSearchDropdown(true);
     } else {
       setHideSearchDropdown(false);
@@ -67,6 +67,7 @@ const Topbar = () => {
               width={250}
               height={100}
               priority
+              className="h-14 object-contain object-left"
             ></Image>
           </Link>
         </div>
@@ -85,10 +86,7 @@ const Topbar = () => {
 
         <div className="hidden xl:block col-span-5">
           <nav className="flex gap-4 items-center justify-end">
-            <AnimatedLink
-              href="/attractions"
-              onClick={() => setBackPath(pathname)}
-            >
+            <AnimatedLink href="/places" onClick={() => setBackPath(pathname)}>
               LUGARES
             </AnimatedLink>
             <AnimatedLink href="/help" onClick={() => setBackPath(pathname)}>
@@ -98,7 +96,7 @@ const Topbar = () => {
               as={Link}
               color="secondary"
               className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-              href={verified ? '/attractions/create' : '/auth/login'}
+              href={verified ? '/places/create' : '/auth/login'}
               onPress={() => setBackPath(pathname)}
             >
               Publicar

@@ -2,7 +2,7 @@ import axiosInstance from '@/config/axiosInstance';
 
 export const verifyToken = async () => {
   try {
-    const response = await axiosInstance.get('/auth/verify-token', {
+    const response = await axiosInstance.get('/auth/verify-session', {
       withCredentials: true,
     });
     if (response.status === 200) {

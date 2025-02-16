@@ -19,7 +19,7 @@ const Banner = () => {
           <span className="text-8xl md:text-9xl lg:text-10xl">Mendoza</span>
         </h1>
         <LinkToSection
-          idToScroll="attractions"
+          idToScroll="places"
           className="text-lg text-white flex flex-col md:flex-row items-center justify-between w-[240px] transition-transform duration-300 transform hover:scale-110"
         >
           <span>Comienza tu aventura</span>

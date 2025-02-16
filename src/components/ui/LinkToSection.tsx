@@ -14,7 +14,7 @@ const LinkToSection: FC<IPropsLinkToSection> = ({
   idToScroll,
   className,
 }) => {
-  const scrollToAttractions = (e: React.MouseEvent) => {
+  const scrollToPlaces = (e: React.MouseEvent) => {
     e.preventDefault();
     const element = document.getElementById(idToScroll);
     if (element) {
@@ -23,7 +23,7 @@ const LinkToSection: FC<IPropsLinkToSection> = ({
   };
 
   return (
-    <Link href="#" onClick={scrollToAttractions} className={className}>
+    <Link href="#" onClick={scrollToPlaces} className={className}>
       {children}
     </Link>
   );
