@@ -132,7 +132,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
         ))}
       </div>
 
-      {configSchedules.map(({ day, open24hours, times }) => (
+      {configSchedules && configSchedules.map(({ day, open24hours, times }) => (
         <div
           key={day}
           className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]"

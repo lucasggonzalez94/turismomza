@@ -191,11 +191,12 @@ const Navigation: FC = () => {
             </div>
           </li>
         ))}
-        {/* Indicador */}
-        <div
-          className="absolute top-[-40%] z-0 w-16 h-16 bg-siren-900 rounded-full transition-all duration-500"
-          style={{ transform: `translateX(${activeIndex * 70 + 7}px)` }}
-        />
+        {activeIndex !== -1 && (
+          <div
+            className="absolute top-[-40%] z-0 w-16 h-16 bg-siren-900 rounded-full transition-all duration-500"
+            style={{ transform: `translateX(${activeIndex * 70 + 7}px)` }}
+          />
+        )}
       </ul>
     </div>
   );

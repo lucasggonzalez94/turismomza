@@ -36,18 +36,13 @@ const FiltersForm = () => {
 
   const searchQuery = searchParams.get('search');
 
-  const { register, handleSubmit, control, setValue, watch, reset } = useForm({
+  const { register, handleSubmit, control, setValue, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       priceRange: [prices?.minPrice, prices?.maxPrice],
       rating: [],
     },
   });
-
-  // const priceRange = watch('priceRange') ?? [
-  //   prices?.minPrice,
-  //   prices?.maxPrice,
-  // ];
 
   const [maxPrice, setMaxPrice] = useState(prices?.maxPrice);
 
@@ -246,6 +241,7 @@ const FiltersForm = () => {
           <Button type="submit" color="primary">
             Aplicar
           </Button>
+          {/* TODO: Setear precio por defecto */}
           <Button
             color="primary"
             variant="ghost"

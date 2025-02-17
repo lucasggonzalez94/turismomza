@@ -172,17 +172,6 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   // }, [placeFormData, isLoaded]);
 
   useEffect(() => {
-    if (selectedTab === 'details') {
-      const dataForm = getValues();
-      setPlaceFormData({
-        ...placeFormData,
-        ...dataForm,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTab]);
-
-  useEffect(() => {
     if (placeFormData) {
       reset(placeFormData);
     }

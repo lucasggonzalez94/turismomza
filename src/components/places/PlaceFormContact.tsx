@@ -167,16 +167,17 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     setValue('schedule', schedule);
   };
 
-  useEffect(() => {
-    if (selectedTab === 'contact') {
-      const dataForm = getValues();
-      setPlaceFormData({
-        ...placeFormData,
-        ...dataForm,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTab]);
+  // useEffect(() => {
+  //   debugger;
+  //   if (selectedTab === 'contact') {
+  //     const dataForm = getValues();
+  //     setPlaceFormData({
+  //       ...placeFormData,
+  //       ...dataForm,
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedTab]);
 
   useEffect(() => {
     if (placeFormData) {
