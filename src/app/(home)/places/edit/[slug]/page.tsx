@@ -43,7 +43,7 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
   };
 
   return (
-    <div className="flex flex-col items-center md:items-start flex-grow gap-6 py-8 px-4 xl:px-[20%]">
+    <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
       <h2 className="font-bold text-xl">Editar publicación</h2>
       <PlaceForm isEditing={true} dataPlace={formData} placeId={place.id} />
     </div>
