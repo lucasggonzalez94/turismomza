@@ -29,7 +29,7 @@ const Navigation: FC = () => {
 
   const [navItems, setNavItems] = useState<NavItem[]>([
     { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-    { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
+    { id: 1, icon: <FaUser size={20} />, text: 'Perfil', path: '/profile' },
     {
       id: 2,
       icon: <IoNotifications size={25} />,
@@ -128,7 +128,7 @@ const Navigation: FC = () => {
     } else {
       setNavItems([
         { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
+        { id: 1, icon: <FaUser size={25} />, text: 'Perfil', path: '/profile' },
         {
           id: 3,
           icon: <MdPlace size={25} />,
@@ -146,7 +146,7 @@ const Navigation: FC = () => {
   }, [verified]);
 
   return (
-    <div className="fixed bottom-0 w-full h-[70px] bg-white flex md:hidden justify-center items-center rounded-tl-lg rounded-tr-lg z-50">
+    <div className="fixed bottom-0 w-full h-[70px] bg-white flex md:hidden justify-center items-center rounded-tl-xl rounded-tr-xl z-50">
       <ul className="flex w-[350px] relative">
         {navItems.map((item, index) => (
           <li
@@ -161,7 +161,6 @@ const Navigation: FC = () => {
               className="relative flex justify-center items-center flex-col w-full text-center font-medium"
             >
               {/* Ícono */}
-
               <span
                 className={`relative flex justify-center items-center h-[75px] text-center transition-all duration-500 text-black ${
                   activeIndex === index ? 'translate-y-[-38px] text-white' : ''

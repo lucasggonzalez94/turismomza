@@ -1,5 +1,5 @@
 import { Review } from '@/interfaces/place';
-import { ISchedule } from '@/interfaces/schedule';
+import { DayConfig } from '@/interfaces/schedule';
 import { SERVICES } from './constants';
 
 export const calculateAverageRating = (reviews: Review[]): string => {
@@ -29,13 +29,17 @@ export const formatDate = (isoDate: string): string => {
   return `${day}/${month}/${year}`;
 };
 
-export const validateSchedule = (schedule: ISchedule): boolean => {
-  return Object.values(schedule).some((day) => {
-    if (day.open24hours) {
-      return true;
-    }
-    return day.times.some((time) => time.from !== '' && time.to !== '');
-  });
+export const validateSchedule = (schedule: DayConfig[]): boolean => {
+  if (schedule) {
+    return schedule?.some((day) => {
+      if (day.open24hours) {
+        return true;
+      }
+      return day.times.some((time) => time.from !== '' && time.to !== '');
+    });
+  }
+
+  return false;
 };
 
 export const mapServices = (services: string[]) => {

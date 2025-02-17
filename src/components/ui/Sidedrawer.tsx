@@ -45,7 +45,7 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
         />
       )}
       <div
-        className={`fixed top-0 bottom-0 bg-white shadow-lg z-50 transition-all duration-300 p-4 right-0 my-3 rounded-xl ${
+        className={`fixed top-0 bottom-[70px] md:bottom-0 bg-white shadow-lg z-50 transition-all duration-300 p-4 right-0 my-3 rounded-xl ${
           isOpen ? 'translate-x-0 mx-3' : 'translate-x-full mx-0'
         }`}
       >

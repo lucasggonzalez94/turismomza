@@ -16,6 +16,7 @@ import { useStore } from '@/store/store';
 
 interface IPropsPlaceFormDetails {
   setSaved: (saved: boolean) => void;
+  selectedTab: string;
   setSelectedTab: (tab: string) => void;
 }
 
@@ -29,7 +30,7 @@ const schema = yup
     category: yup.string().required('El campo es obligatorio.'),
     services: yup
       .array()
-      .of(yup.string())
+      .of(yup.string().required())
       .min(1, 'Debes seleccionar al menos uno.')
       .required('El campo es obligatorio.'),
     price: yup.number().optional(),
@@ -48,6 +49,7 @@ const schema = yup
 
 const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSaved,
+  selectedTab,
   setSelectedTab,
 }) => {
   const { placeFormData, setPlaceFormData } = useStore((state) => state);
@@ -58,6 +60,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     control,
     formState: { errors },
     reset,
+    getValues,
     // setValue,
   } = useForm({
     resolver: yupResolver(schema),
@@ -169,7 +172,24 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   // }, [placeFormData, isLoaded]);
 
   useEffect(() => {
-    reset();
+    if (selectedTab === 'details') {
+      const dataForm = getValues();
+      setPlaceFormData({
+        ...placeFormData,
+        ...dataForm,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTab]);
+
+  useEffect(() => {
+    if (placeFormData) {
+      reset(placeFormData);
+    }
+  }, [placeFormData, reset]);
+
+  useEffect(() => {
+    return () => reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

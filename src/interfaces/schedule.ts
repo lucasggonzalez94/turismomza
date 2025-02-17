@@ -1,6 +1,5 @@
-export type ISchedule = Record<string, DayConfig>;
-
 export interface DayConfig {
+  day: string;
   open24hours: boolean;
   times: Time[];
 }

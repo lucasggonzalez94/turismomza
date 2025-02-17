@@ -31,10 +31,12 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
     price: place.price || undefined,
     currency: place.currencyPrice || 'ars',
     address: place.location,
-    website: place.webSite,
+    website: place.website,
     instagram: place.instagram,
     facebook: place.facebook,
-    phonenumber: place.contactNumber,
+    phonenumber: place?.contactNumber
+      ? place?.contactNumber.slice(3)
+      : place?.contactNumber,
     email: place.email,
     schedule: JSON.parse(place.schedule || ''),
     images: place.images,

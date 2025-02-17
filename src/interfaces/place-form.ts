@@ -1,3 +1,5 @@
+import { DayConfig } from './schedule';
+
 export interface IPlaceForm {
   name?: string;
   description?: string;
@@ -12,14 +14,5 @@ export interface IPlaceForm {
   facebook?: string;
   phonenumber?: string;
   email?: string;
-  schedule?: {
-    [x: string]: {
-      open24hours?: boolean;
-      times?: { from?: string; to?: string }[];
-    };
-    [x: number]: {
-      open24hours?: boolean;
-      times?: { from?: string; to?: string }[];
-    };
-  } | null;
+  schedule?: DayConfig[];
 }

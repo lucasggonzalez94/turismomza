@@ -27,7 +27,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
   const { setPlaceFormData } = useStore((state) => state);
   const { width } = useWindowSize();
 
-  const [selectedTab, setSelectedTab] = useState<string | number>('details');
+  const [selectedTab, setSelectedTab] = useState<string>('details');
   const [hideTextTabs, setHideTextTabs] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isDataReady, setIsDataReady] = useState(false);
@@ -44,16 +44,16 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
         );
         setPlaceFormData({
           ...restDataPlace,
-          address: dataPlace?.address?.toString() || '',
-          schedule: JSON.parse(dataPlace?.schedule?.toString() || ''),
           images: imagesAsFile,
         });
         setIsDataReady(true);
       };
 
+      setSaved(true);
       fetchImagesAsFiles();
     } else {
       setIsDataReady(true);
+      setSaved(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing, dataPlace]);
@@ -66,6 +66,13 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     }
   }, [width]);
 
+  useEffect(() => {
+    return () => {
+      setPlaceFormData(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!isDataReady) return <div>Cargando datos...</div>;
 
   return (
@@ -73,7 +80,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
       aria-label="Pasos para publicar"
       selectedKey={selectedTab}
       onSelectionChange={(key) => {
-        setSelectedTab(key);
+        setSelectedTab(key as string);
       }}
     >
       <Tab
@@ -92,7 +99,11 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           </div>
         }
       >
-        <PlaceFormDetails setSaved={setSaved} setSelectedTab={setSelectedTab} />
+        <PlaceFormDetails
+          setSaved={setSaved}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
       </Tab>
       <Tab
         key="contact"
@@ -100,14 +111,18 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           <div className="flex items-center space-x-2">
             <PiNumberCircleTwoFill
               size={25}
-              color={selectedTab === 'contact' ? '#E95718' : '#676767'}
+              color={selectedTab === 'contact' || saved ? '#E95718' : '#676767'}
             />
             {!hideTextTabs && <span>Contacto y horarios</span>}
           </div>
         }
         isDisabled={!saved}
       >
-        <PlaceFormContact isEditing={isEditing} placeId={placeId} />
+        <PlaceFormContact
+          isEditing={isEditing}
+          placeId={placeId}
+          selectedTab={selectedTab}
+        />
       </Tab>
     </Tabs>
   );

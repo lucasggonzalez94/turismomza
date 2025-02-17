@@ -17,7 +17,7 @@ import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import Spinner from '../ui/Spinner/Spinner';
 import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
-import { ISchedule } from '@/interfaces/schedule';
+import { DayConfig } from '@/interfaces/schedule';
 
 interface IPropsPlacePageClient {
   slug: string;
@@ -113,34 +113,29 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
 
   useEffect(() => {
     if (schedule) {
-      const parsedSchedule: ISchedule = JSON.parse(schedule);
-      if (
-        Object.entries(parsedSchedule)?.length &&
-        typeof parsedSchedule === 'object'
-      ) {
+      const parsedSchedule: DayConfig[] = JSON.parse(schedule);
+      if (parsedSchedule?.length) {
         setScheduleAccordion([
           {
             title: 'Horarios',
             content: (
               <ul className="list-disc list-inside">
-                {Object.entries(parsedSchedule).map(
-                  ([day, { open24hours, times }]) => (
-                    <li key={day}>
-                      <strong>{day}:</strong>{' '}
-                      {open24hours ? (
-                        <span>Abierto las 24 horas</span>
-                      ) : (
-                        <>
-                          {times?.map((time, index) => (
-                            <span key={index}>
-                              {time.from} - {time.to}
-                            </span>
-                          ))}
-                        </>
-                      )}
-                    </li>
-                  ),
-                )}
+                {parsedSchedule.map(({ day, open24hours, times }) => (
+                  <li key={day}>
+                    <strong>{day}:</strong>{' '}
+                    {open24hours ? (
+                      <span>Abierto las 24 horas</span>
+                    ) : (
+                      <>
+                        {times?.map((time, index) => (
+                          <span key={index}>
+                            {time.from} - {time.to}
+                          </span>
+                        ))}
+                      </>
+                    )}
+                  </li>
+                ))}
               </ul>
             ),
           },

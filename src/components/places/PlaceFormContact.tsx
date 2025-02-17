@@ -5,7 +5,6 @@ import { Button, Input } from '@nextui-org/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Schedule from '../ui/Schedule';
-import { WEEKDAYS } from '@/utils/constants';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/store';
 import { useForm } from 'react-hook-form';
@@ -19,22 +18,8 @@ interface IPropsPlaceFormContact {
   isEditing?: boolean;
   placeId?: string;
   slug?: string;
+  selectedTab: string;
 }
-
-const dayConfigSchema = yup.object({
-  open24hours: yup.boolean(),
-  times: yup.array().of(
-    yup.object({
-      from: yup.string(),
-      to: yup.string(),
-    }),
-  ),
-});
-
-const configSchema = yup
-  .object()
-  .shape(Object.fromEntries(WEEKDAYS.map((day) => [day, dayConfigSchema])))
-  .nullable();
 
 const schema = yup
   .object({
@@ -53,13 +38,32 @@ const schema = yup
           return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
         },
       ),
-    schedule: configSchema,
+    schedule: yup
+      .array()
+      .of(
+        yup.object({
+          day: yup.string().required(),
+          open24hours: yup.boolean().required(),
+          times: yup
+            .array()
+            .of(
+              yup.object({
+                from: yup.string().required(),
+                to: yup.string().required(),
+              }),
+            )
+            .required(),
+        }),
+      )
+      .optional()
+      .default(undefined),
   })
   .required();
 
 const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   isEditing,
   placeId,
+  selectedTab,
 }) => {
   const { handleNavigation } = useNavigation();
   const { placeFormData, setPlaceFormData, setErrorFeedback } = useStore(
@@ -116,10 +120,19 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
       data.phonenumber ? `+54${data.phonenumber}` : '',
     );
     formData.append('email', data.email);
-    formData.append('webSite', data.website);
+    formData.append('website', data.website);
     formData.append('instagram', data.instagram);
     formData.append('facebook', data.facebook);
-    formData.append('schedule', JSON.stringify(data.schedule));
+    formData.append(
+      'schedule',
+      JSON.stringify(
+        (data.schedule as DayConfig[])?.filter(
+          ({ open24hours, times }) =>
+            open24hours ||
+            times.some(({ from, to }) => from !== '' && to !== ''),
+        ),
+      ),
+    );
 
     try {
       setLoading(true);
@@ -150,26 +163,31 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     }
   };
 
-  const setSchedule = (schedule: Record<string, DayConfig>) => {
+  const setSchedule = (schedule: DayConfig[]) => {
     setValue('schedule', schedule);
   };
 
   useEffect(() => {
-    return () => {
+    if (selectedTab === 'contact') {
       const dataForm = getValues();
       setPlaceFormData({
         ...placeFormData,
         ...dataForm,
       });
-    };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedTab]);
 
   useEffect(() => {
     if (placeFormData) {
       reset(placeFormData);
     }
   }, [placeFormData, reset]);
+
+  useEffect(() => {
+    return () => reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -179,28 +197,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
       >
         <div className="flex gap-4 w-full">
           <div className="flex flex-col gap-4">
-            <Schedule
-              onSaveSchedule={setSchedule}
-              defaultValue={
-                placeFormData?.schedule
-                  ? Object.entries(placeFormData.schedule).reduce(
-                      (acc, [day, config]) => ({
-                        ...acc,
-                        [day]: {
-                          open24hours: config.open24hours ?? false,
-                          times: (config.times ?? [{ from: '', to: '' }]).map(
-                            (time) => ({
-                              from: time.from || '',
-                              to: time.to || '',
-                            }),
-                          ),
-                        },
-                      }),
-                      {} as Record<string, DayConfig>,
-                    )
-                  : undefined
-              }
-            />
+            <Schedule onSaveSchedule={setSchedule} />
             <Input
               type="text"
               label={

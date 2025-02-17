@@ -10,7 +10,7 @@ export interface Place {
   services: string[];
   contactNumber?: string;
   email?: string;
-  webSite?: string;
+  website?: string;
   instagram?: string;
   facebook?: string;
   schedule?: string;
