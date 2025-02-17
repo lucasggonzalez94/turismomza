@@ -102,7 +102,9 @@ const PlacesWithFilters = () => {
                 </span>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+              <div
+                className={`${places.length || loading ? 'grid md:grid-cols-2 lg:grid-cols-3' : 'flex justify-center items-center h-full p-24'} gap-4 w-full`}
+              >
                 {loading ? (
                   Array.from({ length: pageSize }).map((_, index) => (
                     <CardSkeleton key={index} />
@@ -118,7 +120,7 @@ const PlacesWithFilters = () => {
                 )}
               </div>
             )}
-            {!errorService && (
+            {!errorService && !!places.length && (
               <Pagination
                 total={totalPages || 1}
                 initialPage={1}

@@ -30,6 +30,7 @@ const schema = yup
 
 const FiltersForm = () => {
   const { prices, setFilters } = useStore((state) => state);
+  const [priceRangeValue, setPriceRangeValue] = useState([0, 0]);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -43,10 +44,10 @@ const FiltersForm = () => {
     },
   });
 
-  const priceRange = watch('priceRange') ?? [
-    prices?.minPrice,
-    prices?.maxPrice,
-  ];
+  // const priceRange = watch('priceRange') ?? [
+  //   prices?.minPrice,
+  //   prices?.maxPrice,
+  // ];
 
   const [maxPrice, setMaxPrice] = useState(prices?.maxPrice);
 
@@ -72,8 +73,9 @@ const FiltersForm = () => {
   useEffect(() => {
     setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
     setMaxPrice(prices?.maxPrice);
+    setPriceRangeValue([0, prices?.maxPrice]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prices]);
+  }, [prices?.minPrice, prices?.maxPrice]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -133,10 +135,10 @@ const FiltersForm = () => {
               labelPlacement="outside"
               variant="faded"
               startContent={<IoLogoUsd />}
-              value={priceRange[0]?.toString()}
+              value={priceRangeValue[0]?.toString()}
               onChange={(e) => {
                 const minPrice = Number(e.target.value);
-                setValue('priceRange', [minPrice, priceRange[1]]);
+                setValue('priceRange', [minPrice, priceRangeValue[1]]);
               }}
             />
             <Input
@@ -146,10 +148,10 @@ const FiltersForm = () => {
               labelPlacement="outside"
               variant="faded"
               startContent={<IoLogoUsd />}
-              value={priceRange[1]?.toString()}
+              value={priceRangeValue[1]?.toString()}
               onChange={(e) => {
                 const maxPrice = Number(e.target.value);
-                setValue('priceRange', [priceRange[0], maxPrice]);
+                setValue('priceRange', [priceRangeValue[0], maxPrice]);
               }}
             />
           </div>
@@ -163,10 +165,11 @@ const FiltersForm = () => {
                 minValue={0}
                 maxValue={maxPrice}
                 defaultValue={[0, maxPrice]}
-                value={priceRange as number[]}
+                value={priceRangeValue}
                 onChange={(newValue) => {
                   onChange(newValue);
                   setValue('priceRange', newValue as number[]);
+                  setPriceRangeValue(newValue as number[]);
                 }}
                 formatOptions={{
                   style: 'currency',
