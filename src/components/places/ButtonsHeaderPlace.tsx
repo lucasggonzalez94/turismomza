@@ -24,7 +24,7 @@ import Link from 'next/link';
 interface Contact {
   contactNumber?: string | null;
   email?: string | null;
-  webSite?: string | null;
+  website?: string | null;
   instagram?: string | null;
   facebook?: string | null;
 }
@@ -107,7 +107,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
         )}
         {(contact?.contactNumber ||
           contact?.email ||
-          contact?.webSite ||
+          contact?.website ||
           contact?.instagram ||
           contact?.facebook) && (
           <Button color="primary" onPress={() => setOpenModalContact(true)}>
@@ -144,16 +144,16 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
               </Link>
             </div>
           )}
-          {contact?.webSite && (
+          {contact?.website && (
             <div className="flex gap-2 items-center">
               <IoCloud size={25} className="text-trinidad-600" />
               <Link
-                href={contact?.webSite}
+                href={contact?.website}
                 className="hover:underline"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                {contact?.webSite}
+                {contact?.website}
               </Link>
             </div>
           )}

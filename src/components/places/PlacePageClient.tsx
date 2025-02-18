@@ -57,7 +57,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
     isFavorite,
     contactNumber,
     email,
-    webSite,
+    website,
     instagram,
     facebook,
     creatorId,
@@ -67,6 +67,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
 
   const getPlace = async () => {
     try {
+      setLoading(true);
       const response = await getPlaceBySlugService(slug, user?.id);
       setPlace(response);
     } catch {
@@ -193,7 +194,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
             contact={{
               contactNumber,
               email,
-              webSite,
+              website,
               instagram,
               facebook,
             }}

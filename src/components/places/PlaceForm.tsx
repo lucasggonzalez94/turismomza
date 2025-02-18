@@ -12,6 +12,7 @@ import { IImage } from '@/interfaces/place';
 import { useStore } from '@/store/store';
 import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
+import Spinner from '../ui/Spinner/Spinner';
 
 type PlaceFormWithCustomImages = Omit<IPlaceForm, 'images'> & {
   images?: IImage[];
@@ -24,16 +25,16 @@ interface IPropsPlaceForm {
 }
 
 const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
-  const { setPlaceFormData } = useStore((state) => state);
+  const { setPlaceFormData, loading, setLoading } = useStore((state) => state);
   const { width } = useWindowSize();
 
   const [selectedTab, setSelectedTab] = useState<string>('details');
   const [hideTextTabs, setHideTextTabs] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [isDataReady, setIsDataReady] = useState(false);
 
   useEffect(() => {
     if (isEditing && dataPlace) {
+      setLoading(true);
       const { images, ...restDataPlace } = dataPlace;
 
       const fetchImagesAsFiles = async () => {
@@ -46,13 +47,13 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           ...restDataPlace,
           images: imagesAsFile,
         });
-        setIsDataReady(true);
+        setLoading(false);
       };
 
       setSaved(true);
       fetchImagesAsFiles();
     } else {
-      setIsDataReady(true);
+      setLoading(false);
       setSaved(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +74,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!isDataReady) return <div>Cargando datos...</div>;
+  if (loading) return <Spinner />;
 
   return (
     <Tabs

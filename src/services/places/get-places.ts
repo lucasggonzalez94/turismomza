@@ -1,5 +1,3 @@
-'use server';
-
 import axiosInstance from '@/config/axiosInstance';
 import { ListPlacesProps } from '@/interfaces/listPlacesProps';
 

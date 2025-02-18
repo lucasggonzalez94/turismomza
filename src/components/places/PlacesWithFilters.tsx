@@ -50,6 +50,7 @@ const PlacesWithFilters = () => {
   useEffect(() => {
     const getPlaces = async () => {
       try {
+        setLoading(true);
         const { data, totalPages, maxPrice } = await getPlacesService({
           filters,
           page: currentPage,

@@ -23,13 +23,11 @@ const PlacesHome = () => {
 
   const getPlaces = async () => {
     try {
-      const { data } = await getPlacesService(
-        {
-          page: 1,
-          pageSize: pageSize,
-        },
-        user?.id,
-      );
+      setLoading(true);
+      const { data } = await getPlacesService({
+        page: 1,
+        pageSize: pageSize,
+      });
       setPlaces(data);
       setLoading(false);
     } catch {
@@ -95,11 +93,7 @@ const PlacesHome = () => {
             </div>
           ) : (
             places.map((place: Place) => (
-              <PlaceCard
-                key={place?.id}
-                user={user}
-                place={place}
-              />
+              <PlaceCard key={place?.id} user={user} place={place} />
             ))
           )}
         </div>
