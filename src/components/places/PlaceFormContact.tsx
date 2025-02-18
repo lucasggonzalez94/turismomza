@@ -63,18 +63,20 @@ const schema = yup
 const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   isEditing,
   placeId,
-  selectedTab,
 }) => {
   const { handleNavigation } = useNavigation();
-  const { placeFormData, setPlaceFormData, setErrorFeedback } = useStore(
-    (state) => state,
-  );
+  const {
+    placeFormData,
+    setPlaceFormData,
+    setErrorFeedback,
+    loading,
+    setLoading,
+  } = useStore((state) => state);
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -88,8 +90,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     },
   });
   const pathname = usePathname();
-
-  const [loading, setLoading] = useState(false);
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
@@ -280,7 +280,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
             />
           </div>
         </div>
-        <Button isLoading={loading} type="submit" color="primary">
+        <Button isDisabled={loading} type="submit" color="primary">
           Guardar y finalizar
         </Button>
       </form>
