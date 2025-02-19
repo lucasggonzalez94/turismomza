@@ -13,6 +13,7 @@ import { useStore } from '@/store/store';
 import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
 import Spinner from '../ui/Spinner/Spinner';
+import { usePathname } from 'next/navigation';
 
 type PlaceFormWithCustomImages = Omit<IPlaceForm, 'images'> & {
   images?: IImage[];
@@ -25,8 +26,11 @@ interface IPropsPlaceForm {
 }
 
 const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
-  const { setPlaceFormData, loading, setLoading } = useStore((state) => state);
+  const { placeFormData, setPlaceFormData, loading, setLoading } = useStore(
+    (state) => state,
+  );
   const { width } = useWindowSize();
+  const pathname = usePathname();
 
   const [selectedTab, setSelectedTab] = useState<string>('details');
   const [hideTextTabs, setHideTextTabs] = useState(false);
@@ -40,7 +44,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
       const fetchImagesAsFiles = async () => {
         const imagesAsFile = await Promise.all(
           images?.map(
-            async (image) => await fetchImageAsFile(image.url, image.public_id),
+            async (image) => await fetchImageAsFile(image.url, image.publicId),
           ) || [],
         );
         setPlaceFormData({
@@ -53,11 +57,12 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
       setSaved(true);
       fetchImagesAsFiles();
     } else {
+      setPlaceFormData(null);
       setLoading(false);
       setSaved(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditing, dataPlace]);
+  }, [isEditing, dataPlace, pathname]);
 
   useEffect(() => {
     if (width > 420) {
@@ -66,13 +71,6 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
       setHideTextTabs(true);
     }
   }, [width]);
-
-  useEffect(() => {
-    return () => {
-      setPlaceFormData(null);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (loading) return <Spinner />;
 
@@ -99,12 +97,15 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
             {!hideTextTabs && <span>Detalles de la ubicación</span>}
           </div>
         }
+        className="w-full"
       >
-        <PlaceFormDetails
-          setSaved={setSaved}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
-        />
+        {selectedTab === 'details' && (
+          <PlaceFormDetails
+            setSaved={setSaved}
+            setSelectedTab={setSelectedTab}
+            defaultValues={placeFormData}
+          />
+        )}
       </Tab>
       <Tab
         key="contact"
@@ -118,12 +119,15 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           </div>
         }
         isDisabled={!saved}
+        className="w-full"
       >
-        <PlaceFormContact
-          isEditing={isEditing}
-          placeId={placeId}
-          selectedTab={selectedTab}
-        />
+        {selectedTab === 'contact' && (
+          <PlaceFormContact
+            isEditing={isEditing}
+            placeId={placeId}
+            defaultValues={placeFormData}
+          />
+        )}
       </Tab>
     </Tabs>
   );

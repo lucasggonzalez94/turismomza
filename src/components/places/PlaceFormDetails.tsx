@@ -12,12 +12,13 @@ import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { useStore } from '@/store/store';
+import { IPlaceForm } from '@/interfaces/place-form';
 // import { Address, LatLng } from '@/interfaces/address';
 
 interface IPropsPlaceFormDetails {
   setSaved: (saved: boolean) => void;
-  selectedTab: string;
   setSelectedTab: (tab: string) => void;
+  defaultValues?: IPlaceForm | null;
 }
 
 const schema = yup
@@ -49,32 +50,28 @@ const schema = yup
 
 const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSaved,
-  selectedTab,
   setSelectedTab,
+  defaultValues,
 }) => {
-  const { placeFormData, setPlaceFormData } = useStore((state) => state);
+  const { setPlaceFormData } = useStore((state) => state);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-    reset,
     getValues,
-    // setValue,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: placeFormData?.name,
-      description: placeFormData?.description,
-      category: placeFormData?.category,
-      services: placeFormData?.services,
-      price:
-        placeFormData?.price && placeFormData?.price > 0
-          ? placeFormData?.price
-          : undefined,
-      currency: placeFormData?.currency || 'ars',
-      address: placeFormData?.address,
+      name: '',
+      description: '',
+      category: '',
+      services: [],
+      price: undefined,
+      currency: 'ars',
+      address: '',
     },
   });
 
@@ -99,7 +96,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
       setPlaceFormData({
-        ...placeFormData,
+        ...defaultValues,
         ...data,
         images,
       });
@@ -172,13 +169,39 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   // }, [placeFormData, isLoaded]);
 
   useEffect(() => {
-    if (placeFormData) {
-      reset(placeFormData);
+    if (defaultValues) {
+      reset({
+        name: defaultValues?.name || '',
+        description: defaultValues?.description || '',
+        category: defaultValues?.category || '',
+        services: defaultValues?.services || [],
+        price: defaultValues?.price || undefined,
+        currency: defaultValues?.currency || 'ars',
+        address: defaultValues?.address || '',
+      });
+      setImages(defaultValues?.images || []);
+    } else {
+      reset({
+        name: '',
+        description: '',
+        category: '',
+        services: [],
+        price: undefined,
+        currency: 'ars',
+        address: '',
+      });
+      setImages([]);
     }
-  }, [placeFormData, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValues]);
 
   useEffect(() => {
-    return () => reset();
+    return () => {
+      setPlaceFormData({
+        ...defaultValues,
+        ...getValues(),
+      });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -219,7 +242,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
                 placeholder="¿Qué categoría describe mejor este lugar?"
                 className="w-full"
                 value={value}
-                defaultSelectedKeys={[placeFormData?.category || '']}
+                defaultSelectedKeys={[defaultValues?.category || '']}
                 isInvalid={!!errors.category?.message}
                 errorMessage={errors.category?.message}
                 onChange={(e) => {
@@ -250,7 +273,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
                 value={
                   (value?.filter((val) => val !== undefined) as string[]) || []
                 }
-                defaultSelectedKeys={placeFormData?.services || []}
+                defaultSelectedKeys={defaultValues?.services || []}
                 onChange={(e) => {
                   onChange(e.target.value.split(','));
                 }}
@@ -379,7 +402,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
         )} */}
       </div>
       <ImageUploader
-        defaultImages={placeFormData?.images}
+        defaultImages={defaultValues?.images}
         onImagesChange={setImages}
       />
       <Button type="submit" color="primary">

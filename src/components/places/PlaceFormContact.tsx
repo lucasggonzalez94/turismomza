@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Input } from '@nextui-org/react';
@@ -13,12 +13,12 @@ import { DayConfig } from '@/interfaces/schedule';
 import { editPlaceService } from '@/services/places/edit-place';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
 import useNavigation from '@/hooks/useNavigation';
+import { IPlaceForm } from '@/interfaces/place-form';
 
 interface IPropsPlaceFormContact {
   isEditing?: boolean;
   placeId?: string;
-  slug?: string;
-  selectedTab: string;
+  defaultValues?: IPlaceForm | null;
 }
 
 const schema = yup
@@ -63,30 +63,28 @@ const schema = yup
 const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   isEditing,
   placeId,
+  defaultValues,
 }) => {
   const { handleNavigation } = useNavigation();
-  const {
-    placeFormData,
-    setPlaceFormData,
-    setErrorFeedback,
-    loading,
-    setLoading,
-  } = useStore((state) => state);
+  const { setPlaceFormData, setErrorFeedback, loading, setLoading } = useStore(
+    (state) => state,
+  );
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      website: placeFormData?.website || '',
-      instagram: placeFormData?.instagram || '',
-      facebook: placeFormData?.facebook || '',
-      phonenumber: placeFormData?.phonenumber || '',
-      email: placeFormData?.email || '',
-      schedule: placeFormData?.schedule,
+      website: '',
+      instagram: '',
+      facebook: '',
+      phonenumber: '',
+      email: '',
+      schedule: [],
     },
   });
   const pathname = usePathname();
@@ -100,17 +98,17 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   const handleFinish = async (data: any) => {
     const formData = new FormData();
 
-    formData.append('title', placeFormData?.name || '');
-    formData.append('description', placeFormData?.description || '');
-    formData.append('category', placeFormData?.category || '');
-    formData.append('services', JSON.stringify(placeFormData?.services));
-    formData.append('location', placeFormData?.address || '');
-    if (placeFormData?.price) {
-      formData.append('price', placeFormData?.price.toString());
-      formData.append('currencyPrice', placeFormData?.currency || 'ars');
+    formData.append('title', defaultValues?.name || '');
+    formData.append('description', defaultValues?.description || '');
+    formData.append('category', defaultValues?.category || '');
+    formData.append('services', JSON.stringify(defaultValues?.services));
+    formData.append('location', defaultValues?.address || '');
+    if (defaultValues?.price) {
+      formData.append('price', defaultValues?.price.toString());
+      formData.append('currencyPrice', defaultValues?.currency || 'ars');
     }
-    if (placeFormData?.images) {
-      placeFormData?.images.forEach((image) => {
+    if (defaultValues?.images) {
+      defaultValues?.images.forEach((image) => {
         formData.append('images', image);
       });
     }
@@ -167,26 +165,36 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     setValue('schedule', schedule);
   };
 
-  // useEffect(() => {
-  //   debugger;
-  //   if (selectedTab === 'contact') {
-  //     const dataForm = getValues();
-  //     setPlaceFormData({
-  //       ...placeFormData,
-  //       ...dataForm,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedTab]);
-
   useEffect(() => {
-    if (placeFormData) {
-      reset(placeFormData);
+    if (defaultValues) {
+      reset({
+        website: defaultValues?.website || '',
+        instagram: defaultValues?.instagram || '',
+        facebook: defaultValues?.facebook || '',
+        phonenumber: defaultValues?.phonenumber || '',
+        email: defaultValues?.email || '',
+        schedule: defaultValues?.schedule || [],
+      });
+    } else {
+      reset({
+        website: '',
+        instagram: '',
+        facebook: '',
+        phonenumber: '',
+        email: '',
+        schedule: [],
+      });
     }
-  }, [placeFormData, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValues]);
 
   useEffect(() => {
-    return () => reset();
+    return () => {
+      setPlaceFormData({
+        ...defaultValues,
+        ...getValues(),
+      });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

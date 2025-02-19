@@ -89,6 +89,8 @@ const ImageUploader = ({
   useEffect(() => {
     if (defaultImages?.length) {
       _setValues(defaultImages);
+    } else {
+      _setValues([]);
     }
   }, [_setValues, defaultImages]);
 
@@ -151,8 +153,8 @@ const ImageUploader = ({
       >
         {images.map((file, index) => (
           <div
-            data-label={file.name}
             key={file.name}
+            data-label={file.name}
             className={`relative group`}
           >
             <Image

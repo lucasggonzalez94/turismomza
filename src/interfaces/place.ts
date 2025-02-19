@@ -46,7 +46,7 @@ export interface Review {
 }
 
 export interface IImage {
-  public_id: string;
+  publicId: string;
   url: string;
 }
 

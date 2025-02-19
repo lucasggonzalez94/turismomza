@@ -2,6 +2,7 @@ import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 import PlaceForm from '@/components/places/PlaceForm';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import Chevron from '@/components/ui/Chevron';
 
 interface IPropsEditPlacePage {
   params: {
@@ -43,10 +44,13 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
   };
 
   return (
-    <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
-      <h2 className="font-bold text-xl">Editar publicación</h2>
-      <PlaceForm isEditing={true} dataPlace={formData} placeId={place.id} />
-    </div>
+    <>
+      <Chevron />
+      <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
+        <h2 className="font-bold text-xl">Editar publicación</h2>
+        <PlaceForm isEditing={true} dataPlace={formData} placeId={place.id} />
+      </div>
+    </>
   );
 };
 
