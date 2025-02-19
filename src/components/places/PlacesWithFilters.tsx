@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import useWindowSize from '@/hooks/useWindowSize';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
@@ -17,7 +17,7 @@ const PlacesWithFilters = () => {
   const { setPrices, user, filters } = useStore((state) => state);
   const { width } = useWindowSize();
 
-  const [places, setPlaces] = useState<Place[]>([]);
+  const [places, setPlaces] = useState<IPlace[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(0);
@@ -115,7 +115,7 @@ const PlacesWithFilters = () => {
                     <span>No se encontraron lugares.</span>
                   </div>
                 ) : (
-                  places.map((place: Place) => (
+                  places.map((place: IPlace) => (
                     <PlaceCard key={place?.id} place={place} user={user} />
                   ))
                 )}

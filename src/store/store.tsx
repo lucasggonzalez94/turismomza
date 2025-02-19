@@ -1,4 +1,4 @@
-import { IPlaceForm } from '@/interfaces/place-form';
+import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
 import { Filters } from '@/interfaces/filters';
 import { User } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
@@ -22,8 +22,10 @@ interface State {
   setLoading: (loading: boolean) => void;
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
-  placeFormData: IPlaceForm | null;
-  setPlaceFormData: (data: IPlaceForm | null) => void;
+  placeFormDetails: IPlaceFormDetails | null;
+  setPlaceFormDetails: (data: IPlaceFormDetails | null) => void;
+  placeFormContact: IPlaceFormContact | null;
+  setPlaceFormContact: (data: IPlaceFormContact | null) => void;
   errorFeedback: ErrorFeedback | null;
   setErrorFeedback: (error: ErrorFeedback) => void;
   backPath: string;
@@ -46,8 +48,10 @@ export const useStore = create<State>((set) => ({
   setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),
-  placeFormData: null,
-  setPlaceFormData: (data) => set(() => ({ placeFormData: data })),
+  placeFormDetails: null,
+  setPlaceFormDetails: (data) => set(() => ({ placeFormDetails: data })),
+  placeFormContact: null,
+  setPlaceFormContact: (data) => set(() => ({ placeFormContact: data })),
   errorFeedback: null,
   setErrorFeedback: (errorFeedback) => set(() => ({ errorFeedback })),
   backPath: '/',

@@ -13,7 +13,7 @@ interface IPropsSchedule {
 }
 
 const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
-  const { placeFormData } = useStore((state) => state);
+  const { placeFormDetails: placeFormData } = useStore((state) => state);
   const [configSchedules, setConfigSchedules] = useState<DayConfig[]>([]);
 
   const toggleSelectedDay = (day: string) => {

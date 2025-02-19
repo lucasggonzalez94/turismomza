@@ -13,12 +13,12 @@ import { DayConfig } from '@/interfaces/schedule';
 import { editPlaceService } from '@/services/places/edit-place';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
 import useNavigation from '@/hooks/useNavigation';
-import { IPlaceForm } from '@/interfaces/place-form';
+import { IPlaceFormContact } from '@/interfaces/place-form';
 
 interface IPropsPlaceFormContact {
   isEditing?: boolean;
   placeId?: string;
-  defaultValues?: IPlaceForm | null;
+  defaultValues?: IPlaceFormContact | null;
 }
 
 const schema = yup
@@ -66,9 +66,13 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   defaultValues,
 }) => {
   const { handleNavigation } = useNavigation();
-  const { setPlaceFormData, setErrorFeedback, loading, setLoading } = useStore(
-    (state) => state,
-  );
+  const {
+    placeFormDetails,
+    setPlaceFormContact,
+    setErrorFeedback,
+    loading,
+    setLoading,
+  } = useStore((state) => state);
   const {
     register,
     handleSubmit,
@@ -98,17 +102,17 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   const handleFinish = async (data: any) => {
     const formData = new FormData();
 
-    formData.append('title', defaultValues?.name || '');
-    formData.append('description', defaultValues?.description || '');
-    formData.append('category', defaultValues?.category || '');
-    formData.append('services', JSON.stringify(defaultValues?.services));
-    formData.append('location', defaultValues?.address || '');
-    if (defaultValues?.price) {
-      formData.append('price', defaultValues?.price.toString());
-      formData.append('currencyPrice', defaultValues?.currency || 'ars');
+    formData.append('title', placeFormDetails?.name || '');
+    formData.append('description', placeFormDetails?.description || '');
+    formData.append('category', placeFormDetails?.category || '');
+    formData.append('services', JSON.stringify(placeFormDetails?.services));
+    formData.append('location', placeFormDetails?.address || '');
+    if (placeFormDetails?.price) {
+      formData.append('price', placeFormDetails?.price.toString());
+      formData.append('currencyPrice', placeFormDetails?.currency || 'ars');
     }
-    if (defaultValues?.images) {
-      defaultValues?.images.forEach((image) => {
+    if (placeFormDetails?.images) {
+      placeFormDetails?.images.forEach((image) => {
         formData.append('images', image);
       });
     }
@@ -137,12 +141,12 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
       if (isEditing && placeId) {
         const place = await editPlaceService(formData, placeId);
         reset();
-        setPlaceFormData(null);
+        setPlaceFormContact(null);
         handleNavigation(`/places/${place?.slug}`);
       } else {
         const place = await createPlaceService(formData);
         reset();
-        setPlaceFormData(null);
+        setPlaceFormContact(null);
         handleNavigation(`/places/${place?.slug}`);
       }
     } catch (error) {
@@ -190,7 +194,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
 
   useEffect(() => {
     return () => {
-      setPlaceFormData({
+      setPlaceFormContact({
         ...defaultValues,
         ...getValues(),
       });

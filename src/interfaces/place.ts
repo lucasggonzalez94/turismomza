@@ -1,4 +1,4 @@
-export interface Place {
+export interface IPlace {
   id: string;
   title: string;
   slug: string;

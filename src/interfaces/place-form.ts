@@ -1,6 +1,6 @@
 import { DayConfig } from './schedule';
 
-export interface IPlaceForm {
+export interface IPlaceFormDetails {
   name?: string;
   description?: string;
   category?: string;
@@ -9,6 +9,9 @@ export interface IPlaceForm {
   currency?: string;
   address?: string;
   images?: File[];
+}
+
+export interface IPlaceFormContact {
   website?: string;
   instagram?: string;
   facebook?: string;

@@ -1,10 +1,10 @@
 import axiosInstance from '@/config/axiosInstance';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 
 export const editPlaceService = async (
   formData: FormData,
   placeId: string,
-): Promise<Place> => {
+): Promise<IPlace> => {
   const response = await axiosInstance.put(`/places/${placeId}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

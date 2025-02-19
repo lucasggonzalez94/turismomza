@@ -1,9 +1,9 @@
 import axiosInstance from '@/config/axiosInstance';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 
 export const createPlaceService = async (
   formData: FormData,
-): Promise<Place> => {
+): Promise<IPlace> => {
   const response = await axiosInstance.post(`/places`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

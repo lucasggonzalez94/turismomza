@@ -11,7 +11,7 @@ import ButtonsHeaderPlace from './ButtonsHeaderPlace';
 import AccordionCustom from '../ui/AccordionCustom';
 import Reviews from './Reviews';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
@@ -24,7 +24,7 @@ interface IPropsPlacePageClient {
 }
 
 const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
-  const [place, setPlace] = useState<Partial<Place>>({});
+  const [place, setPlace] = useState<Partial<IPlace>>({});
   const [averageRating, setAverageRating] = useState('0');
   const [servicesAccordion, setServicesAccordion] = useState<
     {

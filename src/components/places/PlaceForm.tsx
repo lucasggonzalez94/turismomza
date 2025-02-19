@@ -7,7 +7,7 @@ import { PiNumberCircleOneFill, PiNumberCircleTwoFill } from 'react-icons/pi';
 import { FaCircleCheck } from 'react-icons/fa6';
 import PlaceFormDetails from './PlaceFormDetails';
 import PlaceFormContact from './PlaceFormContact';
-import { IPlaceForm } from '@/interfaces/place-form';
+import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
 import { IImage } from '@/interfaces/place';
 import { useStore } from '@/store/store';
 import { fetchImageAsFile } from '@/utils/helpers';
@@ -15,7 +15,10 @@ import useWindowSize from '@/hooks/useWindowSize';
 import Spinner from '../ui/Spinner/Spinner';
 import { usePathname } from 'next/navigation';
 
-type PlaceFormWithCustomImages = Omit<IPlaceForm, 'images'> & {
+type PlaceFormWithCustomImages = Omit<
+  IPlaceFormDetails & IPlaceFormContact,
+  'images'
+> & {
   images?: IImage[];
 };
 
@@ -26,9 +29,14 @@ interface IPropsPlaceForm {
 }
 
 const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
-  const { placeFormData, setPlaceFormData, loading, setLoading } = useStore(
-    (state) => state,
-  );
+  const {
+    placeFormDetails,
+    placeFormContact,
+    setPlaceFormDetails,
+    setPlaceFormContact,
+    loading,
+    setLoading,
+  } = useStore((state) => state);
   const { width } = useWindowSize();
   const pathname = usePathname();
 
@@ -47,9 +55,23 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
             async (image) => await fetchImageAsFile(image.url, image.publicId),
           ) || [],
         );
-        setPlaceFormData({
-          ...restDataPlace,
+        setPlaceFormDetails({
+          name: restDataPlace?.name,
+          description: restDataPlace?.description,
+          category: restDataPlace?.category,
+          services: restDataPlace?.services,
+          price: restDataPlace?.price,
+          currency: restDataPlace?.currency,
+          address: restDataPlace?.address,
           images: imagesAsFile,
+        });
+        setPlaceFormContact({
+          website: restDataPlace?.website,
+          instagram: restDataPlace?.instagram,
+          facebook: restDataPlace?.facebook,
+          phonenumber: restDataPlace?.phonenumber,
+          email: restDataPlace?.email,
+          schedule: restDataPlace?.schedule,
         });
         setLoading(false);
       };
@@ -57,7 +79,8 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
       setSaved(true);
       fetchImagesAsFiles();
     } else {
-      setPlaceFormData(null);
+      setPlaceFormDetails(null);
+      setPlaceFormContact(null);
       setLoading(false);
       setSaved(false);
     }
@@ -103,7 +126,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           <PlaceFormDetails
             setSaved={setSaved}
             setSelectedTab={setSelectedTab}
-            defaultValues={placeFormData}
+            defaultValues={placeFormDetails}
           />
         )}
       </Tab>
@@ -125,7 +148,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           <PlaceFormContact
             isEditing={isEditing}
             placeId={placeId}
-            defaultValues={placeFormData}
+            defaultValues={placeFormContact}
           />
         )}
       </Tab>

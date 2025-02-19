@@ -12,13 +12,13 @@ import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { useStore } from '@/store/store';
-import { IPlaceForm } from '@/interfaces/place-form';
+import { IPlaceFormDetails } from '@/interfaces/place-form';
 // import { Address, LatLng } from '@/interfaces/address';
 
 interface IPropsPlaceFormDetails {
   setSaved: (saved: boolean) => void;
   setSelectedTab: (tab: string) => void;
-  defaultValues?: IPlaceForm | null;
+  defaultValues?: IPlaceFormDetails | null;
 }
 
 const schema = yup
@@ -53,7 +53,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSelectedTab,
   defaultValues,
 }) => {
-  const { setPlaceFormData } = useStore((state) => state);
+  const { setPlaceFormDetails } = useStore((state) => state);
 
   const {
     register,
@@ -95,7 +95,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
 
   const handleSaveAndContinue = (data: any) => {
     if (images?.length > 3) {
-      setPlaceFormData({
+      setPlaceFormDetails({
         ...defaultValues,
         ...data,
         images,
@@ -197,7 +197,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
 
   useEffect(() => {
     return () => {
-      setPlaceFormData({
+      setPlaceFormDetails({
         ...defaultValues,
         ...getValues(),
       });

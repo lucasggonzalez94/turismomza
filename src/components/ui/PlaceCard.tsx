@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 import { addFavoriteService } from '@/services/places/add-favorite';
 import { useStore } from '@/store/store';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
@@ -15,7 +15,7 @@ import useNavigation from '@/hooks/useNavigation';
 
 interface IPropsPlaceCard {
   user: User | null;
-  place: Place;
+  place: IPlace;
 }
 
 const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {

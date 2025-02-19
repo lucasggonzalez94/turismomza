@@ -1,10 +1,10 @@
 import axiosInstance from '@/config/axiosInstance';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 
 export const getPlaceBySlugService = async (
   slug: string,
   userId?: string,
-): Promise<Place> => {
+): Promise<IPlace> => {
   const response = await axiosInstance.get(`/places/${slug}`, {
     params: {
       userId,

@@ -6,14 +6,14 @@ import { IoChevronForwardSharp } from 'react-icons/io5';
 import { IoAlertCircle } from 'react-icons/io5';
 
 import PlaceCard from '@/components/ui/PlaceCard';
-import { Place } from '@/interfaces/place';
+import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
 import useWindowSize from '@/hooks/useWindowSize';
 import CardSkeleton from '@/components/skeletons/CardSkeleton';
 import { useStore } from '@/store/store';
 
 const PlacesHome = () => {
-  const [places, setPlaces] = useState<Place[]>([]);
+  const [places, setPlaces] = useState<IPlace[]>([]);
   const [pageSize, setPageSize] = useState(10);
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -92,7 +92,7 @@ const PlacesHome = () => {
               <span>Todavía no hay lugares creados.</span>
             </div>
           ) : (
-            places.map((place: Place) => (
+            places.map((place: IPlace) => (
               <PlaceCard key={place?.id} user={user} place={place} />
             ))
           )}
