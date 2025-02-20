@@ -9,7 +9,7 @@ const Banner = () => {
     <div
       className="h-screen bg-cover bg-center flex flex-col justify-center p-24 relative"
       style={{
-        backgroundImage: 'url(/images/background.jpg)',
+        backgroundImage: 'url(/images/background.webp)',
       }}
     >
       <div className="h-full absolute inset-0 bg-black opacity-40 pointer-events-none z-10"></div>

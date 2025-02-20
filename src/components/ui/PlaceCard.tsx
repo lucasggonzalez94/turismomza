@@ -104,7 +104,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
           />
         ) : (
           <Image
-            src="/images/default-image.jpg"
+            src="/images/default-image.webp"
             alt="No image"
             width={300}
             height={200}

@@ -15,14 +15,14 @@ export default function HomeLayout({
       <div className="hidden lg:block w-1/2 overflow-hidden relative">
         <div className="absolute inset-0 bg-black opacity-40 pointer-events-none"></div>
         <Image
-          src="/images/logoTurismomza.png"
+          src="/images/logoTurismomza.webp"
           alt="Logo turismo mendoza"
           width={500}
           height={400}
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <Image
-          src="/images/portada_auth.jpeg"
+          src="/images/portada_auth.webp"
           alt="Uvas"
           width={500}
           height={400}

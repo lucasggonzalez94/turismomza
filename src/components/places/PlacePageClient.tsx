@@ -212,7 +212,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
               if (images?.length > 4 && index === 3) {
                 return (
                   <div
-                    key={img?.public_id}
+                    key={img?.publicId}
                     className="relative hover:brightness-75 col-span-4 cursor-pointer"
                     onClick={() => handleImageClick(index)}
                   >
@@ -224,7 +224,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
                       alt={`Imágen ${index}`}
                       width={300}
                       height={200}
-                      defaultValue="/images/default-image.jpg"
+                      defaultValue="/images/default-image.webp"
                       className={`w-full h-full object-cover object-center`}
                     />
                   </div>
@@ -232,12 +232,12 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
               }
               return (
                 <Image
-                  key={img?.public_id}
+                  key={img?.publicId}
                   src={img?.url}
                   alt={`Imágen ${index}`}
                   width={300}
                   height={200}
-                  defaultValue="/images/default-image.jpg"
+                  defaultValue="/images/default-image.webp"
                   className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
                   onClick={() => handleImageClick(index)}
                 />

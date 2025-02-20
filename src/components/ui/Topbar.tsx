@@ -62,7 +62,7 @@ const Topbar = () => {
         <div className="col-span-5 flex">
           <Link href="/">
             <Image
-              src="/images/logoTurismomza.png"
+              src="/images/logoTurismomza.webp"
               alt="Logo turismo mendoza"
               width={250}
               height={100}

@@ -2,9 +2,9 @@ import React from 'react';
 import SliderCarousel from '../../ui/SliderCarousel/SliderCarousel';
 
 const IMAGES = [
-  '/images/portones.jpg',
-  '/images/puente-uspallata.jpg',
-  '/images/portada_auth.jpeg',
+  '/images/portones.webp',
+  '/images/puente-uspallata.webp',
+  '/images/portada_auth.webp',
 ];
 
 const AboutMza = () => {

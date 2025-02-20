@@ -142,3 +142,16 @@ export const CURRENCIES = [
 ];
 
 export const WEEKDAYS = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
+
+export const LANGUAGES = [
+  { key: 'es', label: 'Español' },
+  { key: 'en', label: 'Inglés' },
+  { key: 'fr', label: 'Francés' },
+  { key: 'de', label: 'Alemán' },
+  { key: 'it', label: 'Italiano' },
+  { key: 'pt', label: 'Portugués' },
+  { key: 'ru', label: 'Ruso' },
+  { key: 'zh', label: 'Chino' },
+  { key: 'ja', label: 'Japonés' },
+  { key: 'ar', label: 'Árabe' },
+];
