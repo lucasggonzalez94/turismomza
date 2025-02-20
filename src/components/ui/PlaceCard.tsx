@@ -10,11 +10,11 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
-import { User } from '@/interfaces/user';
+import { IUser } from '@/interfaces/user';
 import useNavigation from '@/hooks/useNavigation';
 
 interface IPropsPlaceCard {
-  user: User | null;
+  user: IUser | null;
   place: IPlace;
 }
 

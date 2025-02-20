@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: '...',
 };
 
-export default function OwnProfilePage() {
+export default function ProfileDataPage() {
   return (
     <div className="flex flex-col flex-grow gap-6 pb-4 px-4">
       <Chevron />

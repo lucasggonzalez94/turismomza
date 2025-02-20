@@ -9,7 +9,7 @@ import PlaceCard from '../ui/PlaceCard';
 import { Button, Pagination } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import { useStore } from '@/store/store';
-import { User } from '@/interfaces/user';
+import { IUser } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 
@@ -23,7 +23,7 @@ const PlacesWithFilters = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<User | null>(null);
+  const [userData, setUserData] = useState<IUser | null>(null);
   const [hideFilters, setHideFilters] = useState(false);
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
 

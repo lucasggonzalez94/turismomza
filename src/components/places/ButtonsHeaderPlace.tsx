@@ -17,7 +17,7 @@ import { AiOutlineFacebook } from 'react-icons/ai';
 import { usePathname, useRouter } from 'next/navigation';
 import { useStore } from '@/store/store';
 import { addFavoriteService } from '@/services/places/add-favorite';
-import { User } from '@/interfaces/user';
+import { IUser } from '@/interfaces/user';
 import CustomModal from '../ui/CustomModal';
 import Link from 'next/link';
 
@@ -29,7 +29,7 @@ interface Contact {
   facebook?: string | null;
 }
 interface IPropsButtonsHeaderPlace {
-  user: User | null;
+  user: IUser | null;
   slug: string;
   placeId?: string;
   creatorId?: string;

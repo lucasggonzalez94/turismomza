@@ -1,6 +1,6 @@
 import { Review } from '@/interfaces/place';
 import { DayConfig } from '@/interfaces/schedule';
-import { SERVICES } from './constants';
+import { LANGUAGES, SERVICES } from './constants';
 
 export const calculateAverageRating = (reviews: Review[]): string => {
   if (!reviews || reviews.length === 0) return '0';
@@ -19,14 +19,18 @@ export const formatPrice = (price: number, currency: 'ars' | 'usd'): string => {
   return formatter.format(price);
 };
 
-export const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
+export const formatDate = (isoDate?: string): string => {
+  if (isoDate) {
+    const date = new Date(isoDate);
 
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year}`;
+  }
+
+  return '';
 };
 
 export const validateSchedule = (schedule: DayConfig[]): boolean => {
@@ -50,6 +54,17 @@ export const mapServices = (services: string[]) => {
 
   return services.map((service) => {
     return servicesObject[service];
+  });
+};
+
+export const mapLanguages = (languages: string[]) => {
+  const languagesObject = LANGUAGES.reduce((acc: any, language: any) => {
+    acc[language.key] = language.label;
+    return acc;
+  }, {});
+
+  return languages.map((language) => {
+    return languagesObject[language];
   });
 };
 

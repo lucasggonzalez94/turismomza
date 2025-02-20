@@ -1,6 +1,6 @@
 import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
 import { Filters } from '@/interfaces/filters';
-import { User } from '@/interfaces/user';
+import { IUser } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
@@ -10,8 +10,8 @@ interface Price {
 }
 
 interface State {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: IUser | null;
+  setUser: (user: IUser | null) => void;
   filters: Filters | null;
   setFilters: (filters: Filters | null) => void;
   prices: Price;
