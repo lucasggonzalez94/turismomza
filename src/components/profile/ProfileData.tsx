@@ -12,11 +12,7 @@ import { formatDate, mapLanguages } from '@/utils/helpers';
 
 const ProfileData = () => {
   const { handleNavigation } = useNavigation();
-  const { user, loading } = useStore((state) => state);
-
-  if (loading) {
-    return <Spinner />;
-  }
+  const { user } = useStore((state) => state);
 
   return (
     <div className="flex flex-col flex-grow gap-3 px-4 pb-8">

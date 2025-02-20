@@ -42,12 +42,6 @@ const Navigation: FC = () => {
       text: 'Lugares',
       path: '/places',
     },
-    {
-      id: 4,
-      icon: <IoSettingsSharp size={25} />,
-      text: 'Configuración',
-      path: '/settings',
-    },
   ]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [notifications, setNotifications] = useState<INotification[]>([]);
@@ -118,12 +112,6 @@ const Navigation: FC = () => {
           text: 'Lugares',
           path: '/places',
         },
-        {
-          id: 4,
-          icon: <IoSettingsSharp size={25} />,
-          text: 'Configuración',
-          path: '/settings',
-        },
       ]);
     } else {
       setNavItems([
@@ -135,19 +123,13 @@ const Navigation: FC = () => {
           text: 'Lugares',
           path: '/places',
         },
-        {
-          id: 4,
-          icon: <IoSettingsSharp size={25} />,
-          text: 'Configuración',
-          path: '/settings',
-        },
       ]);
     }
   }, [verified]);
 
   return (
     <div className="fixed bottom-0 w-full h-[70px] bg-white flex md:hidden justify-center items-center rounded-tl-xl rounded-tr-xl z-50">
-      <ul className="flex w-[350px] relative">
+      <ul className="flex relative">
         {navItems.map((item, index) => (
           <li
             key={item.id}

@@ -96,14 +96,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             divider: true,
           },
           {
-            id: 'preferences',
-            text: 'Preferencias',
-            onClick: () => {
-              handleNavigation('/profile/preferences');
-              setBackPath(pathname);
-            },
-          },
-          {
             id: 'help',
             text: 'Ayuda',
             onClick: () => {
@@ -139,14 +131,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             divider: true,
           },
           {
-            id: 'preferences',
-            text: 'Preferencias',
-            onClick: () => {
-              handleNavigation('/profile/preferences');
-              setBackPath(pathname);
-            },
-          },
-          {
             id: 'help',
             text: 'Ayuda',
             onClick: () => {
@@ -171,21 +155,22 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
               handleNavigation('/profile');
               setBackPath(pathname);
             },
+            divider: true,
+          },
+          {
+            id: 'publications',
+            text: 'Mis publicaciones',
+            onClick: () => {
+              handleNavigation('/profile/publications');
+              setBackPath(pathname);
+            },
+            divider: true,
           },
           {
             id: 'admin',
             text: 'Administrar',
             onClick: () => {
               handleNavigation('/admin');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'preferences',
-            text: 'Preferencias',
-            onClick: () => {
-              handleNavigation('/profile/preferences');
               setBackPath(pathname);
             },
             divider: true,
@@ -219,7 +204,10 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
               <Link
                 href="/profile"
                 className="text-lg font-semibold text-gray-800"
-                onClick={() => setBackPath(pathname)}
+                onClick={() => {
+                  setIsOpen(null);
+                  setBackPath(pathname);
+                }}
               >
                 {user?.name}
               </Link>
