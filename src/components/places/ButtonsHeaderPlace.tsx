@@ -120,6 +120,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
         title="Medios de contacto"
         isOpen={openModalContact}
         onOpenChange={setOpenModalContact}
+        textButton="Aceptar"
       >
         <div className="flex flex-col gap-7 p-5">
           {contact?.contactNumber && (

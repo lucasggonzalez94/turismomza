@@ -29,10 +29,10 @@ const PlacesHome = () => {
         pageSize: pageSize,
       });
       setPlaces(data);
-      setLoading(false);
     } catch {
-      setLoading(false);
       setErrorService(true);
+    } finally {
+      setLoading(false);
     }
   };
 

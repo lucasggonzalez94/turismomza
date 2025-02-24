@@ -53,12 +53,13 @@ const LoginForm = () => {
       await login(data);
       handleNavigation(lastPath);
     } catch (error: any) {
-      setLoading(false);
       if (error.status === 401) {
         notify('Las credenciales no son válidas.');
       } else {
         notify();
       }
+    } finally {
+      setLoading(false);
     }
   };
 

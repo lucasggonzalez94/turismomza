@@ -7,9 +7,7 @@ export const refreshAccessToken = async () => {
     });
 
     return response.data.accessToken;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error refreshing token:', error);
+  } catch {
     throw new Error('Could not refresh token');
   }
 };

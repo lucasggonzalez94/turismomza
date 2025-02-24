@@ -14,6 +14,7 @@ interface IPropsSliderCarousel {
   autoplay?: boolean;
   autoplayDelay?: number;
   fullscreen?: boolean;
+  profilePicture?: boolean;
   onClose?: () => void;
 }
 
@@ -25,6 +26,7 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
   autoplay = false,
   autoplayDelay = 3000,
   fullscreen = false,
+  profilePicture,
   onClose,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -65,12 +67,12 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
   return (
     <div
       className={`${
-        fullscreen
+        fullscreen || profilePicture
           ? 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm'
           : 'relative w-full h-full overflow-hidden rounded-lg'
       }`}
     >
-      {fullscreen && (
+      {(fullscreen || profilePicture) && (
         <button
           className="absolute top-4 right-4 z-50 text-white text-3xl"
           onClick={onClose}
@@ -83,7 +85,7 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
         <div className="flex w-full h-full">
           {images?.map((src, index) => (
             <div
-              key={index}
+              key={src}
               className="flex-[0_0_100%] flex justify-center items-center w-full h-full"
             >
               <Image
@@ -91,7 +93,7 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
                 alt={`Carousel image ${index + 1}`}
                 width={600}
                 height={600}
-                className={`${fullscreen ? 'h-full w-fit' : 'object-cover object-center w-full h-full'}`}
+                className={`${fullscreen ? 'h-full w-fit' : profilePicture ? 'w-96 object-cover object-center' : 'object-cover object-center w-full h-full'}`}
               />
             </div>
           ))}

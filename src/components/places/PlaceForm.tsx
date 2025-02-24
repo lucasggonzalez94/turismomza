@@ -46,10 +46,10 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
 
   useEffect(() => {
     if (isEditing && dataPlace) {
-      setLoading(true);
       const { images, ...restDataPlace } = dataPlace;
 
       const fetchImagesAsFiles = async () => {
+        setLoading(true);
         const imagesAsFile = await Promise.all(
           images?.map(
             async (image) => await fetchImageAsFile(image.url, image.publicId),

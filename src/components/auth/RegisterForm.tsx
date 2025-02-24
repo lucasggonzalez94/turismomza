@@ -63,8 +63,9 @@ const RegisterForm = () => {
       await registerService(registerBody);
       handleNavigation('/');
     } catch {
-      setLoading(false);
       notify();
+    } finally {
+      setLoading(false);
     }
   };
 

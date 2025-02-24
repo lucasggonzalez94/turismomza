@@ -25,7 +25,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
       setLoading(true);
       const user = await getUserByIdService(userId);
       setUser(user);
-    } catch (error) {
+    } catch {
       router.push('/not-found');
     } finally {
       setLoading(false);
@@ -34,6 +34,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
 
   useEffect(() => {
     getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   if (loading) {
@@ -66,22 +67,31 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
         <div className="w-full flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Bio</h4>
-            <p className="text-sm">{user?.bio || 'No existe una bio para este usuario.'}</p>
+            <p className="text-sm">
+              {user?.bio || 'No existe una bio para este usuario.'}
+            </p>
           </div>
           <Divider className="my-2" />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Ubicación</h4>
-            <p className="text-sm">{user?.location || 'No existe una ubicación para este usuario'}</p>
+            <p className="text-sm">
+              {user?.location || 'No existe una ubicación para este usuario'}
+            </p>
           </div>
           <Divider className="my-2" />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Sitio web</h4>
-            <p className="text-sm">{user?.website || 'No existe un sitio web para este usuario'}</p>
+            <p className="text-sm">
+              {user?.website || 'No existe un sitio web para este usuario'}
+            </p>
           </div>
           <Divider className="my-2" />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Idiomas</h4>
-            <p className="text-sm">{mapLanguages(user?.language || [])?.join(', ') || 'No existen idiomas para este usuario'}</p>
+            <p className="text-sm">
+              {mapLanguages(user?.language || [])?.join(', ') ||
+                'No existen idiomas para este usuario'}
+            </p>
           </div>
         </div>
       </div>

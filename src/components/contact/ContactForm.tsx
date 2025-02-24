@@ -58,11 +58,11 @@ const ContactForm = () => {
     try {
       setLoading(true);
       await sendMail(data);
-      setLoading(false);
       notifySuccess();
     } catch {
-      setLoading(false);
       notifyError();
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -13,8 +13,10 @@ interface IPropsCustomModal {
   children: ReactNode;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  textButton?: string;
+  textButton: string;
   onAction?: () => void;
+  disableAction?: boolean;
+  loadingAction?: boolean;
 }
 
 const CustomModal: FC<IPropsCustomModal> = ({
@@ -24,6 +26,8 @@ const CustomModal: FC<IPropsCustomModal> = ({
   onOpenChange,
   textButton,
   onAction,
+  disableAction,
+  loadingAction,
 }) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -37,7 +41,12 @@ const CustomModal: FC<IPropsCustomModal> = ({
                 <Button color="primary" variant="light" onPress={onClose}>
                   Cancelar
                 </Button>
-                <Button color="primary" onPress={onAction}>
+                <Button
+                  color="primary"
+                  onPress={onAction}
+                  isDisabled={disableAction}
+                  isLoading={loadingAction}
+                >
                   {textButton}
                 </Button>
               </ModalFooter>

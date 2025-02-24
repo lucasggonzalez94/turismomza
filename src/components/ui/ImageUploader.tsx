@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import { X, Upload, Move } from 'lucide-react';
 import Image from 'next/image';
@@ -20,6 +20,8 @@ const ImageUploader = ({
   maxSizeMB = 5,
   onImagesChange,
 }: ImageUploaderProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [errorMinMax, setErrorMinMax] = useState<string | null>(null);
   const [errorImages, setErrorImages] = useState<string | null>(null);
 
@@ -42,7 +44,7 @@ const ImageUploader = ({
 
       _setValues((prevImages) => {
         const newImages = [...prevImages, ...validFiles].slice(0, maxImages);
-        if (newImages.length === maxImages) {
+        if (newImages.length > maxImages) {
           setErrorMinMax(
             `Has alcanzado el límite máximo de ${maxImages} imágenes`,
           );
@@ -76,6 +78,9 @@ const ImageUploader = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
       addImages(files);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     },
     [addImages],
   );
@@ -95,14 +100,15 @@ const ImageUploader = ({
   }, [_setValues, defaultImages]);
 
   return (
-    <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
+    <div className="w-full p-6 bg-gray-100 rounded-lg">
       <h2 className="text-xl font-semibold text-center mb-6">
-        Subí tus imágenes
+        Subí {minImages > 1 ? ' tus imágenes' : ' tu imágen'}
       </h2>
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 'border-gray-300`}
       >
         <input
+          ref={fileInputRef}
           type="file"
           accept=".jpg,.jpeg,.png"
           multiple
@@ -115,15 +121,16 @@ const ImageUploader = ({
           className="cursor-pointer inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800"
         >
           <Upload className="w-5 h-5 mr-2" />
-          Seleccionar imágenes
+          Seleccionar {minImages > 1 ? ' imágenes' : ' imágen'}
         </label>
         <p className="mt-2 text-sm text-gray-600">
-          o arrastra y suelta tus imágenes aquí
+          o arrastra y suelta {minImages > 1 ? ' tus imágenes ' : 'tu imágen '}
+          aquí
         </p>
       </div>
 
       <div className="text-center mb-4 w-full flex justify-center items-center">
-        <div className="flex flex-col w-fit items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800">
+        <div className="flex flex-col w-fit items-center px-3 py-1 rounded-xl text-sm font-medium bg-gray-200 text-gray-800">
           <span className="mr-1">ℹ️</span>
           <span>Formatos aceptados: .jpg, .jpeg, .png</span>
           <span>Tamaño máximo: 5Mb</span>
@@ -149,7 +156,7 @@ const ImageUploader = ({
 
       <div
         ref={parent}
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 cursor-grab"
+        className={`${minImages > 1 ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4' : 'flex'} cursor-grab`}
       >
         {images.map((file, index) => (
           <div

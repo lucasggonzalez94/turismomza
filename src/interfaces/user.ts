@@ -4,7 +4,7 @@ export interface IUser {
   email: string;
   role: string;
   two_factor_enabled: boolean;
-  profilePicture: string;
+  profilePicture: IProfilePicture;
   createdAt: string;
   bio?: string;
   location?: string;
@@ -13,4 +13,10 @@ export interface IUser {
   verified?: boolean;
   places_count?: number;
   review_count?: number;
+}
+
+interface IProfilePicture {
+  id: string;
+  public_id: string;
+  url: string;
 }

@@ -5,11 +5,11 @@ export interface INotification {
   message: string;
   read: boolean;
   creationDate: Date;
-  user: IUser;
-  triggeredBy: IUser;
+  user: IUserNotification;
+  triggeredBy: IUserNotification;
 }
 
-export interface IUser {
+interface IUserNotification {
   id: string;
   name: string;
 }

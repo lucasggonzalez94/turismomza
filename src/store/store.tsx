@@ -44,7 +44,7 @@ export const useStore = create<State>((set) => ({
   setPrices: (prices) => set(() => ({ prices })),
   lastPath: '/',
   setLastPath: (path) => set(() => ({ lastPath: path })),
-  loading: true,
+  loading: false,
   setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),

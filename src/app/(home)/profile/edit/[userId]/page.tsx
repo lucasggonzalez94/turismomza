@@ -18,7 +18,7 @@ export default function EditProfilePage({ params }: IPropsEditProfilePage) {
 
   return (
     <div className="flex flex-col flex-grow gap-6 pb-4 px-4">
-      <Chevron />
+      <Chevron path="/profile" />
       <EditProfileForm userId={userId} />
     </div>
   );

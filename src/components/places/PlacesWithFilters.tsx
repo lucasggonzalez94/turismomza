@@ -62,10 +62,10 @@ const PlacesWithFilters = () => {
           minPrice: 0,
           maxPrice,
         });
-        setLoading(false);
       } catch {
-        setLoading(false);
         setErrorService(true);
+      } finally {
+        setLoading(false);
       }
     };
 
