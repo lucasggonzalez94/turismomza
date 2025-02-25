@@ -89,8 +89,11 @@ const Topbar = () => {
             <AnimatedLink href="/places" onClick={() => setBackPath(pathname)}>
               LUGARES
             </AnimatedLink>
-            <AnimatedLink href="/help" onClick={() => setBackPath(pathname)}>
-              CONTACTO
+            <AnimatedLink
+              href="/favorites"
+              onClick={() => setBackPath(pathname)}
+            >
+              FAVORITOS
             </AnimatedLink>
             <Button
               as={Link}

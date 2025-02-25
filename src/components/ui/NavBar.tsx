@@ -1,18 +1,18 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-
+import { usePathname } from 'next/navigation';
+import { Badge } from '@nextui-org/react';
 import { GoHomeFill } from 'react-icons/go';
-import { FaUser } from 'react-icons/fa6';
-import { IoNotifications, IoSettingsSharp } from 'react-icons/io5';
+import { IoCalendarClear, IoHeart } from 'react-icons/io5';
 import { MdPlace } from 'react-icons/md';
 import useNavigation from '@/hooks/useNavigation';
 import useAuth from '@/hooks/useAuth';
 import { INotification } from '@/interfaces/notification';
 import { useStore } from '@/store/store';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
-import { Badge } from '@nextui-org/react';
-import { usePathname } from 'next/navigation';
+import { FaCircleUser } from 'react-icons/fa6';
+import ProfilePicture from './ProfilePicture';
 
 interface NavItem {
   id: number;
@@ -29,18 +29,29 @@ const Navigation: FC = () => {
 
   const [navItems, setNavItems] = useState<NavItem[]>([
     { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-    { id: 1, icon: <FaUser size={20} />, text: 'Perfil', path: '/profile' },
     {
-      id: 2,
-      icon: <IoNotifications size={25} />,
-      text: 'Notificaciones',
-      path: '/notifications',
-    },
-    {
-      id: 3,
+      id: 1,
       icon: <MdPlace size={25} />,
       text: 'Lugares',
       path: '/places',
+    },
+    {
+      id: 2,
+      icon: <IoCalendarClear size={22} />,
+      text: 'Eventos',
+      path: '/events',
+    },
+    {
+      id: 4,
+      icon: user ? (
+        <div className="h-7">
+          <ProfilePicture changePicture={false} openPicture={false} />
+        </div>
+      ) : (
+        <FaCircleUser size={22} />
+      ),
+      text: 'Perfil',
+      path: '/profile',
     },
   ]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -99,29 +110,63 @@ const Navigation: FC = () => {
     if (verified) {
       setNavItems([
         { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-        { id: 1, icon: <FaUser size={22} />, text: 'Perfil', path: '/profile' },
         {
-          id: 2,
-          icon: <IoNotifications size={25} />,
-          text: 'Notificaciones',
-          path: '/notifications',
-        },
-        {
-          id: 3,
+          id: 1,
           icon: <MdPlace size={25} />,
           text: 'Lugares',
           path: '/places',
+        },
+        {
+          id: 2,
+          icon: <IoCalendarClear size={22} />,
+          text: 'Eventos',
+          path: '/events',
+        },
+        {
+          id: 3,
+          icon: <IoHeart size={25} />,
+          text: 'Favoritos',
+          path: '/favorites',
+        },
+        {
+          id: 4,
+          icon: user ? (
+            <div className="h-7">
+              <ProfilePicture changePicture={false} openPicture={false} />
+            </div>
+          ) : (
+            <FaCircleUser size={22} />
+          ),
+          text: 'Perfil',
+          path: '/profile',
         },
       ]);
     } else {
       setNavItems([
         { id: 0, icon: <GoHomeFill size={25} />, text: 'Inicio', path: '/' },
-        { id: 1, icon: <FaUser size={25} />, text: 'Perfil', path: '/profile' },
         {
-          id: 3,
+          id: 1,
           icon: <MdPlace size={25} />,
           text: 'Lugares',
           path: '/places',
+        },
+        {
+          id: 2,
+          icon: <IoCalendarClear size={22} />,
+          text: 'Eventos',
+          path: '/events',
+        },
+        {
+          id: 4,
+          icon: user ? (
+            <div className="h-7">
+              <ProfilePicture changePicture={false} openPicture={false} />
+            </div>
+          ) : (
+            <FaCircleUser size={22} />
+          ),
+          text: 'Perfil',
+          path: '/profile',
         },
       ]);
     }
