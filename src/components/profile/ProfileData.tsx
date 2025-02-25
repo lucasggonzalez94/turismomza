@@ -111,7 +111,7 @@ const ProfileData = () => {
             variant="flat"
             isIconOnly
             size="sm"
-            onPress={() => handleNavigation('/profile/edit/12345345')}
+            onPress={() => handleNavigation('/profile/edit')}
           >
             <RiEditLine size={20} />
           </Button>

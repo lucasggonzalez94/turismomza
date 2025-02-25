@@ -8,10 +8,11 @@ interface IPropsInputPassword {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   name: string;
+  required?: boolean;
 }
 
 const InputPassword = forwardRef<HTMLInputElement, IPropsInputPassword>(
-  ({ value, onChange, name }, ref) => {
+  ({ value, onChange, name, required }, ref) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -20,7 +21,7 @@ const InputPassword = forwardRef<HTMLInputElement, IPropsInputPassword>(
       <Input
         label="Contraseña"
         labelPlacement="outside"
-        placeholder="Ingresá tu contraseña"
+        placeholder="Ingresa tu contraseña"
         variant="faded"
         endContent={
           <button
@@ -37,6 +38,8 @@ const InputPassword = forwardRef<HTMLInputElement, IPropsInputPassword>(
         onChange={onChange}
         name={name}
         ref={ref}
+        className="w-full"
+        isRequired={required}
       />
     );
   },
