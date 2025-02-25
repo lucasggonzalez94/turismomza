@@ -1,21 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IoCamera } from 'react-icons/io5';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LANGUAGES } from '@/utils/constants';
 import { useStore } from '@/store/store';
 import { updateUserService } from '@/services/auth/update-user';
-import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
-import CustomModal from '../ui/CustomModal';
-import ImageUploader from '../ui/ImageUploader';
 import InputPassword from '../ui/InputPassword';
+import ProfilePicture from '../ui/ProfilePicture';
 
 const schema = yup
   .object({
@@ -54,10 +50,6 @@ const EditProfileForm = () => {
     },
   });
 
-  const [openProfilePicture, setOpenProfilePicture] = useState(false);
-  const [openUploadProfilePicture, setOpenUploadProfilePicture] =
-    useState(false);
-  const [profilePicture, setProfilePicture] = useState<File[]>([]);
   const [selectedLanguageKeys, setSelectedLanguageKeys] = useState<Set<string>>(
     new Set([]),
   );
@@ -73,30 +65,6 @@ const EditProfileForm = () => {
       position: 'bottom-right',
       theme: 'dark',
     });
-
-  const handleUpdateProfilePicture = async (profilePicture: File) => {
-    try {
-      setLoading(true);
-
-      const formData = new FormData();
-      formData.append('profilePicture', profilePicture);
-
-      const updatedUser = await updateUserService(formData);
-      if (user) {
-        setUser({
-          ...user,
-          profilePicture: updatedUser?.profilePicture,
-        });
-      }
-      setProfilePicture([]);
-      setOpenUploadProfilePicture(false);
-      notifySuccess('Foto de perfil actualizada correctamente');
-    } catch {
-      notifyError();
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSave = async (data: any) => {
     try {
@@ -149,30 +117,8 @@ const EditProfileForm = () => {
     <>
       <div className="w-full flex flex-col justify-center items-center flex-grow gap-3 px-4 pb-8">
         <h1 className="w-1/2 font-bold text-xl">Editar usuario</h1>
-        <div className="w-full flex gap-6 justify-center items-center mb-4">
-          <div className="relative group w-[8%] aspect-square object-center rounded-full overflow-hidden cursor-pointer">
-            <Image
-              src={user?.profilePicture?.url || '/images/default-image.webp'}
-              alt="Foto de perfil"
-              width={200}
-              height={200}
-              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-80"
-            />
-            <div
-              className="absolute inset-0 flex items-end justify-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              onClick={() => setOpenProfilePicture(true)}
-            >
-              <div
-                className="bg-black bg-opacity-60 p-2 rounded-md flex justify-center items-center gap-2 w-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenUploadProfilePicture(true);
-                }}
-              >
-                <IoCamera size={25} color="white" />
-              </div>
-            </div>
-          </div>
+        <div className="w-full h-40 flex justify-center items-center mb-4">
+          <ProfilePicture />
         </div>
 
         <div className="w-1/2 flex gap-3 justify-center items-center">
@@ -269,28 +215,6 @@ const EditProfileForm = () => {
         </div>
       </div>
       <ToastContainer autoClose={10000} />
-      {user?.profilePicture && openProfilePicture && (
-        <SliderCarousel
-          images={[user?.profilePicture?.url]}
-          profilePicture
-          onClose={() => setOpenProfilePicture(false)}
-        />
-      )}
-      <CustomModal
-        title="Cargar foto de perfil"
-        isOpen={openUploadProfilePicture}
-        onOpenChange={() => setOpenUploadProfilePicture(false)}
-        textButton="Guardar"
-        onAction={() => handleUpdateProfilePicture(profilePicture[0])}
-        disableAction={!profilePicture.length || loading}
-        loadingAction={loading}
-      >
-        <ImageUploader
-          onImagesChange={setProfilePicture}
-          maxImages={1}
-          minImages={1}
-        />
-      </CustomModal>
     </>
   );
 };

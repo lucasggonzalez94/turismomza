@@ -12,6 +12,8 @@ import {
 
 import { Button } from '@nextui-org/react';
 import { IoPerson } from 'react-icons/io5';
+import { useStore } from '@/store/store';
+import ProfilePicture from './ProfilePicture';
 
 interface IPropsDropdownButton {
   icon?: ReactElement;
@@ -36,6 +38,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   onOpen,
   onClose,
 }) => {
+  const { user } = useStore((state) => state);
   const [positionValue, setPositionValue] = useState('translate-x-[90%]');
   const [hidden, setHidden] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -84,18 +87,24 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
       ref={searchRef}
       data-dropdown-button
     >
-      <Button
-        isIconOnly={!!icon || profile}
-        variant="light"
-        className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
-        onPress={onOpen}
-      >
-        {profile ? (
-          <IoPerson size={25} color="#000" className="mb-[2px]" />
-        ) : (
-          (icon ?? text)
-        )}
-      </Button>
+      {user && profile ? (
+        <div className="h-10" onClick={onOpen}>
+          <ProfilePicture changePicture={false} openPicture={false} />
+        </div>
+      ) : (
+        <Button
+          isIconOnly={!!icon || profile}
+          variant="light"
+          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
+          onPress={onOpen}
+        >
+          {profile ? (
+            <IoPerson size={25} color="#000" className="mb-[2px]" />
+          ) : (
+            (icon ?? text)
+          )}
+        </Button>
+      )}
 
       {!hidden && (
         <div
