@@ -12,6 +12,7 @@ import { useStore } from '@/store/store';
 import { updateUserService } from '@/services/auth/update-user';
 import InputPassword from '../ui/InputPassword';
 import ProfilePicture from '../ui/ProfilePicture';
+import { useAuthStore } from '@/store/authStore';
 
 const schema = yup
   .object({
@@ -29,7 +30,8 @@ const schema = yup
   .required();
 
 const EditProfileForm = () => {
-  const { user, setUser, loading, setLoading } = useStore((state) => state);
+  const { user, setUser } = useAuthStore((state) => state);
+  const { loading, setLoading } = useStore((state) => state);
 
   const {
     register,

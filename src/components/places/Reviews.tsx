@@ -13,7 +13,7 @@ import { Controller, useForm } from 'react-hook-form';
 import StarsRating from '../ui/StarsRating';
 import { addReviewService } from '@/services/places/add-review';
 import { FormattedReview } from '@/interfaces/formattedReview';
-import { useStore } from '@/store/store';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsReviews {
   reviews: Review[];
@@ -52,7 +52,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
     [],
   );
 
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   const onSubmit = async (data: any) => {
     const newReview = await addReviewService({

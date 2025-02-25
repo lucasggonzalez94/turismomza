@@ -13,7 +13,7 @@ interface IPropsSchedule {
 }
 
 const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
-  const { placeFormDetails: placeFormData } = useStore((state) => state);
+  const { placeFormContact } = useStore((state) => state);
   const [configSchedules, setConfigSchedules] = useState<DayConfig[]>([]);
 
   const toggleSelectedDay = (day: string) => {
@@ -103,10 +103,10 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   }, [configSchedules, onSaveSchedule]);
 
   useEffect(() => {
-    if (placeFormData?.schedule) {
-      setConfigSchedules(placeFormData?.schedule);
+    if (placeFormContact?.schedule) {
+      setConfigSchedules(placeFormContact?.schedule);
     }
-  }, [placeFormData?.schedule]);
+  }, [placeFormContact?.schedule]);
 
   return (
     <div className="w-full">
@@ -132,69 +132,72 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
         ))}
       </div>
 
-      {configSchedules && configSchedules.map(({ day, open24hours, times }) => (
-        <div
-          key={day}
-          className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]"
-        >
-          <h2 className="text-lg font-semibold mb-2">{day}</h2>
-          <Checkbox
-            isSelected={open24hours}
-            onValueChange={() => toggleOpen24Hours(day)}
-            className="mb-2"
+      {configSchedules &&
+        configSchedules.map(({ day, open24hours, times }) => (
+          <div
+            key={day}
+            className="mb-4 p-4 border border-gray-300 rounded-lg bg-[#e9e9e9]"
           >
-            Abierto las 24 horas
-          </Checkbox>
-
-          {!open24hours &&
-            times.map((time, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <Input
-                  type="time"
-                  label="Desde"
-                  placeholder="00:00"
-                  variant="faded"
-                  value={time.from}
-                  onChange={(e) =>
-                    updateTime(day, index, 'from', e.target.value)
-                  }
-                  startContent={<Clock className="text-gray-400" size={16} />}
-                  className="w-32"
-                />
-                <Input
-                  type="time"
-                  label="Hasta"
-                  placeholder="00:00"
-                  variant="faded"
-                  value={time.to}
-                  onChange={(e) => updateTime(day, index, 'to', e.target.value)}
-                  startContent={<Clock className="text-gray-400" size={16} />}
-                  className="w-32"
-                />
-                <Button
-                  className="text-white bg-red-700 hover:bg-red-500"
-                  isIconOnly
-                  onPress={() => deleteTime(day, index)}
-                >
-                  <IoClose size={20} />
-                </Button>
-              </div>
-            ))}
-
-          {!open24hours && (
-            <Button
-              className="bg-black hover:bg-gray-900 text-white mt-2"
-              size="sm"
-              onPress={() => addTime(day)}
-              isDisabled={times.some(
-                (time) => time?.from === '' || time?.to === '',
-              )}
+            <h2 className="text-lg font-semibold mb-2">{day}</h2>
+            <Checkbox
+              isSelected={open24hours}
+              onValueChange={() => toggleOpen24Hours(day)}
+              className="mb-2"
             >
-              Agregar horario
-            </Button>
-          )}
-        </div>
-      ))}
+              Abierto las 24 horas
+            </Checkbox>
+
+            {!open24hours &&
+              times.map((time, index) => (
+                <div key={index} className="flex items-center gap-2 mb-2">
+                  <Input
+                    type="time"
+                    label="Desde"
+                    placeholder="00:00"
+                    variant="faded"
+                    value={time.from}
+                    onChange={(e) =>
+                      updateTime(day, index, 'from', e.target.value)
+                    }
+                    startContent={<Clock className="text-gray-400" size={16} />}
+                    className="w-32"
+                  />
+                  <Input
+                    type="time"
+                    label="Hasta"
+                    placeholder="00:00"
+                    variant="faded"
+                    value={time.to}
+                    onChange={(e) =>
+                      updateTime(day, index, 'to', e.target.value)
+                    }
+                    startContent={<Clock className="text-gray-400" size={16} />}
+                    className="w-32"
+                  />
+                  <Button
+                    className="text-white bg-red-700 hover:bg-red-500"
+                    isIconOnly
+                    onPress={() => deleteTime(day, index)}
+                  >
+                    <IoClose size={20} />
+                  </Button>
+                </div>
+              ))}
+
+            {!open24hours && (
+              <Button
+                className="bg-black hover:bg-gray-900 text-white mt-2"
+                size="sm"
+                onPress={() => addTime(day)}
+                isDisabled={times.some(
+                  (time) => time?.from === '' || time?.to === '',
+                )}
+              >
+                Agregar horario
+              </Button>
+            )}
+          </div>
+        ))}
     </div>
   );
 };

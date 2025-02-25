@@ -3,13 +3,15 @@
 import React, { useEffect, ReactNode, FC } from 'react';
 import { useStore } from '@/store/store';
 import { io } from 'socket.io-client';
+import { useAuthStore } from './authStore';
 
 interface SocketProviderProps {
   children: ReactNode;
 }
 
 const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
-  const { user, setSocket } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const setSocket = useStore((state) => state.setSocket);
 
   useEffect(() => {
     if (user) {

@@ -46,7 +46,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
       <div className="flex gap-6 justify-start items-center mb-4">
         <div className="relative group w-[8%] aspect-square object-center rounded-full overflow-hidden cursor-pointer">
           <Image
-            src={user?.profilePicture || '/images/default-image.webp'}
+            src={user?.profilePicture?.url || '/images/default-image.webp'}
             alt="Foto de perfil"
             width={200}
             height={200}

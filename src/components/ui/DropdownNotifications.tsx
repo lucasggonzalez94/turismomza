@@ -8,6 +8,7 @@ import { INotification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useStore } from '@/store/store';
 import NotificationItem from './NotificationItem';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsDropdownNotifications {
   isOpen: boolean;
@@ -26,7 +27,8 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [count, setCount] = useState<number | null>(null);
 
-  const { user, socket } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const socket = useStore((state) => state.socket);
 
   const countUnreadNotifications = (
     notifications: INotification[],

@@ -12,10 +12,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUserService } from '@/services/auth/delete';
 import Link from 'next/link';
 import ProfilePicture from '../ui/ProfilePicture';
+import { useAuthStore } from '@/store/authStore';
 
 const ProfileData = () => {
   const { handleNavigation } = useNavigation();
-  const { user, loading, setLoading } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const { loading, setLoading } = useStore((state) => state);
 
   const notifyError = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {

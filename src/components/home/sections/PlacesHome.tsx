@@ -10,7 +10,7 @@ import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
 import useWindowSize from '@/hooks/useWindowSize';
 import CardSkeleton from '@/components/skeletons/CardSkeleton';
-import { useStore } from '@/store/store';
+import { useAuthStore } from '@/store/authStore';
 
 const PlacesHome = () => {
   const [places, setPlaces] = useState<IPlace[]>([]);
@@ -19,7 +19,7 @@ const PlacesHome = () => {
   const [loading, setLoading] = useState(true);
 
   const { width } = useWindowSize();
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   const getPlaces = async () => {
     try {

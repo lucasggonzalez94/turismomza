@@ -12,6 +12,7 @@ import { ROLS } from '@/utils/constants';
 import { logout } from '@/services/auth/logout';
 import { useStore } from '@/store/store';
 import useNavigation from '@/hooks/useNavigation';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsDropdownProfile {
   user: IUser | null;
@@ -39,7 +40,8 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   const { handleNavigation } = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
-  const { setUser, setBackPath } = useStore((state) => state);
+  const setUser = useAuthStore((state) => state.setUser);
+  const setBackPath = useStore((state) => state.setBackPath);
 
   const notify = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {

@@ -6,9 +6,11 @@ import NotificationItem from './NotificationItem';
 import { useStore } from '@/store/store';
 import { INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
+import { useAuthStore } from '@/store/authStore';
 
 const NotificationsList = () => {
-  const { user, socket } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const socket = useStore((state) => state.socket);
 
   const [errorService, setErrorService] = useState(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);

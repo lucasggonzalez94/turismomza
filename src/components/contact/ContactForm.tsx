@@ -6,9 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStore } from '@/store/store';
 import { Button, Input, Textarea } from '@nextui-org/react';
 import { sendMail } from '@/services/contact/sendMail';
+import { useAuthStore } from '@/store/authStore';
 
 const schema = yup
   .object({
@@ -26,7 +26,7 @@ const schema = yup
   .required();
 
 const ContactForm = () => {
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
   const {
     register,
     handleSubmit,

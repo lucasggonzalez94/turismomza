@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import Spinner from '../ui/Spinner/Spinner';
 import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
 import { DayConfig } from '@/interfaces/schedule';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsPlacePageClient {
   slug: string;
@@ -41,7 +42,8 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
 
-  const { user, loading, setLoading } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const { loading, setLoading } = useStore((state) => state);
   const router = useRouter();
 
   const {

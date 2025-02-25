@@ -14,6 +14,7 @@ import { Button } from '@nextui-org/react';
 import { IoPerson } from 'react-icons/io5';
 import { useStore } from '@/store/store';
 import ProfilePicture from './ProfilePicture';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsDropdownButton {
   icon?: ReactElement;
@@ -38,7 +39,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   onOpen,
   onClose,
 }) => {
-  const { user } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
   const [positionValue, setPositionValue] = useState('translate-x-[90%]');
   const [hidden, setHidden] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);

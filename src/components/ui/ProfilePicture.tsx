@@ -10,6 +10,7 @@ import { updateUserService } from '@/services/auth/update-user';
 import SliderCarousel from './SliderCarousel/SliderCarousel';
 import CustomModal from './CustomModal';
 import ImageUploader from './ImageUploader';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsProfilePicture {
   changePicture?: boolean;
@@ -20,7 +21,8 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
   changePicture = true,
   openPicture = true,
 }) => {
-  const { user, setUser, loading, setLoading } = useStore((state) => state);
+  const { user, setUser } = useAuthStore((state) => state);
+  const { loading, setLoading } = useStore((state) => state);
 
   const [openProfilePicture, setOpenProfilePicture] = useState(false);
   const [openUploadProfilePicture, setOpenUploadProfilePicture] =

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
-import useAuth from '@/hooks/useAuth';
 import { useStore } from '@/store/store';
 import { usePathname } from 'next/navigation';
 import DropdownSearch from './DropdownSearch';
@@ -12,10 +11,11 @@ import AnimatedLink from './AnimatedLink';
 import DropdownNotifications from './DropdownNotifications';
 import DropdownProfile from './DropdownProfile';
 import InputSearch from './InputSearch';
+import { useAuthStore } from '@/store/authStore';
 
 const Topbar = () => {
-  const verified = useAuth();
-  const { user, setBackPath } = useStore((state) => state);
+  const { user, isAuthenticated } = useAuthStore((state) => state);
+  const { setBackPath } = useStore((state) => state);
   const pathname = usePathname();
 
   const [black, setBlack] = useState(false);
@@ -99,7 +99,7 @@ const Topbar = () => {
               as={Link}
               color="secondary"
               className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-              href={verified ? '/places/create' : '/auth/login'}
+              href={isAuthenticated ? '/places/create' : '/auth/login'}
               onPress={() => setBackPath(pathname)}
             >
               Publicar
@@ -110,7 +110,7 @@ const Topbar = () => {
           >
             ES
           </Button> */}
-            {verified && (
+            {isAuthenticated && (
               <DropdownNotifications
                 isOpen={openDropdownIndex === 1}
                 setIsOpen={setOpenDropdownIndex}

@@ -12,9 +12,11 @@ import { useStore } from '@/store/store';
 import { IUser } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
+import { useAuthStore } from '@/store/authStore';
 
 const PlacesWithFilters = () => {
-  const { setPrices, user, filters } = useStore((state) => state);
+  const user = useAuthStore((state) => state.user);
+  const { setPrices, filters } = useStore((state) => state);
   const { width } = useWindowSize();
 
   const [places, setPlaces] = useState<IPlace[]>([]);

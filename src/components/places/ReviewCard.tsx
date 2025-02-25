@@ -17,13 +17,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import { formatDate } from '../../utils/helpers';
 import { FormattedReview } from '@/interfaces/formattedReview';
 import { likeDislikeReviewService } from '@/services/places/like-dislike-review';
-import { useStore } from '@/store/store';
 import { deleteReviewService } from '@/services/places/delete-review';
 import CustomModal from '../ui/CustomModal';
 import { Controller, useForm } from 'react-hook-form';
 import StarsRating from '../ui/StarsRating';
 import { editReviewService } from '@/services/places/edit-review';
 import ModalReport from './ModalReport';
+import { useAuthStore } from '@/store/authStore';
 
 interface IPropsReviewCard {
   review: FormattedReview;
@@ -64,7 +64,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
     },
   });
 
-  const user = useStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   const [hideOptionsByUser, setHideOptionsByUser] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);

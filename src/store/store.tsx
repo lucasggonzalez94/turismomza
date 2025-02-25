@@ -10,8 +10,6 @@ interface Price {
 }
 
 interface State {
-  user: IUser | null;
-  setUser: (user: IUser | null) => void;
   filters: Filters | null;
   setFilters: (filters: Filters | null) => void;
   prices: Price;
@@ -33,8 +31,6 @@ interface State {
 }
 
 export const useStore = create<State>((set) => ({
-  user: null,
-  setUser: (user) => set(() => ({ user: user })),
   filters: null,
   setFilters: (filters) => set(() => ({ filters })),
   prices: {
