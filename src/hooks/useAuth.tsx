@@ -1,6 +1,6 @@
 'use client';
 
-import { verifyToken } from '@/services/auth/verifyToken';
+import { verifySession } from '@/services/auth/verifySession';
 import { useStore } from '@/store/store';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +12,7 @@ const useAuth = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await verifyToken();
+        const user = await verifySession();
         setUser(user);
         setVerified(true);
       } catch {

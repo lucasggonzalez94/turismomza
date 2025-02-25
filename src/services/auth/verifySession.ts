@@ -1,6 +1,6 @@
 import axiosInstance from '@/config/axiosInstance';
 
-export const verifyToken = async () => {
+export const verifySession = async () => {
   try {
     const response = await axiosInstance.get('/auth/verify-session', {
       withCredentials: true,
@@ -10,9 +10,7 @@ export const verifyToken = async () => {
     }
 
     throw new Error('Verify failed');
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error during verify:', error);
+  } catch {
     throw new Error('Verify failed');
   }
 };
