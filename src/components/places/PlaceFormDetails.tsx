@@ -213,6 +213,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="flex flex-col gap-4 w-full">
           <Input
+            isRequired
             type="text"
             label="Nombre"
             labelPlacement="outside"
@@ -223,6 +224,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             {...register('name')}
           />
           <Textarea
+            isRequired
             label="Descripción"
             className="w-full"
             labelPlacement="outside"
@@ -237,6 +239,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select
+                isRequired
                 label="Categoría"
                 labelPlacement="outside"
                 placeholder="¿Qué categoría describe mejor este lugar?"
@@ -263,6 +266,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select
+                isRequired
                 label="Servicios"
                 labelPlacement="outside"
                 placeholder="¿Qué servicios ofrece este lugar?"
@@ -288,6 +292,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             )}
           />
           <Input
+            isRequired
             type="text"
             label="Dirección"
             labelPlacement="outside"
