@@ -5,7 +5,6 @@ import './fonts.css';
 
 import { NextUIProvider } from '@nextui-org/react';
 import Providers from '@/store/Providers';
-import AuthChecker from '@/components/auth/AuthChecker';
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +23,6 @@ export default function RootLayout({
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
       <body className={`${rootFont.className} antialiased bg-gray-300`}>
         <Providers>
-          <AuthChecker />
           <NextUIProvider>{children}</NextUIProvider>
         </Providers>
       </body>

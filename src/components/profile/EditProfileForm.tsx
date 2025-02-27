@@ -118,12 +118,14 @@ const EditProfileForm = () => {
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center flex-grow gap-3 px-4 pb-8">
-        <h1 className="w-1/2 font-bold text-xl">Editar usuario</h1>
+        <h1 className="w-1/2 font-bold text-xl text-center xl:text-left">
+          Editar usuario
+        </h1>
         <div className="w-full h-40 flex justify-center items-center mb-4">
           <ProfilePicture />
         </div>
 
-        <div className="w-1/2 flex gap-3 justify-center items-center">
+        <div className="w-full xl:w-1/2 flex gap-3 justify-center items-center">
           <form
             id="updateUser"
             className="w-full flex flex-col gap-4 justify-center items-end bg-white shadow-lg rounded-lg p-5"

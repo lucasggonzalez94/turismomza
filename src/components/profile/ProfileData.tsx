@@ -40,7 +40,7 @@ const ProfileData = () => {
   return (
     <>
       <div className="flex flex-col flex-grow gap-3 px-4 pb-8">
-        <div className="h-40 flex gap-6 justify-start items-center mb-4">
+        <div className="flex gap-6 justify-start items-center mb-4">
           <ProfilePicture />
           <div className="flex flex-col">
             <h3 className="font-bold">{user?.name}</h3>
@@ -65,8 +65,8 @@ const ProfileData = () => {
           </Button>
         </div>
 
-        <div className="w-full flex gap-3 justify-between items-stretch">
-          <div className="w-1/2 flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
+        <div className="w-full flex flex-col lg:flex-row gap-3 justify-between items-stretch">
+          <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
             <div className="w-full flex flex-col gap-2">
               <h4 className="text-sm font-bold">Bio</h4>
               <p className="text-sm">
@@ -100,7 +100,7 @@ const ProfileData = () => {
             </div>
           </div>
 
-          <div className="w-1/2 flex flex-col gap-4 justify-start items-start bg-white shadow-lg rounded-lg p-5">
+          <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-start bg-white shadow-lg rounded-lg p-5">
             <div className="w-full flex flex-col gap-2">
               <h4 className="text-sm font-bold">Idiomas</h4>
               <p className="text-sm">
@@ -138,7 +138,7 @@ const ProfileData = () => {
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end items-center">
+        <div className="flex gap-3 items-center">
           {/* <Button color="primary">Guardar</Button> */}
           <Button
             className="bg-red-800 text-white"

@@ -67,7 +67,7 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
 
   return (
     <>
-      <div className="relative group h-full max-w-80 aspect-square object-center rounded-full overflow-hidden cursor-pointer">
+      <div className="relative group h-full max-h-44 aspect-square object-center rounded-full overflow-hidden cursor-pointer">
         <Image
           src={user?.profilePicture?.url || '/images/default-image.webp'}
           alt="Foto de perfil"

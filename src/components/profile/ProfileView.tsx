@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/store';
 import Spinner from '../ui/Spinner/Spinner';
 import { formatDate, mapLanguages } from '@/utils/helpers';
+import ProfilePicture from '../ui/ProfilePicture';
+import Link from 'next/link';
 
 interface IPropsProfileView {
   userId: string;
@@ -44,22 +46,18 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
   return (
     <div className="flex flex-col flex-grow gap-3 px-4 pb-8">
       <div className="flex gap-6 justify-start items-center mb-4">
-        <div className="relative group w-[8%] aspect-square object-center rounded-full overflow-hidden cursor-pointer">
-          <Image
-            src={user?.profilePicture?.url || '/images/default-image.webp'}
-            alt="Foto de perfil"
-            width={200}
-            height={200}
-            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-80"
-          />
-          <div className="absolute inset-0 flex items-end justify-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </div>
+        <ProfilePicture />
         <div className="flex flex-col">
           <h3 className="font-bold">{user?.name}</h3>
           <span className="text-tiny text-gray-600">
             Fecha de registro: {formatDate(user?.createdAt)}
           </span>
-          <span className="text-tiny underline">{user?.email}</span>
+          <Link
+            href={`mailto:${user?.email}`}
+            className="text-tiny text-trinidad-600 hover:underline"
+          >
+            {user?.email}
+          </Link>
         </div>
       </div>
 
@@ -81,9 +79,20 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
           <Divider className="my-2" />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Sitio web</h4>
-            <p className="text-sm">
-              {user?.website || 'No existe un sitio web para este usuario'}
-            </p>
+            {user?.website ? (
+              <Link
+                href={user?.website}
+                className="text-sm text-trinidad-600 hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {user?.website}
+              </Link>
+            ) : (
+              <p className="text-sm">
+                No existe un sitio web para este usuario
+              </p>
+            )}
           </div>
           <Divider className="my-2" />
           <div className="w-full flex flex-col gap-2">
