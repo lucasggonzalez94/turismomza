@@ -6,22 +6,24 @@ import { IoEye, IoEyeOffOutline } from 'react-icons/io5';
 
 interface IPropsInputPassword {
   value: string;
+  label?: string;
+  placeholder?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   name: string;
   required?: boolean;
 }
 
 const InputPassword = forwardRef<HTMLInputElement, IPropsInputPassword>(
-  ({ value, onChange, name, required }, ref) => {
+  ({ value, label, placeholder, onChange, name, required }, ref) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     return (
       <Input
-        label="Contraseña"
+        label={label || 'Contraseña'}
         labelPlacement="outside"
-        placeholder="Ingresa tu contraseña"
+        placeholder={placeholder || 'Ingresa tu contraseña'}
         variant="faded"
         endContent={
           <button

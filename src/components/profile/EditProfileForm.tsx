@@ -81,7 +81,7 @@ const EditProfileForm = () => {
 
       if (data.languages && data.languages.length > 0) {
         data.languages.forEach((lang: string) => {
-          formData.append('languages[]', lang);
+          formData.append('language[]', lang);
         });
       }
 

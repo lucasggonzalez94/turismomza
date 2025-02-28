@@ -6,13 +6,15 @@ interface State {
   user: IUser | null;
   setUser: (user: IUser | null) => void;
   isAuthenticated: boolean;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
   checkAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<State>((set) => ({
   user: null,
-  setUser: (user) => set(() => ({ user: user })),
+  setUser: (user) => set(() => ({ user })),
   isAuthenticated: false,
+  setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
   checkAuth: async () => {
     try {
       const res = await verifySession();

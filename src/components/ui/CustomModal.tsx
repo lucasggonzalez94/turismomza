@@ -17,6 +17,7 @@ interface IPropsCustomModal {
   onAction?: () => void;
   disableAction?: boolean;
   loadingAction?: boolean;
+  idForm?: string;
 }
 
 const CustomModal: FC<IPropsCustomModal> = ({
@@ -28,6 +29,7 @@ const CustomModal: FC<IPropsCustomModal> = ({
   onAction,
   disableAction,
   loadingAction,
+  idForm,
 }) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -46,6 +48,8 @@ const CustomModal: FC<IPropsCustomModal> = ({
                   onPress={onAction}
                   isDisabled={disableAction}
                   isLoading={loadingAction}
+                  form={idForm}
+                  type={idForm ? 'submit' : 'button'}
                 >
                   {textButton}
                 </Button>

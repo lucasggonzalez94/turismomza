@@ -36,6 +36,7 @@ const LoginForm = () => {
     control,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
   });
 

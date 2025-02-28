@@ -1,6 +1,7 @@
 import Topbar from '@/components/ui/Topbar';
 import Footer from '@/components/ui/Footer';
 import NavBar from '@/components/ui/NavBar';
+import NavigationTracker from '@/components/NavigationTracker';
 
 export default function HomeLayout({
   children,
@@ -13,6 +14,7 @@ export default function HomeLayout({
       {children}
       <NavBar />
       <Footer />
+      <NavigationTracker />
     </main>
   );
 }

@@ -57,6 +57,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
     register,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
       rating: review?.rating,

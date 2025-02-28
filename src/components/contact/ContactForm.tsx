@@ -32,6 +32,7 @@ const ContactForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
       name: user?.name || '',

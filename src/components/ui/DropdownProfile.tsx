@@ -40,7 +40,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   const { handleNavigation } = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
-  const setUser = useAuthStore((state) => state.setUser);
+  const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
   const setBackPath = useStore((state) => state.setBackPath);
 
   const notify = (message?: string) =>
@@ -53,8 +53,9 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
 
   const handleLogout = async () => {
     try {
-      await logout();
       setUser(null);
+      setIsAuthenticated(false);
+      await logout();
 
       handleNavigation('/auth/login');
     } catch {

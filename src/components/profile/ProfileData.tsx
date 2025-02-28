@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import useNavigation from '@/hooks/useNavigation';
 import { useStore } from '@/store/store';
 import { Button, Divider } from '@nextui-org/react';
@@ -13,14 +13,51 @@ import { deleteUserService } from '@/services/auth/delete';
 import Link from 'next/link';
 import ProfilePicture from '../ui/ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
+import CustomModal from '../ui/CustomModal';
+import { Controller, useForm } from 'react-hook-form';
+import InputPassword from '../ui/InputPassword';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { updateUserService } from '@/services/auth/update-user';
+
+const schema = yup
+  .object({
+    password: yup
+      .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.',
+      )
+      .required('El campo es obligatorio.'),
+    currentPassword: yup.string().required('El campo es obligatorio.'),
+  })
+  .required();
 
 const ProfileData = () => {
+  const { handleSubmit, control } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+    defaultValues: {
+      password: '',
+      currentPassword: '',
+    },
+  });
+
   const { handleNavigation } = useNavigation();
   const user = useAuthStore((state) => state.user);
   const { loading, setLoading } = useStore((state) => state);
 
+  const [openPasswordChange, setOpenPasswordChange] = useState(false);
+  const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
+
   const notifyError = (message?: string) =>
     toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
+      position: 'bottom-right',
+      theme: 'dark',
+    });
+
+  const notifySuccess = (message: string) =>
+    toast.success(message, {
       position: 'bottom-right',
       theme: 'dark',
     });
@@ -34,6 +71,24 @@ const ProfileData = () => {
       notifyError();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordChange = async (data: any) => {
+    try {
+      setLoadingPasswordChange(true);
+
+      const formData = new FormData();
+      formData.append('password', data.password);
+      formData.append('currentPassword', data.currentPassword);
+
+      await updateUserService(formData);
+
+      notifySuccess('Contraseña actualizada correctamente.');
+    } catch {
+      notifyError('Error al actualizar la contraseña.');
+    } finally {
+      setLoadingPasswordChange(false);
     }
   };
 
@@ -110,6 +165,16 @@ const ProfileData = () => {
             </div>
             <Divider className="my-2" />
             {/* TODO: Integrar cambio de password */}
+            <div className="w-full h-full flex gap-3 items-end justify-end">
+              <Button
+                size="sm"
+                color="primary"
+                variant="light"
+                onPress={() => setOpenPasswordChange(true)}
+              >
+                Cambiar contraseña
+              </Button>
+            </div>
             {/* TODO: Integrar 2FA */}
             {/* <div className="w-full h-full flex gap-3 items-end justify-end">
               <span className="text-sm">
@@ -150,6 +215,46 @@ const ProfileData = () => {
           </Button>
         </div>
       </div>
+      <CustomModal
+        title="Cambiar contraseña"
+        isOpen={openPasswordChange}
+        onOpenChange={setOpenPasswordChange}
+        textButton="Guardar"
+        onAction={() => handleSubmit(handlePasswordChange)}
+        idForm="updatePassword"
+        loadingAction={loadingPasswordChange}
+      >
+        <form
+          id="updatePassword"
+          onSubmit={handleSubmit(handlePasswordChange)}
+          className="flex flex-col gap-8"
+        >
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputPassword
+                label="Nueva contraseña"
+                placeholder="Ingresa la nueva contraseña"
+                required
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="currentPassword"
+            control={control}
+            render={({ field }) => (
+              <InputPassword
+                label="Contraseña actual"
+                placeholder="Ingresa tu contraseña actual"
+                required
+                {...field}
+              />
+            )}
+          />
+        </form>
+      </CustomModal>
       <ToastContainer autoClose={10000} />
     </>
   );

@@ -39,6 +39,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
     register,
     formState: { errors },
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
       rating: 0,

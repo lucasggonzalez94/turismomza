@@ -63,6 +63,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     getValues,
     reset,
   } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',

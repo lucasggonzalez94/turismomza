@@ -37,6 +37,7 @@ const FiltersForm = () => {
   const searchQuery = searchParams.get('search');
 
   const { register, handleSubmit, control, setValue, reset } = useForm({
+    mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
       priceRange: [prices?.minPrice, prices?.maxPrice],

@@ -21,6 +21,7 @@ const ModalReport: FC<IPropsModalReport> = ({
   onOpenChange,
 }) => {
   const { handleSubmit, reset, register } = useForm<ReportFormData>({
+    mode: 'onChange',
     defaultValues: {
       reason: '',
     },
