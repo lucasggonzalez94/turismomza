@@ -1,5 +1,6 @@
 'use client';
 
+import { FC, useEffect, useState } from 'react';
 import {
   Button,
   Dropdown,
@@ -10,7 +11,6 @@ import {
 } from '@nextui-org/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FC, useEffect, useState } from 'react';
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi';
 import { IoEllipsisHorizontal, IoPerson, IoStar } from 'react-icons/io5';
 import { toast } from 'sonner';
@@ -72,6 +72,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   const [openEditReview, setOpenEditReview] = useState(false);
   const [openReportReview, setOpenReportReview] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(false);
 
   const handleLike = async (reviewId: string) => {
     try {
@@ -83,32 +84,40 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   };
 
   const handleEdit = async (data: any) => {
-    const editedReview = await editReviewService(review?.id, {
-      ...data,
-      placeId,
-    });
+    setLoadingEdit(true);
+    try {
+      const editedReview = await editReviewService(review?.id, {
+        ...data,
+        placeId,
+      });
 
-    const pushEditedReview = reviews?.map((review) => {
-      if (review?.id === editedReview?.id) {
-        return {
-          id: editedReview?.id,
-          user: {
-            id: editedReview?.user?.id,
-            name: editedReview.user.name,
-          },
-          dateAdded: editedReview.creationDate.toString(),
-          content: editedReview.content,
-          rating: editedReview.rating,
-          likes: editedReview.likes,
-        };
-      }
-      return review;
-    });
+      const pushEditedReview = reviews?.map((review) => {
+        if (review?.id === editedReview?.id) {
+          return {
+            id: editedReview?.id,
+            user: {
+              id: editedReview?.user?.id,
+              name: editedReview.user.name,
+            },
+            dateAdded: editedReview.creationDate.toString(),
+            content: editedReview.content,
+            rating: editedReview.rating,
+            likes: editedReview.likes,
+          };
+        }
+        return review;
+      });
 
-    setReviews(pushEditedReview);
+      setReviews(pushEditedReview);
 
-    reset();
-    setOpenEditReview(false);
+      reset();
+      toast.success('¡Tu opinión fue editada con éxito!');
+      setOpenEditReview(false);
+    } catch {
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+    } finally {
+      setLoadingEdit(false);
+    }
   };
 
   const handleDelete = async (reviewId: string) => {
@@ -186,7 +195,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
               <DropdownMenu aria-label="Actions review">
                 <DropdownItem
                   key="report"
-                  onClick={() => setOpenReportReview(true)}
+                  onPress={() => setOpenReportReview(true)}
                 >
                   Reportar
                 </DropdownItem>
@@ -195,19 +204,19 @@ const ReviewCard: FC<IPropsReviewCard> = ({
               <DropdownMenu aria-label="Actions review">
                 <DropdownItem
                   key="edit"
-                  onClick={() => setOpenEditReview(true)}
+                  onPress={() => setOpenEditReview(true)}
                 >
                   Editar
                 </DropdownItem>
                 <DropdownItem
                   key="delete"
-                  onClick={() => setOpenConfirmDelete(true)}
+                  onPress={() => setOpenConfirmDelete(true)}
                 >
                   Eliminar
                 </DropdownItem>
                 <DropdownItem
                   key="report"
-                  onClick={() => setOpenReportReview(true)}
+                  onPress={() => setOpenReportReview(true)}
                 >
                   Reportar
                 </DropdownItem>
@@ -216,6 +225,8 @@ const ReviewCard: FC<IPropsReviewCard> = ({
           </Dropdown>
         </div>
       </div>
+
+      {/* Eliminacion */}
       <CustomModal
         title="¿Estás seguro?"
         isOpen={openConfirmDelete}
@@ -225,12 +236,15 @@ const ReviewCard: FC<IPropsReviewCard> = ({
       >
         <p>Esta acción es irreversible.</p>
       </CustomModal>
+
+      {/* Edicion */}
       <CustomModal
         title="Editar opinión"
         isOpen={openEditReview}
         onOpenChange={setOpenEditReview}
         textButton="Guardar"
         onAction={handleSubmit(handleEdit)}
+        loadingAction={loadingEdit}
       >
         <div className="flex flex-col gap-7 items-center">
           <div className="flex flex-col gap-1 w-full justify-center items-center">

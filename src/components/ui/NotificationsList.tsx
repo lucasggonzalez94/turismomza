@@ -7,6 +7,7 @@ import { useStore } from '@/store/store';
 import { INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useAuthStore } from '@/store/authStore';
+import { Spinner } from '@nextui-org/react';
 
 const NotificationsList = () => {
   const user = useAuthStore((state) => state.user);
@@ -14,6 +15,7 @@ const NotificationsList = () => {
 
   const [errorService, setErrorService] = useState(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getNotifications = async () => {
     try {
@@ -49,7 +51,11 @@ const NotificationsList = () => {
         <h3 className="text-lg font-semibold text-gray-800">Notificaciones</h3>
       </div>
       <div className="overflow-y-auto bg-gray-200">
-        {notifications.length > 0 ? (
+        {loading ? (
+          <div className="p-4 text-center">
+            <Spinner color="default" />
+          </div>
+        ) : notifications.length > 0 ? (
           notifications.map((notification) => (
             <NotificationItem
               key={notification.id}

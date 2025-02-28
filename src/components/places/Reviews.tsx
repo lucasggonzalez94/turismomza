@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Textarea } from '@nextui-org/react';
@@ -52,32 +53,41 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
   const [formattedReviews, setFormattedReviews] = useState<FormattedReview[]>(
     [],
   );
+  const [loading, setLoading] = useState(false);
 
   const user = useAuthStore((state) => state.user);
 
   const onSubmit = async (data: any) => {
-    const newReview = await addReviewService({
-      ...data,
-      placeId,
-    });
+    setLoading(true);
+    try {
+      const newReview = await addReviewService({
+        ...data,
+        placeId,
+      });
 
-    setFormattedReviews((prevReviews) => [
-      ...prevReviews,
-      {
-        id: newReview.id,
-        user: {
-          id: newReview.user.id,
-          name: newReview.user.name,
+      setFormattedReviews((prevReviews) => [
+        ...prevReviews,
+        {
+          id: newReview.id,
+          user: {
+            id: newReview.user.id,
+            name: newReview.user.name,
+          },
+          dateAdded: newReview.creation_date.toString(),
+          content: newReview.content,
+          rating: newReview.rating,
+          likes: newReview.likes,
         },
-        dateAdded: newReview.creation_date.toString(),
-        content: newReview.content,
-        rating: newReview.rating,
-        likes: newReview.likes,
-      },
-    ]);
+      ]);
 
-    reset();
-    setOpenModalAddReview(false);
+      reset();
+      toast.success('Tu opinión fue agregada con éxito.');
+      setOpenModalAddReview(false);
+    } catch {
+      toast.error('Error al agregar la opinión.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -163,6 +173,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
         onOpenChange={setOpenModalAddReview}
         textButton="Opinar"
         onAction={handleSubmit(onSubmit)}
+        loadingAction={loading}
       >
         <div className="flex flex-col gap-7 items-center">
           <div className="flex flex-col gap-1 w-full justify-center items-center">

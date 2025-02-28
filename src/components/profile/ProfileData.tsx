@@ -2,13 +2,12 @@
 
 import React, { useState } from 'react';
 import useNavigation from '@/hooks/useNavigation';
-import { useStore } from '@/store/store';
 import { Button, Divider } from '@nextui-org/react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { RiEditLine } from 'react-icons/ri';
 import { formatDate, mapLanguages } from '@/utils/helpers';
 import { toast } from 'sonner';
-import { deleteUserService } from '@/services/auth/delete';
+import { deleteUserService } from '@/services/auth/delete-user';
 import Link from 'next/link';
 import ProfilePicture from '../ui/ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
@@ -44,20 +43,20 @@ const ProfileData = () => {
 
   const { handleNavigation } = useNavigation();
   const user = useAuthStore((state) => state.user);
-  const { loading, setLoading } = useStore((state) => state);
 
   const [openPasswordChange, setOpenPasswordChange] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
   const handleDelete = async () => {
     try {
-      setLoading(true);
+      setLoadingDelete(true);
       await deleteUserService();
       handleNavigation('/');
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
-      setLoading(false);
+      setLoadingDelete(false);
     }
   };
 
@@ -195,7 +194,7 @@ const ProfileData = () => {
           <Button
             className="bg-red-800 text-white"
             endContent={<IoTrashOutline />}
-            isLoading={loading}
+            isLoading={loadingDelete}
             onPress={handleDelete}
           >
             Eliminar perfil

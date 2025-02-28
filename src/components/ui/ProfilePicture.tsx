@@ -21,12 +21,12 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
   openPicture = true,
 }) => {
   const { user, setUser } = useAuthStore((state) => state);
-  const { loading, setLoading } = useStore((state) => state);
 
   const [openProfilePicture, setOpenProfilePicture] = useState(false);
   const [openUploadProfilePicture, setOpenUploadProfilePicture] =
     useState(false);
   const [profilePicture, setProfilePicture] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleUpdateProfilePicture = async (profilePicture: File) => {
     try {

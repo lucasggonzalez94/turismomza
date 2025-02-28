@@ -13,12 +13,11 @@ import Reviews from './Reviews';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { IPlace } from '@/interfaces/place';
 import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
-import { useStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
-import Spinner from '../ui/Spinner/Spinner';
 import SliderCarousel from '../ui/SliderCarousel/SliderCarousel';
 import { DayConfig } from '@/interfaces/schedule';
 import { useAuthStore } from '@/store/authStore';
+import { useLoadingStore } from '@/store/loadingStore';
 
 interface IPropsPlacePageClient {
   slug: string;
@@ -43,7 +42,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
   const [initialIndex, setInitialIndex] = useState(0);
 
   const user = useAuthStore((state) => state.user);
-  const { loading, setLoading } = useStore((state) => state);
+  const setLoading = useLoadingStore((state) => state.setLoading);
   const router = useRouter();
 
   const {
@@ -75,9 +74,7 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
     } catch {
       router.push('/not-found');
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setLoading(false);
     }
   };
 
@@ -146,10 +143,6 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
       }
     }
   }, [schedule]);
-
-  if (loading) {
-    return <Spinner />;
-  }
 
   return (
     <div className="flex flex-col flex-grow gap-6 px-4 pb-8 relative">

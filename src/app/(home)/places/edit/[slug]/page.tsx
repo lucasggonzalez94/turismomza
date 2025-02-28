@@ -1,9 +1,8 @@
 import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 import PlaceForm from '@/components/places/PlaceForm';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Chevron from '@/components/ui/Chevron';
-import { getUserSession } from '@/utils/auth';
 
 interface IPropsEditPlacePage {
   params: {
@@ -17,12 +16,6 @@ export const metadata: Metadata = {
 };
 
 const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
-  const response = await getUserSession();
-
-  if (!response) {
-    redirect('/auth/login');
-  }
-
   const { slug } = params;
 
   const place = await getPlaceBySlugService(slug);

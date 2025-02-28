@@ -1,6 +1,5 @@
 import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
 import { Filters } from '@/interfaces/filters';
-import { IUser } from '@/interfaces/user';
 import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
@@ -16,8 +15,6 @@ interface State {
   setPrices: (prices: Price) => void;
   lastPath: string;
   setLastPath: (path: string) => void;
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
   placeFormDetails: IPlaceFormDetails | null;
@@ -40,8 +37,6 @@ export const useStore = create<State>((set) => ({
   setPrices: (prices) => set(() => ({ prices })),
   lastPath: '/',
   setLastPath: (path) => set(() => ({ lastPath: path })),
-  loading: false,
-  setLoading: (loading) => set(() => ({ loading })),
   socket: null,
   setSocket: (socket) => set(() => ({ socket })),
   placeFormDetails: null,

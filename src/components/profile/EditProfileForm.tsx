@@ -7,7 +7,6 @@ import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LANGUAGES } from '@/utils/constants';
-import { useStore } from '@/store/store';
 import { updateUserService } from '@/services/auth/update-user';
 import InputPassword from '../ui/InputPassword';
 import ProfilePicture from '../ui/ProfilePicture';
@@ -30,7 +29,6 @@ const schema = yup
 
 const EditProfileForm = () => {
   const { user, setUser } = useAuthStore((state) => state);
-  const { loading, setLoading } = useStore((state) => state);
 
   const {
     register,
@@ -54,6 +52,7 @@ const EditProfileForm = () => {
   const [selectedLanguageKeys, setSelectedLanguageKeys] = useState<Set<string>>(
     new Set([]),
   );
+  const [loading, setLoading] = useState(false);
 
   const handleSave = async (data: any) => {
     try {

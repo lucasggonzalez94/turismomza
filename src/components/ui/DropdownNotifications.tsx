@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from 'react';
 import DropdownButton from './DropdownButton';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import { Badge } from '@nextui-org/react';
+import { Badge, Spinner } from '@nextui-org/react';
 import { INotification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useStore } from '@/store/store';
@@ -26,6 +26,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   const [errorService, setErrorService] = useState(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [count, setCount] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const user = useAuthStore((state) => state.user);
   const socket = useStore((state) => state.socket);
@@ -41,11 +42,14 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
 
   const getNotifications = async () => {
     try {
+      setLoading(true);
       const response = await listNotificationsService();
       setCount(countUnreadNotifications(response));
       setNotifications(response);
     } catch {
       setErrorService(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +92,11 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
           </h3>
         </div>
         <div className="overflow-y-auto bg-gray-200">
-          {notifications.length > 0 ? (
+          {loading ? (
+            <div className="p-4 text-center">
+              <Spinner color="default" />
+            </div>
+          ) : notifications.length > 0 ? (
             notifications.map((notification) => (
               <NotificationItem
                 key={notification.id}

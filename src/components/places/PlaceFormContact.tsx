@@ -1,9 +1,8 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Input } from '@nextui-org/react';
-import 'react-toastify/dist/ReactToastify.css';
 import Schedule from '../ui/Schedule';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/store';
@@ -66,13 +65,9 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   defaultValues,
 }) => {
   const { handleNavigation } = useNavigation();
-  const {
-    placeFormDetails,
-    setPlaceFormContact,
-    setErrorFeedback,
-    loading,
-    setLoading,
-  } = useStore((state) => state);
+  const { placeFormDetails, setPlaceFormContact, setErrorFeedback } = useStore(
+    (state) => state,
+  );
   const {
     register,
     handleSubmit,
@@ -93,6 +88,8 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     },
   });
   const pathname = usePathname();
+
+  const [loading, setLoading] = useState(false);
 
   const handleFinish = async (data: any) => {
     const formData = new FormData();

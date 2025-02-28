@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 import CustomModal from '../ui/CustomModal';
 import { Textarea } from '@nextui-org/react';
@@ -26,14 +26,18 @@ const ModalReport: FC<IPropsModalReport> = ({
       reason: '',
     },
   });
+  const [loading, setLoading] = useState(false);
 
   const handleReport = async (data: ReportFormData) => {
     try {
+      setLoading(true);
       await reportReviewService(reviewId, data?.reason);
       reset();
       onOpenChange(false);
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,6 +49,7 @@ const ModalReport: FC<IPropsModalReport> = ({
         onOpenChange={onOpenChange}
         textButton="Enviar"
         onAction={handleSubmit(handleReport)}
+        loadingAction={loading}
       >
         <div className="flex flex-col gap-7 items-center">
           <Textarea

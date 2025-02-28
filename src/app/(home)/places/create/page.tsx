@@ -1,20 +1,12 @@
 import PlaceForm from '@/components/places/PlaceForm';
 import Chevron from '@/components/ui/Chevron';
-import { getUserSession } from '@/utils/auth';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Publicar',
 };
 
-export default async function CreatePlacePage() {
-  const response = await getUserSession();
-
-  if (!response) {
-    redirect('/auth/login');
-  }
-
+export default function CreatePlacePage() {
   return (
     <>
       <Chevron />

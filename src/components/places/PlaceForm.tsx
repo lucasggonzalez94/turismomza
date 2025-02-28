@@ -14,6 +14,7 @@ import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
 import Spinner from '../ui/Spinner/Spinner';
 import { usePathname } from 'next/navigation';
+import { useLoadingStore } from '@/store/loadingStore';
 
 type PlaceFormWithCustomImages = Omit<
   IPlaceFormDetails & IPlaceFormContact,
@@ -34,9 +35,8 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     placeFormContact,
     setPlaceFormDetails,
     setPlaceFormContact,
-    loading,
-    setLoading,
   } = useStore((state) => state);
+  const { loading, setLoading } = useLoadingStore((state) => state);
   const { width } = useWindowSize();
   const pathname = usePathname();
 

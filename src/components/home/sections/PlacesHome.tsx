@@ -11,12 +11,13 @@ import { getPlacesService } from '@/services/places/get-places';
 import useWindowSize from '@/hooks/useWindowSize';
 import CardSkeleton from '@/components/skeletons/CardSkeleton';
 import { useAuthStore } from '@/store/authStore';
+import { useLoadingStore } from '@/store/loadingStore';
 
 const PlacesHome = () => {
   const [places, setPlaces] = useState<IPlace[]>([]);
   const [pageSize, setPageSize] = useState(10);
   const [errorService, setErrorService] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { loading, setLoading } = useLoadingStore((state) => state);
 
   const { width } = useWindowSize();
   const user = useAuthStore((state) => state.user);

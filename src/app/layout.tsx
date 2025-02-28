@@ -6,6 +6,7 @@ import './fonts.css';
 
 import { NextUIProvider } from '@nextui-org/react';
 import Providers from '@/store/Providers';
+import Spinner from '@/components/ui/Spinner/Spinner';
 
 export const metadata: Metadata = {
   title: {
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={`${rootFont.className} antialiased bg-gray-300`}>
         <Providers>
           <NextUIProvider>
+            <Spinner />
             {children}
             <Toaster />
           </NextUIProvider>

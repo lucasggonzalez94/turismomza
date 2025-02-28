@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { Divider } from '@nextui-org/react';
 import { getUserByIdService } from '@/services/auth/get-user-by-id';
 import { IUser } from '@/interfaces/user';
 import { useRouter } from 'next/navigation';
-import { useStore } from '@/store/store';
-import Spinner from '../ui/Spinner/Spinner';
 import { formatDate, mapLanguages } from '@/utils/helpers';
 import ProfilePicture from '../ui/ProfilePicture';
 import Link from 'next/link';
+import { useLoadingStore } from '@/store/loadingStore';
 
 interface IPropsProfileView {
   userId: string;
@@ -18,7 +16,7 @@ interface IPropsProfileView {
 
 const ProfileView = ({ userId }: IPropsProfileView) => {
   const router = useRouter();
-  const { loading, setLoading } = useStore((state) => state);
+  const { setLoading } = useLoadingStore((state) => state);
 
   const [user, setUser] = useState<IUser | null>(null);
 
@@ -38,10 +36,6 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
     getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
-
-  if (loading) {
-    return <Spinner />;
-  }
 
   return (
     <div className="flex flex-col flex-grow gap-3 px-4 pb-8">

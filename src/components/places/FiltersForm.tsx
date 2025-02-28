@@ -47,7 +47,7 @@ const FiltersForm = () => {
 
   const [maxPrice, setMaxPrice] = useState(prices?.maxPrice);
 
-  const handleFilter = async (data: any) => {
+  const handleFilter = (data: any) => {
     const { priceRange, ...restData } = data;
     const filteredData = {
       ...restData,
