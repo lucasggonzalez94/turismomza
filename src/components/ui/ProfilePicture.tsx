@@ -2,8 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import Image from 'next/image';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { IoCamera } from 'react-icons/io5';
 import { useStore } from '@/store/store';
 import { updateUserService } from '@/services/auth/update-user';
@@ -29,18 +28,6 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
     useState(false);
   const [profilePicture, setProfilePicture] = useState<File[]>([]);
 
-  const notifyError = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
-  const notifySuccess = (message: string) =>
-    toast.success(message, {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleUpdateProfilePicture = async (profilePicture: File) => {
     try {
       setLoading(true);
@@ -57,9 +44,9 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
       }
       setProfilePicture([]);
       setOpenUploadProfilePicture(false);
-      notifySuccess('Foto de perfil actualizada correctamente');
+      toast.success('Foto de perfil actualizada correctamente');
     } catch {
-      notifyError();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
       setLoading(false);
     }
@@ -92,7 +79,6 @@ const ProfilePicture: FC<IPropsProfilePicture> = ({
           )}
         </div>
       </div>
-      <ToastContainer autoClose={10000} />
       {user?.profilePicture && openProfilePicture && (
         <SliderCarousel
           images={[user?.profilePicture?.url]}

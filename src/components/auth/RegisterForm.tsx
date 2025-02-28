@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import InputPassword from '../ui/InputPassword';
 import { FcGoogle } from 'react-icons/fc';
 import { register as registerService } from '@/services/auth/register';
@@ -47,12 +46,6 @@ const RegisterForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const notify = () =>
-    toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleRegister = async (data: any) => {
     try {
       setLoading(true);
@@ -64,7 +57,7 @@ const RegisterForm = () => {
       await registerService(registerBody);
       handleNavigation('/');
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
       setLoading(false);
     }
@@ -147,7 +140,6 @@ const RegisterForm = () => {
           Regístrate con Google
         </Button>
       </div>
-      <ToastContainer autoClose={10000} />
     </form>
   );
 };

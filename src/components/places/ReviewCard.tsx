@@ -13,7 +13,7 @@ import * as yup from 'yup';
 import { FC, useEffect, useState } from 'react';
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi';
 import { IoEllipsisHorizontal, IoPerson, IoStar } from 'react-icons/io5';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { formatDate } from '../../utils/helpers';
 import { FormattedReview } from '@/interfaces/formattedReview';
 import { likeDislikeReviewService } from '@/services/places/like-dislike-review';
@@ -73,18 +73,12 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   const [openReportReview, setOpenReportReview] = useState(false);
   const [liked, setLiked] = useState(false);
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleLike = async (reviewId: string) => {
     try {
       await likeDislikeReviewService(reviewId);
       setLiked((prev) => !prev);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -124,7 +118,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
       setReviews(newReviews);
       setOpenConfirmDelete(false);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -270,7 +264,6 @@ const ReviewCard: FC<IPropsReviewCard> = ({
         isOpen={openReportReview}
         onOpenChange={setOpenReportReview}
       />
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

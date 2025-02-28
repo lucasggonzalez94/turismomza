@@ -1,15 +1,14 @@
 'use client';
 
-import { Button, Input, Link } from '@nextui-org/react';
 import React, { useState } from 'react';
-import InputPassword from '../ui/InputPassword';
-import { FcGoogle } from 'react-icons/fc';
-import { login } from '@/services/auth/login';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Button, Input, Link } from '@nextui-org/react';
+import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { FcGoogle } from 'react-icons/fc';
+import InputPassword from '../ui/InputPassword';
+import { login } from '@/services/auth/login';
 import { useStore } from '@/store/store';
 import useNavigation from '@/hooks/useNavigation';
 
@@ -42,12 +41,6 @@ const LoginForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleLogin = async (data: any) => {
     try {
       setLoading(true);
@@ -55,9 +48,9 @@ const LoginForm = () => {
       handleNavigation(lastPath);
     } catch (error: any) {
       if (error.status === 401) {
-        notify('Las credenciales no son válidas.');
+        toast.error('Las credenciales no son válidas.');
       } else {
-        notify();
+        toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
       }
     } finally {
       setLoading(false);
@@ -117,7 +110,6 @@ const LoginForm = () => {
           Ingresar con Google
         </Button>
       </div>
-      <ToastContainer autoClose={10000} />
     </form>
   );
 };

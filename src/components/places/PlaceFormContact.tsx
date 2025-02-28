@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
+import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Input } from '@nextui-org/react';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Schedule from '../ui/Schedule';
 import { usePathname } from 'next/navigation';
@@ -94,12 +94,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   });
   const pathname = usePathname();
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'top-left',
-      theme: 'dark',
-    });
-
   const handleFinish = async (data: any) => {
     const formData = new FormData();
 
@@ -159,7 +153,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         });
         handleNavigation('/error');
       } else {
-        notify();
+        toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
       }
     } finally {
       setLoading(false);
@@ -297,7 +291,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
           Guardar y finalizar
         </Button>
       </form>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

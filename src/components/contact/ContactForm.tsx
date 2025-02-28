@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { Button, Input, Textarea } from '@nextui-org/react';
 import { sendMail } from '@/services/contact/sendMail';
 import { useAuthStore } from '@/store/authStore';
@@ -44,24 +43,13 @@ const ContactForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const notifySuccess = (message?: string) =>
-    toast.success(message ?? 'El email se envió correctamente.', {
-      position: 'top-left',
-      theme: 'dark',
-    });
-  const notifyError = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'top-left',
-      theme: 'dark',
-    });
-
   const sendEmail = async (data: any) => {
     try {
       setLoading(true);
       await sendMail(data);
-      notifySuccess();
+      toast.success('El email se envió correctamente.');
     } catch {
-      notifyError();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
       setLoading(false);
     }
@@ -131,7 +119,6 @@ const ContactForm = () => {
           </Button>
         </div>
       </form>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

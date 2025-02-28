@@ -10,7 +10,7 @@ import {
 
 interface IPropsCustomModal {
   title: string;
-  children: ReactNode;
+  children?: ReactNode;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   textButton: string;
@@ -18,6 +18,17 @@ interface IPropsCustomModal {
   disableAction?: boolean;
   loadingAction?: boolean;
   idForm?: string;
+  size?:
+    | 'xs'
+    | 'sm'
+    | 'md'
+    | 'lg'
+    | 'xl'
+    | '2xl'
+    | '3xl'
+    | '4xl'
+    | '5xl'
+    | 'full';
 }
 
 const CustomModal: FC<IPropsCustomModal> = ({
@@ -30,9 +41,10 @@ const CustomModal: FC<IPropsCustomModal> = ({
   disableAction,
   loadingAction,
   idForm,
+  size = 'md',
 }) => {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} size={size} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>

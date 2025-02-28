@@ -1,8 +1,7 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { Button } from '@nextui-org/react';
 import {
   IoAt,
@@ -12,6 +11,7 @@ import {
   IoHeartOutline,
   IoLogoInstagram,
   IoShareSocialOutline,
+  IoTrashOutline,
 } from 'react-icons/io5';
 import { AiOutlineFacebook } from 'react-icons/ai';
 import { usePathname, useRouter } from 'next/navigation';
@@ -20,6 +20,7 @@ import { addFavoriteService } from '@/services/places/add-favorite';
 import { IUser } from '@/interfaces/user';
 import CustomModal from '../ui/CustomModal';
 import Link from 'next/link';
+import { deletePlaceService } from '@/services/places/delete-place';
 
 interface Contact {
   contactNumber?: string | null;
@@ -47,16 +48,12 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
 }) => {
   const [favorite, setFavorite] = useState(false);
   const [openModalContact, setOpenModalContact] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
   const setLastPath = useStore((state) => state.setLastPath);
-
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
 
   const handleFavorite = async () => {
     if (!user) {
@@ -70,7 +67,21 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
         setFavorite((prev) => !prev);
       }
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (placeId) {
+        setLoadingDelete(true);
+        await deletePlaceService(placeId);
+        router.push('/places');
+      }
+    } catch {
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+    } finally {
+      setLoadingDelete(false);
     }
   };
 
@@ -100,11 +111,6 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
         <Button color="default" variant="ghost" isIconOnly onPress={() => {}}>
           <IoShareSocialOutline size={25} />
         </Button>
-        {user?.id === creatorId && (
-          <Button color="primary" onPress={handleEdit}>
-            Editar publicación
-          </Button>
-        )}
         {(contact?.contactNumber ||
           contact?.email ||
           contact?.website ||
@@ -114,8 +120,23 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
             Contacto
           </Button>
         )}
+        {user?.id === creatorId && (
+          <Button color="primary" variant="ghost" onPress={handleEdit}>
+            Editar publicación
+          </Button>
+        )}
+        {user?.id === creatorId && (
+          <Button
+            color="danger"
+            variant="ghost"
+            isIconOnly
+            onPress={() => setOpenModalDelete(true)}
+          >
+            <IoTrashOutline size={20} />
+          </Button>
+        )}
       </div>
-      <ToastContainer autoClose={10000} />
+      {/* Contacto */}
       <CustomModal
         title="Medios de contacto"
         isOpen={openModalContact}
@@ -186,6 +207,16 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           )}
         </div>
       </CustomModal>
+
+      {/* Eliminacion */}
+      <CustomModal
+        title="¿Estás seguro que deseas eliminar esta publicación?"
+        isOpen={openModalDelete}
+        onOpenChange={setOpenModalDelete}
+        textButton="Estoy seguro"
+        onAction={handleDelete}
+        loadingAction={loadingDelete}
+      />
     </>
   );
 };

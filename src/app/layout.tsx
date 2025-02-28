@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 import { rootFont } from '../config/fonts';
 import './globals.css';
 import './fonts.css';
@@ -23,7 +24,10 @@ export default function RootLayout({
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
       <body className={`${rootFont.className} antialiased bg-gray-300`}>
         <Providers>
-          <NextUIProvider>{children}</NextUIProvider>
+          <NextUIProvider>
+            {children}
+            <Toaster />
+          </NextUIProvider>
         </Providers>
       </body>
     </html>

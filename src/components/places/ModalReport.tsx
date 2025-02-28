@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import CustomModal from '../ui/CustomModal';
 import { Textarea } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
@@ -27,19 +27,13 @@ const ModalReport: FC<IPropsModalReport> = ({
     },
   });
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleReport = async (data: ReportFormData) => {
     try {
       await reportReviewService(reviewId, data?.reason);
       reset();
       onOpenChange(false);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -62,7 +56,6 @@ const ModalReport: FC<IPropsModalReport> = ({
           />
         </div>
       </CustomModal>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

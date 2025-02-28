@@ -8,7 +8,7 @@ import { calculateAverageRating, formatPrice } from '@/utils/helpers';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
 import { IUser } from '@/interfaces/user';
 import useNavigation from '@/hooks/useNavigation';
@@ -39,12 +39,6 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
   const pathname = usePathname();
   const { setLastPath, setBackPath } = useStore((state) => state);
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const [favorite, setFavorite] = useState(false);
 
   const handleFavorite = async (e: React.MouseEvent) => {
@@ -58,7 +52,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
       await addFavoriteService(id);
       setFavorite((prev) => !prev);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -158,7 +152,6 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
           </div>
         </div>
       </div>
-      <ToastContainer autoClose={10000} />
     </div>
   );
 };

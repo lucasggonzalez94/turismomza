@@ -2,8 +2,7 @@
 
 import { INotification as INotification } from '@/interfaces/notification';
 import { markAsReadService } from '@/services/notifications/mark-as-read';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { formatDate } from '@/utils/helpers';
 import { Tooltip } from '@nextui-org/react';
 import { FC, useEffect, useState } from 'react';
@@ -30,12 +29,6 @@ const NotificationItem: FC<IPropsNotification> = ({
 }) => {
   const [readed, setReaded] = useState(false);
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const markAsRead = async (notificationId: string) => {
     try {
       await markAsReadService(notificationId);
@@ -51,7 +44,7 @@ const NotificationItem: FC<IPropsNotification> = ({
       setNotifications(newNotifications);
       setReaded((prev) => !prev);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -70,7 +63,7 @@ const NotificationItem: FC<IPropsNotification> = ({
       setNotifications(newNotifications);
       setReaded((prev) => !prev);
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -127,7 +120,6 @@ const NotificationItem: FC<IPropsNotification> = ({
           )}
         </div>
       </div>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

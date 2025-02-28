@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LANGUAGES } from '@/utils/constants';
 import { useStore } from '@/store/store';
@@ -56,18 +55,6 @@ const EditProfileForm = () => {
     new Set([]),
   );
 
-  const notifyError = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
-  const notifySuccess = (message: string) =>
-    toast.success(message, {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleSave = async (data: any) => {
     try {
       setLoading(true);
@@ -93,9 +80,9 @@ const EditProfileForm = () => {
         });
       }
 
-      notifySuccess('Usuario actualizado correctamente');
+      toast.success('Usuario actualizado correctamente');
     } catch {
-      notifyError();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
       setLoading(false);
     }
@@ -218,7 +205,6 @@ const EditProfileForm = () => {
           </form>
         </div>
       </div>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

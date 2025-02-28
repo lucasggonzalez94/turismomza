@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { IoLogOutOutline } from 'react-icons/io5';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import DropdownButton from './DropdownButton';
 import { IUser } from '@/interfaces/user';
 import { ROLS } from '@/utils/constants';
@@ -43,12 +43,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
   const setBackPath = useStore((state) => state.setBackPath);
 
-  const notify = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
 
   const handleLogout = async () => {
@@ -59,7 +53,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
 
       handleNavigation('/auth/login');
     } catch {
-      notify();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
   };
 
@@ -244,7 +238,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
           </div>
         </div>
       </DropdownButton>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };

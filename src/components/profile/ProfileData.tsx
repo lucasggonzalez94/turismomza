@@ -7,8 +7,7 @@ import { Button, Divider } from '@nextui-org/react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { RiEditLine } from 'react-icons/ri';
 import { formatDate, mapLanguages } from '@/utils/helpers';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 import { deleteUserService } from '@/services/auth/delete';
 import Link from 'next/link';
 import ProfilePicture from '../ui/ProfilePicture';
@@ -50,25 +49,13 @@ const ProfileData = () => {
   const [openPasswordChange, setOpenPasswordChange] = useState(false);
   const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
-  const notifyError = (message?: string) =>
-    toast.error(message ?? '¡Algo salio mal! Vuelve a intentarlo más tarde', {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
-  const notifySuccess = (message: string) =>
-    toast.success(message, {
-      position: 'bottom-right',
-      theme: 'dark',
-    });
-
   const handleDelete = async () => {
     try {
       setLoading(true);
       await deleteUserService();
       handleNavigation('/');
     } catch {
-      notifyError();
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
       setLoading(false);
     }
@@ -84,9 +71,9 @@ const ProfileData = () => {
 
       await updateUserService(formData);
 
-      notifySuccess('Contraseña actualizada correctamente.');
+      toast.success('Contraseña actualizada correctamente.');
     } catch {
-      notifyError('Error al actualizar la contraseña.');
+      toast.error('Error al actualizar la contraseña.');
     } finally {
       setLoadingPasswordChange(false);
     }
@@ -255,7 +242,6 @@ const ProfileData = () => {
           />
         </form>
       </CustomModal>
-      <ToastContainer autoClose={10000} />
     </>
   );
 };
