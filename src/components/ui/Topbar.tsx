@@ -12,6 +12,8 @@ import DropdownProfile from './DropdownProfile';
 import InputSearch from './InputSearch';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigationStore } from '@/store/navigationStore';
+import { IoMenuOutline, IoNotificationsOutline } from 'react-icons/io5';
+import Sidedrawer from './Sidedrawer';
 
 const Topbar = () => {
   const { user, isAuthenticated } = useAuthStore((state) => state);
@@ -21,10 +23,10 @@ const Topbar = () => {
   const [black, setBlack] = useState(false);
   const [hideSearchInput, setHideSearchInput] = useState(false);
   const [hideSearchDropdown, setHideSearchDropdown] = useState(false);
-
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(
     null,
   );
+  const [openSidedrawer, setOpenSidedrawer] = useState(false);
 
   const handleOpenDropdown = (index: number | null) => {
     setOpenDropdownIndex((prev) => (prev === index ? null : index));
@@ -57,7 +59,7 @@ const Topbar = () => {
   return (
     <div className="z-20">
       <div
-        className={`flex justify-center md:grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full ${black ? 'relative bg-black' : 'absolute'}`}
+        className={`flex justify-between md:grid grid-cols-11 grid-rows-1 gap-1 items-center px-6 h-24 w-full ${black ? 'relative bg-black' : 'absolute'}`}
       >
         <div className="col-span-5 flex">
           <Link href="/">
@@ -67,7 +69,7 @@ const Topbar = () => {
               width={250}
               height={100}
               priority
-              className="h-14 object-contain md:object-left"
+              className="h-14 object-contain object-left"
             ></Image>
           </Link>
         </div>
@@ -100,7 +102,6 @@ const Topbar = () => {
               color="secondary"
               className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
               href={isAuthenticated ? '/places/create' : '/auth/login'}
-              onPress={() => setBackPath(pathname)}
             >
               Publicar
             </Button>
@@ -127,12 +128,44 @@ const Topbar = () => {
             />
           </nav>
         </div>
+
+        <div className="block xl:hidden col-span-5">
+          <div className="flex justify-end items-center gap-4">
+            {isAuthenticated && (
+              <Button
+                as={Link}
+                isIconOnly
+                variant="light"
+                href="/notifications"
+              >
+                <IoNotificationsOutline size={25} color="#fff" />
+              </Button>
+            )}
+            <Button
+              color="secondary"
+              isIconOnly
+              className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
+              onClick={() => setOpenSidedrawer(true)}
+            >
+              <IoMenuOutline size={20} />
+            </Button>
+          </div>
+        </div>
       </div>
       {!hideSearchInput && (
         <div className="sm:flex justify-center align-center absolute w-full top-24 p-4 md:hidden">
           <InputSearch />
         </div>
       )}
+      <div>
+        <Sidedrawer
+          isOpen={openSidedrawer}
+          setIsOpen={setOpenSidedrawer}
+          title="Filtros"
+        >
+          Menu
+        </Sidedrawer>
+      </div>
     </div>
   );
 };
