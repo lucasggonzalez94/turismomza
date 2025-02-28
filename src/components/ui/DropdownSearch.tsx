@@ -38,29 +38,27 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
       onOpen={onOpen}
       onClose={onClose}
     >
-      <div className="flex items-center bg-gray-800/60 rounded-md p-4 shadow-md">
-        <Input
-          ref={inputRef}
-          isClearable
-          radius="md"
-          classNames={{
-            input: ['text-black/90', 'placeholder:text-default-700/50'],
-            inputWrapper: ['shadow-xl', 'bg-default-200'],
-          }}
-          placeholder="Buscar..."
-          startContent={
-            <IoSearch className="text-gray-700 pointer-events-none flex-shrink-0" />
+      <Input
+        ref={inputRef}
+        isClearable
+        radius="md"
+        classNames={{
+          input: ['text-black/90', 'placeholder:text-default-700/50'],
+          inputWrapper: ['shadow-xl', 'bg-default-200'],
+        }}
+        placeholder="Buscar..."
+        startContent={
+          <IoSearch className="text-gray-700 pointer-events-none flex-shrink-0" />
+        }
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        onKeyDown={({ key }) => {
+          if (key === 'Enter') {
+            setBackPath(pathname);
+            router.push(`/places?search=${searchValue}`);
           }
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onKeyDown={({ key }) => {
-            if (key === 'Enter') {
-              setBackPath(pathname);
-              router.push(`/places?search=${searchValue}`);
-            }
-          }}
-        />
-      </div>
+        }}
+      />
     </DropdownButton>
   );
 };
