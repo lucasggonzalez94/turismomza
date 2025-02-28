@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Button, Checkbox, Input } from '@nextui-org/react';
 import { IoClose } from 'react-icons/io5';
 import { WEEKDAYS } from '@/utils/constants';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { Clock } from 'lucide-react';
 import { DayConfig } from '@/interfaces/schedule';
 
@@ -13,7 +13,7 @@ interface IPropsSchedule {
 }
 
 const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
-  const { placeFormContact } = useStore((state) => state);
+  const { placeFormContact } = usePlaceStore((state) => state);
   const [configSchedules, setConfigSchedules] = useState<DayConfig[]>([]);
 
   const toggleSelectedDay = (day: string) => {

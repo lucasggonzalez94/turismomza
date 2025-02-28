@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from 'react';
 import { IPlace } from '@/interfaces/place';
 import { addFavoriteService } from '@/services/places/add-favorite';
-import { useStore } from '@/store/store';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
@@ -12,6 +11,7 @@ import { toast } from 'sonner';
 import { IoHeart, IoHeartOutline, IoStar } from 'react-icons/io5';
 import { IUser } from '@/interfaces/user';
 import useNavigation from '@/hooks/useNavigation';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface IPropsPlaceCard {
   user: IUser | null;
@@ -37,7 +37,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
 
   const { handleNavigation } = useNavigation();
   const pathname = usePathname();
-  const { setLastPath, setBackPath } = useStore((state) => state);
+  const { setLastPath, setBackPath } = useNavigationStore((state) => state);
 
   const [favorite, setFavorite] = useState(false);
 

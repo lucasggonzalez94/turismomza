@@ -15,12 +15,12 @@ import {
 } from 'react-icons/io5';
 import { AiOutlineFacebook } from 'react-icons/ai';
 import { usePathname, useRouter } from 'next/navigation';
-import { useStore } from '@/store/store';
 import { addFavoriteService } from '@/services/places/add-favorite';
 import { IUser } from '@/interfaces/user';
 import CustomModal from '../ui/CustomModal';
 import Link from 'next/link';
 import { deletePlaceService } from '@/services/places/delete-place';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface Contact {
   contactNumber?: string | null;
@@ -53,7 +53,7 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
 
   const pathname = usePathname();
   const router = useRouter();
-  const setLastPath = useStore((state) => state.setLastPath);
+  const setLastPath = useNavigationStore((state) => state.setLastPath);
 
   const handleFavorite = async () => {
     if (!user) {

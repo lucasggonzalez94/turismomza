@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { Button, Input } from '@nextui-org/react';
 import Schedule from '../ui/Schedule';
 import { usePathname } from 'next/navigation';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { useForm } from 'react-hook-form';
 import { createPlaceService } from '@/services/places/create-place';
 import { DayConfig } from '@/interfaces/schedule';
@@ -13,6 +13,7 @@ import { editPlaceService } from '@/services/places/edit-place';
 import { ErrorFeedback } from '@/interfaces/errorFeedback';
 import useNavigation from '@/hooks/useNavigation';
 import { IPlaceFormContact } from '@/interfaces/place-form';
+import { useFeedbackStore } from '@/store/feedbackStore';
 
 interface IPropsPlaceFormContact {
   isEditing?: boolean;
@@ -65,9 +66,10 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   defaultValues,
 }) => {
   const { handleNavigation } = useNavigation();
-  const { placeFormDetails, setPlaceFormContact, setErrorFeedback } = useStore(
+  const { placeFormDetails, setPlaceFormContact } = usePlaceStore(
     (state) => state,
   );
+  const setErrorFeedback = useFeedbackStore((state) => state.setErrorFeedback);
   const {
     register,
     handleSubmit,

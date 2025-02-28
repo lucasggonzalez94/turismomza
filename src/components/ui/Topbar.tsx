@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
-import { useStore } from '@/store/store';
 import { usePathname } from 'next/navigation';
 import DropdownSearch from './DropdownSearch';
 import AnimatedLink from './AnimatedLink';
@@ -12,10 +11,11 @@ import DropdownNotifications from './DropdownNotifications';
 import DropdownProfile from './DropdownProfile';
 import InputSearch from './InputSearch';
 import { useAuthStore } from '@/store/authStore';
+import { useNavigationStore } from '@/store/navigationStore';
 
 const Topbar = () => {
   const { user, isAuthenticated } = useAuthStore((state) => state);
-  const { setBackPath } = useStore((state) => state);
+  const { setBackPath } = useNavigationStore((state) => state);
   const pathname = usePathname();
 
   const [black, setBlack] = useState(false);

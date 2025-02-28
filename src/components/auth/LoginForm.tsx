@@ -9,8 +9,8 @@ import * as yup from 'yup';
 import { FcGoogle } from 'react-icons/fc';
 import InputPassword from '../ui/InputPassword';
 import { login } from '@/services/auth/login';
-import { useStore } from '@/store/store';
 import useNavigation from '@/hooks/useNavigation';
+import { useNavigationStore } from '@/store/navigationStore';
 
 const schema = yup
   .object({
@@ -27,7 +27,7 @@ const schema = yup
 
 const LoginForm = () => {
   const { handleNavigation } = useNavigation();
-  const lastPath = useStore((state) => state.lastPath);
+  const lastPath = useNavigationStore((state) => state.lastPath);
 
   const {
     register,

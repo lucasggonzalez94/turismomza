@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { useStore } from '@/store/store';
+import { useNavigationStore } from '@/store/navigationStore';
 
 const NavigationTracker = () => {
   const pathname = usePathname();
-  const setLastPath = useStore((state) => state.setLastPath);
+  const setLastPath = useNavigationStore((state) => state.setLastPath);
 
   useEffect(() => {
     if (!pathname.startsWith('/auth')) {

@@ -11,7 +11,7 @@ import * as yup from 'yup';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { IPlaceFormDetails } from '@/interfaces/place-form';
 // import { Address, LatLng } from '@/interfaces/address';
 
@@ -53,7 +53,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSelectedTab,
   defaultValues,
 }) => {
-  const { setPlaceFormDetails } = useStore((state) => state);
+  const { setPlaceFormDetails } = usePlaceStore((state) => state);
 
   const {
     register,

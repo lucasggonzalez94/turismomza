@@ -12,7 +12,7 @@ import {
 
 import { Button } from '@nextui-org/react';
 import { IoPerson } from 'react-icons/io5';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import ProfilePicture from './ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
 

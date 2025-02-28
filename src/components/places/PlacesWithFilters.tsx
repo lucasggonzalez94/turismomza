@@ -8,7 +8,7 @@ import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
 import { Button, Pagination } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { IUser } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
@@ -16,7 +16,7 @@ import { useAuthStore } from '@/store/authStore';
 
 const PlacesWithFilters = () => {
   const user = useAuthStore((state) => state.user);
-  const { setPrices, filters } = useStore((state) => state);
+  const { setPrices, filters } = usePlaceStore((state) => state);
   const { width } = useWindowSize();
 
   const [places, setPlaces] = useState<IPlace[]>([]);

@@ -5,7 +5,7 @@ import { IoSearch } from 'react-icons/io5';
 import DropdownButton from './DropdownButton';
 import { FC, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useStore } from '@/store/store';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface IPropsDropdownSearch {
   isOpen: boolean;
@@ -21,7 +21,7 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
-  const { setBackPath } = useStore((state) => state);
+  const { setBackPath } = useNavigationStore((state) => state);
 
   const [searchValue, setSearchValue] = useState('');
 

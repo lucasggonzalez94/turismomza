@@ -1,12 +1,12 @@
 'use client';
 
-import { useStore } from '@/store/store';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useNavigationStore } from '@/store/navigationStore';
 
 const Footer = () => {
-  const { setBackPath } = useStore((state) => state);
+  const { setBackPath } = useNavigationStore((state) => state);
   const pathname = usePathname();
 
   const links = [

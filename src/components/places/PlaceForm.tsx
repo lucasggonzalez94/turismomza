@@ -9,7 +9,7 @@ import PlaceFormDetails from './PlaceFormDetails';
 import PlaceFormContact from './PlaceFormContact';
 import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
 import { IImage } from '@/interfaces/place';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
 import Spinner from '../ui/Spinner/Spinner';
@@ -35,7 +35,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     placeFormContact,
     setPlaceFormDetails,
     setPlaceFormContact,
-  } = useStore((state) => state);
+  } = usePlaceStore((state) => state);
   const { loading, setLoading } = useLoadingStore((state) => state);
   const { width } = useWindowSize();
   const pathname = usePathname();

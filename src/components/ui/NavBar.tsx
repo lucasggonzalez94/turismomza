@@ -8,11 +8,11 @@ import { IoCalendarClear, IoHeart } from 'react-icons/io5';
 import { MdPlace } from 'react-icons/md';
 import useNavigation from '@/hooks/useNavigation';
 import { INotification } from '@/interfaces/notification';
-import { useStore } from '@/store/store';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { FaCircleUser } from 'react-icons/fa6';
 import ProfilePicture from './ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 
 interface NavItem {
   id: number;
@@ -24,7 +24,7 @@ interface NavItem {
 const Navigation: FC = () => {
   const { handleNavigation } = useNavigation();
   const pathname = usePathname();
-  const { socket } = useStore((state) => state);
+  const { socket } = useSocketStore((state) => state);
   const { user, isAuthenticated } = useAuthStore((state) => state);
 
   const [navItems, setNavItems] = useState<NavItem[]>([

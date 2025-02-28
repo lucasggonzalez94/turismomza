@@ -15,7 +15,7 @@ import {
 } from '@nextui-org/react';
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
-import { useStore } from '@/store/store';
+import { usePlaceStore } from '@/store/placeStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CATEGORIES } from '@/utils/constants';
 
@@ -29,7 +29,7 @@ const schema = yup
   .required();
 
 const FiltersForm = () => {
-  const { prices, setFilters } = useStore((state) => state);
+  const { prices, setFilters } = usePlaceStore((state) => state);
   const [priceRangeValue, setPriceRangeValue] = useState([0, 0]);
   const searchParams = useSearchParams();
   const router = useRouter();

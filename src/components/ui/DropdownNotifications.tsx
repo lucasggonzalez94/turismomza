@@ -6,9 +6,9 @@ import { IoNotificationsOutline } from 'react-icons/io5';
 import { Badge, Spinner } from '@nextui-org/react';
 import { INotification as INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
-import { useStore } from '@/store/store';
 import NotificationItem from './NotificationItem';
 import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 
 interface IPropsDropdownNotifications {
   isOpen: boolean;
@@ -29,7 +29,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
   const [loading, setLoading] = useState(false);
 
   const user = useAuthStore((state) => state.user);
-  const socket = useStore((state) => state.socket);
+  const socket = useSocketStore((state) => state.socket);
 
   const countUnreadNotifications = (
     notifications: INotification[],

@@ -10,9 +10,9 @@ import DropdownButton from './DropdownButton';
 import { IUser } from '@/interfaces/user';
 import { ROLS } from '@/utils/constants';
 import { logout } from '@/services/auth/logout';
-import { useStore } from '@/store/store';
 import useNavigation from '@/hooks/useNavigation';
 import { useAuthStore } from '@/store/authStore';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface IPropsDropdownProfile {
   user: IUser | null;
@@ -41,7 +41,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   const router = useRouter();
   const pathname = usePathname();
   const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
-  const setBackPath = useStore((state) => state.setBackPath);
+  const setBackPath = useNavigationStore((state) => state.setBackPath);
 
   const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
 

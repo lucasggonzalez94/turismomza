@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from 'react';
 
 import NotificationItem from './NotificationItem';
-import { useStore } from '@/store/store';
 import { INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useAuthStore } from '@/store/authStore';
 import { Spinner } from '@nextui-org/react';
+import { useSocketStore } from '@/store/socketStore';
 
 const NotificationsList = () => {
   const user = useAuthStore((state) => state.user);
-  const socket = useStore((state) => state.socket);
+  const socket = useSocketStore((state) => state.socket);
 
   const [errorService, setErrorService] = useState(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);
@@ -19,10 +19,14 @@ const NotificationsList = () => {
 
   const getNotifications = async () => {
     try {
+      setLoading(true);
+      setErrorService(false);
       const response = await listNotificationsService();
       setNotifications(response);
     } catch {
       setErrorService(true);
+    } finally {
+      setLoading(false);
     }
   };
 

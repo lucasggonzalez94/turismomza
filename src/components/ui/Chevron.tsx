@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from '@/store/store';
+import { useNavigationStore } from '@/store/navigationStore';
 import Link from 'next/link';
 import React, { FC } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
@@ -10,7 +10,7 @@ interface IChevron {
 }
 
 const Chevron: FC<IChevron> = ({ path }) => {
-  const { backPath } = useStore((state) => state);
+  const { backPath } = useNavigationStore((state) => state);
 
   return (
     <Link

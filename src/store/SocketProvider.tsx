@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, ReactNode, FC } from 'react';
-import { useStore } from '@/store/store';
 import { io } from 'socket.io-client';
 import { useAuthStore } from './authStore';
+import { useSocketStore } from './socketStore';
 
 interface SocketProviderProps {
   children: ReactNode;
@@ -11,7 +11,7 @@ interface SocketProviderProps {
 
 const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
   const user = useAuthStore((state) => state.user);
-  const setSocket = useStore((state) => state.setSocket);
+  const setSocket = useSocketStore((state) => state.setSocket);
 
   useEffect(() => {
     if (user) {
@@ -31,6 +31,7 @@ const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         newSocket.disconnect();
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return <>{children}</>;
