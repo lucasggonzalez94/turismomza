@@ -11,13 +11,12 @@ import { getPlacesService } from '@/services/places/get-places';
 import useWindowSize from '@/hooks/useWindowSize';
 import CardSkeleton from '@/components/skeletons/CardSkeleton';
 import { useAuthStore } from '@/store/authStore';
-import { useLoadingStore } from '@/store/loadingStore';
 
 const PlacesHome = () => {
   const [places, setPlaces] = useState<IPlace[]>([]);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(8);
   const [errorService, setErrorService] = useState(false);
-  const { loading, setLoading } = useLoadingStore((state) => state);
+  const [loading, setLoading] = useState(false);
 
   const { width } = useWindowSize();
   const user = useAuthStore((state) => state.user);
@@ -39,9 +38,9 @@ const PlacesHome = () => {
 
   useEffect(() => {
     if (width > 1280) {
-      setPageSize(10);
-    } else if (width > 1024) {
       setPageSize(8);
+    } else if (width > 1024) {
+      setPageSize(6);
     } else {
       setPageSize(6);
     }
@@ -52,14 +51,7 @@ const PlacesHome = () => {
       getPlaces();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageSize]);
-
-  useEffect(() => {
-    if (user) {
-      getPlaces();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [pageSize, user]);
 
   return (
     <div id="places" className="flex flex-col gap-4 h-auto p-8 md:p-12">

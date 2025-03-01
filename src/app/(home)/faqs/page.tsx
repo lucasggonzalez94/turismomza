@@ -1,3 +1,4 @@
+import ContactForm from '@/components/contact/ContactForm';
 import AccordionCustom from '@/components/ui/AccordionCustom';
 import { Metadata } from 'next';
 
@@ -116,6 +117,7 @@ export default function FAQsPage() {
     <div className="flex flex-col flex-grow gap-6 p-8 md:p-12">
       <h2 className="font-bold text-xl">Preguntas frecuentes (FAQs)</h2>
       <AccordionCustom items={FAQs} />
+      <ContactForm />
     </div>
   );
 }

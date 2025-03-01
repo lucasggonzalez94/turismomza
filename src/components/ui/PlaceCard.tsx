@@ -68,7 +68,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
         setBackPath(pathname);
       }}
     >
-      <div className="relative">
+      <div className="relative object-cover w-full h-full">
         {advertisements?.length ? (
           <div className="absolute left-2 top-2 flex items-center gap-1 bg-yellow-500 rounded-sm p-1">
             <IoStar size={12} className="mb-[2px]" />

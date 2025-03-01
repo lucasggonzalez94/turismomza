@@ -94,44 +94,45 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   const [loading, setLoading] = useState(false);
 
   const handleFinish = async (data: any) => {
-    const formData = new FormData();
-
-    formData.append('title', placeFormDetails?.name || '');
-    formData.append('description', placeFormDetails?.description || '');
-    formData.append('category', placeFormDetails?.category || '');
-    formData.append('services', JSON.stringify(placeFormDetails?.services));
-    formData.append('location', placeFormDetails?.address || '');
-    if (placeFormDetails?.price) {
-      formData.append('price', placeFormDetails?.price.toString());
-      formData.append('currencyPrice', placeFormDetails?.currency || 'ars');
-    }
-    if (placeFormDetails?.images) {
-      placeFormDetails?.images.forEach((image) => {
-        formData.append('images', image);
-      });
-    }
-
-    formData.append(
-      'contactNumber',
-      data.phonenumber ? `+54${data.phonenumber}` : '',
-    );
-    formData.append('email', data.email);
-    formData.append('website', data.website);
-    formData.append('instagram', data.instagram);
-    formData.append('facebook', data.facebook);
-    formData.append(
-      'schedule',
-      JSON.stringify(
-        (data.schedule as DayConfig[])?.filter(
-          ({ open24hours, times }) =>
-            open24hours ||
-            times.some(({ from, to }) => from !== '' && to !== ''),
-        ),
-      ),
-    );
-
     try {
       setLoading(true);
+      const formData = new FormData();
+
+      formData.append('title', placeFormDetails?.name || '');
+      formData.append('description', placeFormDetails?.description || '');
+      formData.append('category', placeFormDetails?.category || '');
+      formData.append('services', JSON.stringify(placeFormDetails?.services));
+      formData.append('location', placeFormDetails?.address || '');
+      if (placeFormDetails?.price) {
+        formData.append('price', placeFormDetails?.price.toString());
+        formData.append('currencyPrice', placeFormDetails?.currency || 'ars');
+      }
+      if (placeFormDetails?.images) {
+        placeFormDetails?.images.forEach((image) => {
+          formData.append('images', image);
+        });
+      }
+
+      formData.append(
+        'contactNumber',
+        data.phonenumber ? `+54${data.phonenumber}` : '',
+      );
+      formData.append('email', data.email);
+      formData.append('website', data.website);
+      formData.append('instagram', data.instagram);
+      formData.append('facebook', data.facebook);
+      formData.append(
+        'schedule',
+        JSON.stringify(
+          (data.schedule as DayConfig[])?.filter(
+            ({ open24hours, times }) =>
+              open24hours ||
+              times.some(({ from, to }) => from !== '' && to !== ''),
+          ),
+        ),
+      );
+
+      debugger;
       if (isEditing && placeId) {
         const place = await editPlaceService(formData, placeId);
         reset();
@@ -144,6 +145,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         handleNavigation(`/places/${place?.slug}`);
       }
     } catch (error) {
+      debugger;
       const err = error as ErrorFeedback;
       if (err.status === 406) {
         setErrorFeedback({
@@ -286,7 +288,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
             />
           </div>
         </div>
-        <Button isDisabled={loading} type="submit" color="primary">
+        <Button isLoading={loading} type="submit" color="primary">
           Guardar y finalizar
         </Button>
       </form>

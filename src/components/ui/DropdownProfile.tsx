@@ -165,6 +165,14 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             divider: true,
           },
           {
+            id: 'help',
+            text: 'Ayuda',
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
+          },
+          {
             id: 'logout',
             text: 'Cerrar sesión',
             onClick: handleLogout,

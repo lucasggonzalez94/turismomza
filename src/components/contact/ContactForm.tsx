@@ -56,70 +56,59 @@ const ContactForm = () => {
   };
 
   return (
-    <>
+    <div className="flex justify-center mt-20">
       <form
         onSubmit={handleSubmit(sendEmail)}
-        className="w-full flex flex-col gap-7"
+        className="w-full xl:w-[80%] 2xl:w-1/2 flex flex-col gap-4"
       >
-        <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-col gap-1">
-            <Input
-              type="text"
-              label="Nombre"
-              labelPlacement="outside"
-              placeholder="Ingresá tu nombre"
-              variant="faded"
-              {...register('name')}
-            />
-            <span className="text-sm text-red-500">{errors.name?.message}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Input
-              type="text"
-              label="Asunto"
-              labelPlacement="outside"
-              placeholder="Ingresá el asunto"
-              variant="faded"
-              {...register('subject')}
-            />
-            <span className="text-sm text-red-500">
-              {errors.subject?.message}
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Input
-              type="email"
-              label="Email"
-              labelPlacement="outside"
-              placeholder="Ingresá tu email"
-              variant="faded"
-              {...register('email')}
-            />
-            <span className="text-sm text-red-500">
-              {errors.email?.message}
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Textarea
-              label="Mensaje"
-              className="w-full"
-              labelPlacement="outside"
-              placeholder="Ingresá el mensaje"
-              variant="faded"
-              {...register('message')}
-            />
-            <span className="text-sm text-red-500">
-              {errors.message?.message}
-            </span>
-          </div>
-        </div>
-        <div className="flex justify-center lg:justify-end w-full">
+        <h2 className="text-lg font-semibold">Formulario de contacto</h2>
+        <Input
+          type="text"
+          label="Nombre"
+          labelPlacement="outside"
+          placeholder="Ingresá tu nombre"
+          variant="faded"
+          isInvalid={!!errors.name?.message}
+          errorMessage={errors.name?.message}
+          {...register('name')}
+        />
+        <Input
+          type="text"
+          label="Asunto"
+          labelPlacement="outside"
+          placeholder="Ingresá el asunto"
+          variant="faded"
+          isInvalid={!!errors.subject?.message}
+          errorMessage={errors.subject?.message}
+          {...register('subject')}
+        />
+        <Input
+          type="email"
+          label="Email"
+          labelPlacement="outside"
+          placeholder="Ingresá tu email"
+          variant="faded"
+          isInvalid={!!errors.email?.message}
+          errorMessage={errors.email?.message}
+          {...register('email')}
+        />
+        <Textarea
+          label="Mensaje"
+          className="w-full"
+          labelPlacement="outside"
+          placeholder="Ingresá el mensaje"
+          variant="faded"
+          isInvalid={!!errors.message?.message}
+          errorMessage={errors.message?.message}
+          {...register('message')}
+        />
+        <div className="flex justify-end lg:justify-end w-full">
           <Button color="primary" type="submit" isLoading={loading}>
             Enviar
           </Button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

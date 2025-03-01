@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import { X, Upload, Move } from 'lucide-react';
 import Image from 'next/image';
+import { usePlaceStore } from '@/store/placeStore';
 
 interface ImageUploaderProps {
   defaultImages?: File[];
@@ -26,6 +27,9 @@ const ImageUploader = ({
   const [errorImages, setErrorImages] = useState<string | null>(null);
 
   const [parent, images, _setValues] = useDragAndDrop<HTMLDivElement, File>([]);
+  const { placeFormDetails, setPlaceFormDetails } = usePlaceStore(
+    (state) => state,
+  );
 
   const addImages = useCallback(
     (files: File[]) => {
@@ -87,8 +91,10 @@ const ImageUploader = ({
 
   useEffect(() => {
     if (images.length && onImagesChange) {
+      setPlaceFormDetails({ ...placeFormDetails, images });
       onImagesChange(images);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images, onImagesChange]);
 
   useEffect(() => {
