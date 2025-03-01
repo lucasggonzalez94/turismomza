@@ -1,8 +1,8 @@
 'use client';
 
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { IoLogOutOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
@@ -13,6 +13,7 @@ import { logout } from '@/services/auth/logout';
 import useNavigation from '@/hooks/useNavigation';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigationStore } from '@/store/navigationStore';
+import { IPropsMenuOption } from '@/interfaces/menu';
 
 interface IPropsDropdownProfile {
   user: IUser | null;
@@ -20,14 +21,6 @@ interface IPropsDropdownProfile {
   setIsOpen: (isOpen: number | null) => void;
   onOpen: () => void;
   onClose: () => void;
-}
-
-interface IPropsMenuOption {
-  id: string;
-  text: string;
-  icon?: ReactElement;
-  onClick?: () => void;
-  divider?: boolean;
 }
 
 const DropdownProfile: FC<IPropsDropdownProfile> = ({
@@ -38,7 +31,6 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   onClose,
 }) => {
   const { handleNavigation } = useNavigation();
-  const router = useRouter();
   const pathname = usePathname();
   const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
   const setBackPath = useNavigationStore((state) => state.setBackPath);
@@ -184,7 +176,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       setMenuOptions(DEFAULT_OPTIONS);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, user]);
+  }, [user]);
 
   return (
     <>

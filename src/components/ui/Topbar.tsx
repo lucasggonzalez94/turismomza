@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'sonner';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -12,13 +13,25 @@ import DropdownProfile from './DropdownProfile';
 import InputSearch from './InputSearch';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigationStore } from '@/store/navigationStore';
-import { IoMenuOutline, IoNotificationsOutline } from 'react-icons/io5';
+import {
+  IoAddOutline,
+  IoLogOutOutline,
+  IoMenuOutline,
+  IoNotificationsOutline,
+} from 'react-icons/io5';
 import Sidedrawer from './Sidedrawer';
+import { IPropsMenuOption } from '@/interfaces/menu';
+import useNavigation from '@/hooks/useNavigation';
+import { ROLS } from '@/utils/constants';
+import { logout } from '@/services/auth/logout';
 
 const Topbar = () => {
-  const { user, isAuthenticated } = useAuthStore((state) => state);
-  const { setBackPath } = useNavigationStore((state) => state);
+  const { user, setUser, isAuthenticated, setIsAuthenticated } = useAuthStore(
+    (state) => state,
+  );
+  const setBackPath = useNavigationStore((state) => state.setBackPath);
   const pathname = usePathname();
+  const { handleNavigation } = useNavigation();
 
   const [black, setBlack] = useState(false);
   const [hideSearchInput, setHideSearchInput] = useState(false);
@@ -27,6 +40,7 @@ const Topbar = () => {
     null,
   );
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
+  const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
 
   const handleOpenDropdown = (index: number | null) => {
     setOpenDropdownIndex((prev) => (prev === index ? null : index));
@@ -34,6 +48,18 @@ const Topbar = () => {
 
   const handleCloseDropdown = () => {
     setOpenDropdownIndex(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      setUser(null);
+      setIsAuthenticated(false);
+      await logout();
+
+      handleNavigation('/auth/login');
+    } catch {
+      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+    }
   };
 
   useEffect(() => {
@@ -55,6 +81,118 @@ const Topbar = () => {
       setHideSearchDropdown(false);
     }
   }, [pathname]);
+
+  useEffect(() => {
+    const DEFAULT_OPTIONS: IPropsMenuOption[] = [
+      {
+        id: 'login',
+        text: 'Iniciar sesión',
+        onClick: () => handleNavigation('/auth/login'),
+      },
+      {
+        id: 'register',
+        text: 'Registrarse',
+        onClick: () => handleNavigation('/auth/register'),
+        divider: true,
+      },
+      {
+        id: 'help',
+        text: 'Ayuda',
+        onClick: () => {
+          handleNavigation('/faqs');
+          setBackPath(pathname);
+        },
+      },
+    ];
+
+    if (user) {
+      if (user.role === ROLS.viewer) {
+        setMenuOptions([
+          {
+            id: 'help',
+            text: 'Ayuda',
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'logout',
+            text: 'Cerrar sesión',
+            onClick: handleLogout,
+            icon: <IoLogOutOutline size={15} />,
+          },
+        ]);
+      } else if (user.role === ROLS.publisher) {
+        setMenuOptions([
+          {
+            id: 'publications',
+            text: 'Mis publicaciones',
+            onClick: () => {
+              handleNavigation('/profile/publications');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'help',
+            text: 'Ayuda',
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'logout',
+            text: 'Cerrar sesión',
+            onClick: handleLogout,
+            icon: <IoLogOutOutline size={15} />,
+          },
+        ]);
+      } else {
+        setMenuOptions([
+          {
+            id: 'publications',
+            text: 'Mis publicaciones',
+            onClick: () => {
+              handleNavigation('/profile/publications');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'admin',
+            text: 'Administrar',
+            onClick: () => {
+              handleNavigation('/admin');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'help',
+            text: 'Ayuda',
+            onClick: () => {
+              handleNavigation('/faqs');
+              setBackPath(pathname);
+            },
+            divider: true,
+          },
+          {
+            id: 'logout',
+            text: 'Cerrar sesión',
+            onClick: handleLogout,
+            icon: <IoLogOutOutline size={15} />,
+          },
+        ]);
+      }
+    } else {
+      setMenuOptions(DEFAULT_OPTIONS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="z-20">
@@ -145,7 +283,7 @@ const Topbar = () => {
               color="secondary"
               isIconOnly
               className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-              onClick={() => setOpenSidedrawer(true)}
+              onPress={() => setOpenSidedrawer(true)}
             >
               <IoMenuOutline size={20} />
             </Button>
@@ -161,9 +299,46 @@ const Topbar = () => {
         <Sidedrawer
           isOpen={openSidedrawer}
           setIsOpen={setOpenSidedrawer}
-          title="Filtros"
+          fullContent
         >
-          Menu
+          <div className="flex flex-col justify-between h-full">
+            <div>
+              {menuOptions.map((option) => (
+                <div
+                  key={option.id}
+                  className={`cursor-pointer p-4 hover:bg-gray-200 transition duration-150 ease-in-out ${option.divider ? 'border-b border-gray-200' : ''}`}
+                  onClick={() => {
+                    if (option?.onClick) {
+                      option.onClick();
+                      setOpenSidedrawer(false);
+                      setBackPath(pathname);
+                    }
+                  }}
+                >
+                  <div className="flex items-center cursor-pointer">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 flex gap-3 items-center">
+                        <span>{option.text}</span>
+                        {option?.icon && option?.icon}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end items-center px-4">
+              <Button
+                as={Link}
+                color="secondary"
+                className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
+                href={isAuthenticated ? '/places/create' : '/auth/login'}
+                size="md"
+                endContent={<IoAddOutline />}
+              >
+                Publicar
+              </Button>
+            </div>
+          </div>
         </Sidedrawer>
       </div>
     </div>

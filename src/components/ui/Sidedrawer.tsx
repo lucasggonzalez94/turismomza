@@ -8,6 +8,7 @@ interface IPropSidedrawer {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
+  fullContent?: boolean;
 }
 
 const Sidedrawer: FC<IPropSidedrawer> = ({
@@ -15,6 +16,7 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
   children,
   isOpen,
   setIsOpen,
+  fullContent,
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
 
@@ -45,17 +47,21 @@ const Sidedrawer: FC<IPropSidedrawer> = ({
         />
       )}
       <div
-        className={`fixed top-0 bottom-[70px] md:bottom-0 bg-white shadow-lg z-50 transition-all duration-300 p-4 right-0 my-3 rounded-xl ${
-          isOpen ? 'translate-x-0 mx-3' : 'translate-x-full mx-0'
+        className={`fixed top-0 bottom-[70px] md:bottom-0 bg-white shadow-lg z-50 transition-all duration-300 right-0 my-3 rounded-xl min-w-96 ${
+          isOpen ? 'translate-x-0 mx-3' : 'translate-x-[101%] mx-0'
         }`}
       >
-        <div className="flex justify-between items-center pb-3 border-b border-gray-300">
+        <div
+          className={`flex ${title ? 'justify-between border-b border-gray-300' : 'justify-end'} items-center p-4`}
+        >
           {title && <h2 className="text-lg font-semibold">{title}</h2>}
           <button onClick={() => setIsOpen(false)} className="text-xl">
             <IoMdClose size={24} />
           </button>
         </div>
-        <div className="p-4 h-[calc(100vh-64px)] overflow-y-auto scrollbar-hide">
+        <div
+          className={`${!fullContent && 'p-4'} h-[calc(100%-64px)] overflow-y-auto scrollbar-hide`}
+        >
           {children}
         </div>
       </div>
