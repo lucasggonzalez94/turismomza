@@ -171,6 +171,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
               handleNavigation('/faqs');
               setBackPath(pathname);
             },
+            divider: true,
           },
           {
             id: 'logout',
