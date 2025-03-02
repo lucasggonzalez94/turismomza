@@ -11,7 +11,7 @@ interface ImageUploaderProps {
   minImages?: number;
   maxImages?: number;
   maxSizeMB?: number;
-  onImagesChange?: (files: File[]) => void;
+  onImagesChange: (files: File[]) => void;
 }
 
 const ImageUploader = ({
@@ -27,9 +27,6 @@ const ImageUploader = ({
   const [errorImages, setErrorImages] = useState<string | null>(null);
 
   const [parent, images, _setValues] = useDragAndDrop<HTMLDivElement, File>([]);
-  const { placeFormDetails, setPlaceFormDetails } = usePlaceStore(
-    (state) => state,
-  );
 
   const addImages = useCallback(
     (files: File[]) => {
@@ -90,12 +87,11 @@ const ImageUploader = ({
   );
 
   useEffect(() => {
-    if (images.length && onImagesChange) {
-      setPlaceFormDetails({ ...placeFormDetails, images });
+    if (images.length) {
       onImagesChange(images);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, onImagesChange]);
+  }, [images]);
 
   useEffect(() => {
     if (defaultImages?.length) {

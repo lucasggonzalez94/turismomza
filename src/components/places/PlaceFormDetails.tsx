@@ -1,19 +1,12 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-// import {
-//   Autocomplete,
-//   GoogleMap,
-//   Marker,
-//   useLoadScript,
-// } from '@react-google-maps/api';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { usePlaceStore } from '@/store/placeStore';
 import { IPlaceFormDetails } from '@/interfaces/place-form';
-// import { Address, LatLng } from '@/interfaces/address';
 
 interface IPropsPlaceFormDetails {
   setSaved: (saved: boolean) => void;
@@ -37,16 +30,23 @@ const schema = yup
     price: yup.number().optional(),
     currency: yup.string(),
     address: yup.string().required('La dirección es obligatoria.'),
+    images: yup
+      .array()
+      .min(4, 'Debes subir al menos 4 imágenes.')
+      .max(10, 'No puedes subir más de 10 imágenes.')
+      .test('fileSize', 'El tamaño máximo por imagen es 5MB.', (files) =>
+        files?.every((file) => file.size <= 5 * 1024 * 1024),
+      )
+      .test(
+        'fileType',
+        'Solo se permiten archivos .jpg, .jpeg y .png.',
+        (files) =>
+          files?.every((file) =>
+            ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type),
+          ),
+      ),
   })
   .required();
-
-// const containerStyle = {
-//   width: '100%',
-//   height: '100%',
-//   minHeight: '300px',
-// };
-
-// const libraries: 'places'[] = ['places'];
 
 const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
   setSaved,
@@ -61,7 +61,9 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     control,
     formState: { errors },
     getValues,
+    setValue,
     reset,
+    watch,
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -73,101 +75,27 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
       price: undefined,
       currency: 'ars',
       address: '',
+      images: [],
     },
   });
 
-  // const { isLoaded, loadError } = useLoadScript({
-  //   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-  //   libraries,
-  // });
+  console.log(watch());
 
-  const [images, setImages] = useState<File[]>([]);
-  // const [currentPosition, setCurrentPosition] = useState<LatLng | null>({
-  //   lat: placeFormData?.address?.lat || 0,
-  //   lng: placeFormData?.address?.lng || 0,
-  // });
-  // const [selectedPosition, setSelectedPosition] = useState<LatLng | null>({
-  //   lat: placeFormData?.address?.lat || 0,
-  //   lng: placeFormData?.address?.lng || 0,
-  // });
-  // const [autocomplete, setAutocomplete] =
-  //   useState<google.maps.places.Autocomplete | null>(null);
-  // const mapRef = useRef<google.maps.Map | null>(null);
+  const handleImagesChange = useCallback(
+    (newImages: File[]) => {
+      setValue('images', newImages, { shouldValidate: true });
+    },
+    [setValue],
+  );
 
   const handleSaveAndContinue = (data: any) => {
-    if (images?.length > 3) {
-      setPlaceFormDetails({
-        ...defaultValues,
-        ...data,
-        images,
-      });
-      setSaved(true);
-      setSelectedTab('contact');
-    }
+    setPlaceFormDetails({
+      ...defaultValues,
+      ...data,
+    });
+    setSaved(true);
+    setSelectedTab('contact');
   };
-
-  // const onAutocompleteLoad = (
-  //   autocompleteInstance: google.maps.places.Autocomplete,
-  // ) => {
-  //   setAutocomplete(autocompleteInstance);
-  // };
-
-  // const handlePlaceChanged = () => {
-  //   if (autocomplete !== null) {
-  //     const place = autocomplete.getPlace();
-  //     if (place.geometry) {
-  //       const newLocation = {
-  //         lat: place.geometry.location?.lat() as number,
-  //         lng: place.geometry.location?.lng() as number,
-  //         formatted_address: place.formatted_address,
-  //       };
-  //       setSelectedPosition(newLocation);
-  //       setValue('address', newLocation as Address, {
-  //         shouldValidate: true,
-  //         shouldDirty: true,
-  //       });
-  //       mapRef.current?.panTo(newLocation);
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (placeFormData) {
-  //     reset(placeFormData);
-  //     setCurrentPosition({
-  //       lat: placeFormData?.address?.lat || 0,
-  //       lng: placeFormData?.address?.lng || 0,
-  //     });
-  //     setSelectedPosition({
-  //       lat: placeFormData?.address?.lat || 0,
-  //       lng: placeFormData?.address?.lng || 0,
-  //     });
-  //   } else if (navigator.geolocation && isLoaded) {
-  //     navigator.geolocation.watchPosition(
-  //       function () {},
-  //       function () {},
-  //       {},
-  //     );
-  //     navigator.geolocation.watchPosition(
-  //       async (position) => {
-  //         const { latitude, longitude } = position.coords;
-  //         const userLocation = {
-  //           lat: latitude,
-  //           lng: longitude,
-  //         };
-  //         setCurrentPosition(userLocation);
-  //         setSelectedPosition(userLocation);
-  //       },
-  //       () => {},
-  //       {
-  //         enableHighAccuracy: true,
-  //         timeout: 10000,
-  //         maximumAge: 30000,
-  //       },
-  //     );
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [placeFormData, isLoaded]);
 
   useEffect(() => {
     if (defaultValues) {
@@ -179,8 +107,8 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
         price: defaultValues?.price || undefined,
         currency: defaultValues?.currency || 'ars',
         address: defaultValues?.address || '',
+        images: defaultValues?.images || [],
       });
-      setImages(defaultValues?.images || []);
     } else {
       reset({
         name: '',
@@ -190,8 +118,8 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
         price: undefined,
         currency: 'ars',
         address: '',
+        images: [],
       });
-      setImages([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues]);
@@ -343,73 +271,10 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             })}
           />
         </div>
-        {/* {loadError ? (
-          <div className="w-full h-full flex justify-center items-center">
-            Error al cargar el mapa
-          </div>
-        ) : !isLoaded ? (
-          <div className="w-full h-full flex justify-center items-center">
-            Cargando...
-          </div>
-        ) : (
-          <div className="flex flex-col gap-1 w-full lg:w-1/2 h-100%">
-            <Controller
-              name="address.formatted_address"
-              control={control}
-              render={({ field }) => (
-                <Autocomplete
-                  onLoad={onAutocompleteLoad}
-                  onPlaceChanged={handlePlaceChanged}
-                >
-                  <Input
-                    type="text"
-                    label="Buscar lugar"
-                    labelPlacement="outside"
-                    placeholder="Escribe la dirección"
-                    isInvalid={!!errors.address?.formatted_address?.message}
-                    errorMessage={errors.address?.formatted_address?.message}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                      }
-                    }}
-                    {...field}
-                  />
-                </Autocomplete>
-              )}
-            />
-
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={
-                selectedPosition ||
-                currentPosition || {
-                  lat: 0,
-                  lng: 0,
-                }
-              }
-              zoom={currentPosition ? 15 : 2}
-              onLoad={(map) => {
-                mapRef.current = map;
-              }}
-              options={{
-                gestureHandling: 'cooperative',
-                zoomControl: true,
-                scrollwheel: true,
-                disableDoubleClickZoom: false,
-                fullscreenControl: true,
-                streetViewControl: true,
-                mapTypeControl: true,
-              }}
-            >
-              {selectedPosition && <Marker position={selectedPosition} />}
-            </GoogleMap>
-          </div>
-        )} */}
       </div>
       <ImageUploader
         defaultImages={defaultValues?.images}
-        onImagesChange={setImages}
+        onImagesChange={handleImagesChange}
       />
       <Button type="submit" color="primary">
         Guardar y continuar

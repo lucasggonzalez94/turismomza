@@ -132,7 +132,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         ),
       );
 
-      debugger;
       if (isEditing && placeId) {
         const place = await editPlaceService(formData, placeId);
         reset();
@@ -145,7 +144,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         handleNavigation(`/places/${place?.slug}`);
       }
     } catch (error) {
-      debugger;
       const err = error as ErrorFeedback;
       if (err.status === 406) {
         setErrorFeedback({
