@@ -19,11 +19,11 @@ import { DayConfig } from '@/interfaces/schedule';
 import { useAuthStore } from '@/store/authStore';
 import { useLoadingStore } from '@/store/loadingStore';
 
-interface IPropsPlacePageClient {
+interface IPropsPlaceDetails {
   slug: string;
 }
 
-const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
+const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
   const [place, setPlace] = useState<Partial<IPlace>>({});
   const [averageRating, setAverageRating] = useState('0');
   const [servicesAccordion, setServicesAccordion] = useState<
@@ -290,4 +290,4 @@ const PlacePageClient: FC<IPropsPlacePageClient> = ({ slug }) => {
   );
 };
 
-export default PlacePageClient;
+export default PlaceDetails;

@@ -45,6 +45,10 @@ export const CATEGORIES = [
     key: 'Turismo Rural',
     label: 'Turismo Rural',
   },
+  {
+    key: 'Otra',
+    label: 'Otra',
+  },
 ];
 
 export const SERVICES = [
@@ -127,6 +131,10 @@ export const SERVICES = [
   {
     key: 'picnic_area',
     label: 'Zona de picnic',
+  },
+  {
+    key: 'other',
+    label: 'Otro',
   },
 ];
 

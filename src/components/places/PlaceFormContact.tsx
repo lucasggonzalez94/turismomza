@@ -100,8 +100,36 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
 
       formData.append('title', placeFormDetails?.name || '');
       formData.append('description', placeFormDetails?.description || '');
-      formData.append('category', placeFormDetails?.category || '');
-      formData.append('services', JSON.stringify(placeFormDetails?.services));
+      formData.append(
+        'category',
+        placeFormDetails?.category === 'Otra'
+          ? placeFormDetails?.otherCategory || ''
+          : placeFormDetails?.category || '',
+      );
+      let allServices: string[] = [];
+
+      if (
+        placeFormDetails?.services?.includes('other') &&
+        placeFormDetails?.otherServices
+      ) {
+        const filteredServices = placeFormDetails?.services?.filter(
+          (service) => service !== 'other',
+        );
+        allServices = [
+          ...filteredServices,
+          ...placeFormDetails.otherServices
+            .replace(/(\r\n|\n|\r)/gm, ',')
+            .split(',')
+            .map((service) => service.trim())
+            .filter((service) => service.length > 0)
+            .map(
+              (service) =>
+                service.charAt(0).toUpperCase() +
+                service.slice(1).toLowerCase(),
+            ),
+        ];
+      }
+      formData.append('services', JSON.stringify(allServices));
       formData.append('location', placeFormDetails?.address || '');
       if (placeFormDetails?.price) {
         formData.append('price', placeFormDetails?.price.toString());

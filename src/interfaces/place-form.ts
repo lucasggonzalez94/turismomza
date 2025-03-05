@@ -4,7 +4,9 @@ export interface IPlaceFormDetails {
   name?: string;
   description?: string;
   category?: string;
+  otherCategory?: string;
   services?: string[];
+  otherServices?: string;
   price?: number;
   currency?: string;
   address?: string;

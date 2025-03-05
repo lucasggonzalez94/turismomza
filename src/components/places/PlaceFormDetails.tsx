@@ -22,11 +22,21 @@ const schema = yup
       .min(100, 'La descripción debe tener un mínimo de 100 caractéres.')
       .required('El campo es obligatorio.'),
     category: yup.string().required('El campo es obligatorio.'),
+    otherCategory: yup.string().when('category', {
+      is: 'Otra',
+      then: (schema) => schema.required('Debes especificar la categoría.'),
+      otherwise: (schema) => schema.optional(),
+    }),
     services: yup
       .array()
       .of(yup.string().required())
       .min(1, 'Debes seleccionar al menos uno.')
       .required('El campo es obligatorio.'),
+    otherServices: yup.string().when('services', {
+      is: (services: string[]) => services?.includes('other'),
+      then: (schema) => schema.required('Debes especificar el servicio.'),
+      otherwise: (schema) => schema.optional(),
+    }),
     price: yup.number().optional(),
     currency: yup.string(),
     address: yup.string().required('La dirección es obligatoria.'),
@@ -78,8 +88,6 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
       images: [],
     },
   });
-
-  console.log(watch());
 
   const handleImagesChange = useCallback(
     (newImages: File[]) => {
@@ -190,6 +198,19 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               </Select>
             )}
           />
+          {watch().category === 'Otra' && (
+            <Input
+              isRequired
+              type="text"
+              label="Otra categoría"
+              labelPlacement="outside"
+              placeholder="Ingresa tu propia categoría"
+              variant="faded"
+              isInvalid={!!errors.otherCategory?.message}
+              errorMessage={errors.otherCategory?.message}
+              {...register('otherCategory')}
+            />
+          )}
           <Controller
             name="services"
             control={control}
@@ -220,12 +241,27 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               </Select>
             )}
           />
+          {watch().services.find((service) => service === 'other') && (
+            <Input
+              isRequired
+              type="text"
+              label="Otros servicios"
+              labelPlacement="outside"
+              placeholder="Ingresa tus propios servicios"
+              variant="faded"
+              isInvalid={!!errors.otherServices?.message}
+              errorMessage={errors.otherServices?.message}
+              description="Agrega servicios separados por comas y sin espacios."
+              className="w-full"
+              {...register('otherServices')}
+            />
+          )}
           <Input
             isRequired
             type="text"
             label="Dirección"
             labelPlacement="outside"
-            placeholder="Ingresá la dirección del lugar"
+            placeholder="Ingresa la dirección del lugar"
             variant="faded"
             isInvalid={!!errors.address?.message}
             errorMessage={errors.address?.message}

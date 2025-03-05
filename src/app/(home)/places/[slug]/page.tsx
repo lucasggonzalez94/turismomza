@@ -1,4 +1,4 @@
-import PlacePageClient from '@/components/places/PlacePageClient';
+import PlaceDetails from '@/components/places/PlaceDetails';
 import Chevron from '@/components/ui/Chevron';
 import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 import { Metadata } from 'next';
@@ -31,7 +31,7 @@ export default async function PlacePage({ params }: Props) {
   return (
     <>
       <Chevron />
-      <PlacePageClient slug={slug} />
+      <PlaceDetails slug={slug} />
     </>
   );
 }

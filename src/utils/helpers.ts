@@ -47,14 +47,15 @@ export const validateSchedule = (schedule: DayConfig[]): boolean => {
 };
 
 export const mapServices = (services: string[]) => {
-  const servicesObject = SERVICES.reduce((acc: any, service: any) => {
-    acc[service.key] = service.label;
-    return acc;
-  }, {});
+  const servicesObject = SERVICES.reduce(
+    (acc: Record<string, string>, service: any) => {
+      acc[service.key] = service.label;
+      return acc;
+    },
+    {},
+  );
 
-  return services.map((service) => {
-    return servicesObject[service];
-  });
+  return services.map((service) => servicesObject[service] || service);
 };
 
 export const mapLanguages = (languages: string[]) => {
