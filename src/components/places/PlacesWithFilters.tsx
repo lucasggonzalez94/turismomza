@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useWindowSize from '@/hooks/useWindowSize';
 import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
@@ -142,9 +142,7 @@ const PlacesWithFilters = () => {
           setIsOpen={setOpenSidedrawer}
           title="Filtros"
         >
-          <Suspense>
-            <FiltersForm />
-          </Suspense>
+          <FiltersForm />
         </Sidedrawer>
       )}
     </>

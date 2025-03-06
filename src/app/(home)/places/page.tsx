@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
+import { Metadata } from 'next';
 import PlacesWithFilters from '@/components/places/PlacesWithFilters';
 import Chevron from '@/components/ui/Chevron';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Lugares',
@@ -11,7 +12,9 @@ export default function PlacesPage() {
   return (
     <>
       <Chevron />
-      <PlacesWithFilters />
+      <Suspense fallback={<div>Cargando...</div>}>
+        <PlacesWithFilters />
+      </Suspense>
     </>
   );
 }
