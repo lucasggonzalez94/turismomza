@@ -1,31 +1,31 @@
 import axiosInstance from '@/config/axiosInstance';
 
-export const login = async ({
+export const loginGoogle = async ({
+  name,
   email,
-  password,
+  image,
+  googleId,
 }: {
-  email: string;
-  password: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  googleId?: string | null;
 }) => {
   try {
-    const res = await axiosInstance.post(
-      '/auth/login',
+    const response = await axiosInstance.post(
+      '/auth/google',
       {
+        name,
         email,
-        password,
+        image,
+        googleId,
       },
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
         withCredentials: true,
       },
     );
-
-    if (res.status !== 200) {
-      throw new Error('Credenciales inválidas');
-    } else {
-      return res.data.accessToken;
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error: any) {
     if (error.response) {

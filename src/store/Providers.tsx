@@ -4,6 +4,7 @@ import { FC, ReactNode, useEffect } from 'react';
 import SocketProvider from './SocketProvider';
 import { useAuthStore } from './authStore';
 import { usePathname } from 'next/navigation';
+import { SessionProvider } from 'next-auth/react';
 
 interface Props {
   children: ReactNode;
@@ -17,7 +18,11 @@ const Providers: FC<Props> = ({ children }) => {
     checkAuth();
   }, [checkAuth, pathname]);
 
-  return <SocketProvider>{children}</SocketProvider>;
+  return (
+    <SessionProvider>
+      <SocketProvider>{children}</SocketProvider>
+    </SessionProvider>
+  );
 };
 
 export default Providers;

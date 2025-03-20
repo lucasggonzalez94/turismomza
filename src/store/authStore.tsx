@@ -9,6 +9,9 @@ interface State {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   checkAuth: () => Promise<void>;
+  accessToken: string | null;
+  setAccessToken: (token: string) => void;
+  logout: () => void;
 }
 
 export const useAuthStore = create<State>((set) => ({
@@ -32,4 +35,7 @@ export const useAuthStore = create<State>((set) => ({
       setLoading(false);
     }
   },
+  accessToken: null,
+  setAccessToken: (token) => set({ accessToken: token }),
+  logout: () => set({ accessToken: null }),
 }));

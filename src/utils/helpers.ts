@@ -74,3 +74,7 @@ export const fetchImageAsFile = async (url: string, filename: string) => {
   const blob = await response.blob();
   return new File([blob], filename, { type: blob.type });
 };
+
+export const handleGoogleLogin = () => {
+  window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+};

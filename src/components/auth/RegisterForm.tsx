@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 import { toast } from 'sonner';
 import InputPassword from '../ui/InputPassword';
-// import { FcGoogle } from 'react-icons/fc';
+import { FcGoogle } from 'react-icons/fc';
 import { register as registerService } from '@/services/auth/register';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useNavigation from '@/hooks/useNavigation';
+import { handleGoogleLogin } from '@/utils/helpers';
 
 const schema = yup
   .object({
@@ -132,13 +133,17 @@ const RegisterForm = () => {
         >
           Regístrate
         </Button>
-        {/* <Button
+
+        <span className="text-gray-500 text-tiny">o continuar con</span>
+
+        <Button
           color="primary"
           className="w-full font-bold bg-white border border-gray-400 text-black"
           startContent={<FcGoogle size={30} />}
+          onPress={handleGoogleLogin}
         >
-          Regístrate con Google
-        </Button> */}
+          Google
+        </Button>
       </div>
     </form>
   );
