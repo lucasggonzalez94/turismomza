@@ -3,9 +3,10 @@ export interface IUser {
   name: string;
   email: string;
   role: string;
-  two_factor_enabled: boolean;
-  profilePicture: IProfilePicture;
-  createdAt: string;
+  image?: string | null;
+  two_factor_enabled?: boolean;
+  profilePicture?: IProfilePicture | null;
+  createdAt?: string;
   bio?: string;
   location?: string;
   website?: string;

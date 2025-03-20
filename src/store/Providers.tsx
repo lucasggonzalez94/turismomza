@@ -3,24 +3,30 @@
 import { FC, ReactNode, useEffect } from 'react';
 import SocketProvider from './SocketProvider';
 import { useAuthStore } from './authStore';
-import { usePathname } from 'next/navigation';
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider, useSession } from 'next-auth/react';
 
 interface Props {
   children: ReactNode;
 }
 
-const Providers: FC<Props> = ({ children }) => {
-  const checkAuth = useAuthStore((state) => state.checkAuth);
-  const pathname = usePathname();
+const AuthStateManager = ({ children }: { children: ReactNode }) => {
+  const { data: session } = useSession();
+  const updateAuthState = useAuthStore((state) => state.updateAuthState);
 
+  // Actualizar el estado de autenticación cuando cambie la sesión
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth, pathname]);
+    updateAuthState(session);
+  }, [session, updateAuthState]);
 
+  return <>{children}</>;
+};
+
+const Providers: FC<Props> = ({ children }) => {
   return (
     <SessionProvider>
-      <SocketProvider>{children}</SocketProvider>
+      <AuthStateManager>
+        <SocketProvider>{children}</SocketProvider>
+      </AuthStateManager>
     </SessionProvider>
   );
 };

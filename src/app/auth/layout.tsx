@@ -19,7 +19,7 @@ export default function HomeLayout({
           alt="Logo turismo mendoza"
           width={500}
           height={400}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-lg"
         />
         <Image
           src="/images/portada_auth.webp"
