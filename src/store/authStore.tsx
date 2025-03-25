@@ -10,7 +10,7 @@ interface State {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   updateAuthState: (
-    userId?: string | null,
+    googleId?: string | null,
     accessToken?: string | null,
   ) => void;
   logout: () => Promise<void>;
@@ -27,8 +27,8 @@ export const useAuthStore = create<State>((set, get) => ({
   setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
   authProvider: null,
   setAuthProvider: (provider) => set(() => ({ authProvider: provider })),
-  updateAuthState: async (userId, accessToken) => {
-    if (!userId && !accessToken) {
+  updateAuthState: async (googleId, accessToken) => {
+    if (!googleId && !accessToken) {
       set({
         user: null,
         isAuthenticated: false,
@@ -38,8 +38,8 @@ export const useAuthStore = create<State>((set, get) => ({
       return;
     }
 
-    if (userId) {
-      const user = await getUserByGoogleIdService(userId);
+    if (googleId) {
+      const user = await getUserByGoogleIdService(googleId);
       set({
         user,
         authProvider: 'google',
@@ -48,14 +48,10 @@ export const useAuthStore = create<State>((set, get) => ({
 
     if (accessToken) {
       set({
-        authProvider: 'credentials',
         accessToken,
+        isAuthenticated: true,
       });
     }
-
-    set({
-      isAuthenticated: true,
-    });
   },
   logout: async () => {
     const { authProvider } = get();
