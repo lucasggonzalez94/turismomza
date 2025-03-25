@@ -1,18 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { Button, Input, Link } from '@nextui-org/react';
 import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FcGoogle } from 'react-icons/fc';
 import InputPassword from '../ui/InputPassword';
 import useNavigation from '@/hooks/useNavigation';
 import { useNavigationStore } from '@/store/navigationStore';
 import { useAuthStore } from '@/store/authStore';
 import { login } from '@/services/auth/login';
+import GoogleButton from './GoogleButton';
 
 const schema = yup
   .object({
@@ -30,7 +29,7 @@ const schema = yup
 const LoginForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const { setAccessToken, setUser } = useAuthStore((state) => state);
 
   const {
     register,
@@ -44,25 +43,13 @@ const LoginForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
-    try {
-      setLoading(true);
-      const result = await signIn('google', { callbackUrl: lastPath });
-      if (result?.error) {
-        toast.error('Error al iniciar sesión con Google');
-      }
-    } catch (error) {
-      toast.error('Error al iniciar sesión con Google');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleLogin = async (data: any) => {
     try {
       setLoading(true);
-      const token = await login(data);
-      setAccessToken(token);
+      const response = await login(data);
+      const { accessToken, user } = response;
+      setAccessToken(accessToken);
+      setUser(user);
       handleNavigation(lastPath);
     } catch (error: any) {
       if (error.status === 401) {
@@ -123,15 +110,7 @@ const LoginForm = () => {
 
         <span className="text-gray-500 text-tiny">o continuar con</span>
 
-        <Button
-          color="primary"
-          startContent={<FcGoogle size={30} />}
-          className="w-full font-bold bg-white border border-gray-400 text-black"
-          onClick={handleGoogleLogin}
-          isLoading={loading}
-        >
-          Google
-        </Button>
+        <GoogleButton />
       </div>
     </form>
   );

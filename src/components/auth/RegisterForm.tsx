@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 import { toast } from 'sonner';
 import InputPassword from '../ui/InputPassword';
-import { FcGoogle } from 'react-icons/fc';
 import { register as registerService } from '@/services/auth/register';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useNavigation from '@/hooks/useNavigation';
-import { handleGoogleLogin } from '@/utils/helpers';
+import GoogleButton from './GoogleButton';
+import { useAuthStore } from '@/store/authStore';
+import { useNavigationStore } from '@/store/navigationStore';
 
 const schema = yup
   .object({
@@ -35,6 +36,8 @@ const schema = yup
 
 const RegisterForm = () => {
   const { handleNavigation } = useNavigation();
+  const lastPath = useNavigationStore((state) => state.lastPath);
+  const { setAccessToken, setUser } = useAuthStore((state) => state);
   const {
     register,
     handleSubmit,
@@ -55,8 +58,11 @@ const RegisterForm = () => {
         ...restValues,
         name: `${name} ${lastname}`,
       };
-      await registerService(registerBody);
-      handleNavigation('/');
+      const response = await registerService(registerBody);
+      const { accessToken, user } = response;
+      setAccessToken(accessToken);
+      setUser(user);
+      handleNavigation(lastPath);
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     } finally {
@@ -136,14 +142,7 @@ const RegisterForm = () => {
 
         <span className="text-gray-500 text-tiny">o continuar con</span>
 
-        <Button
-          color="primary"
-          className="w-full font-bold bg-white border border-gray-400 text-black"
-          startContent={<FcGoogle size={30} />}
-          onPress={handleGoogleLogin}
-        >
-          Google
-        </Button>
+        <GoogleButton />
       </div>
     </form>
   );

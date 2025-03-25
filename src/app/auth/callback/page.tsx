@@ -1,23 +1,26 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import useNavigation from '@/hooks/useNavigation';
+import { useNavigationStore } from '@/store/navigationStore';
 
 export default function AuthCallback() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { setAccessToken } = useAuthStore();
+  const { handleNavigation } = useNavigation();
+  const lastPath = useNavigationStore((state) => state.lastPath);
 
   useEffect(() => {
     const accessToken = searchParams.get('accessToken');
     if (accessToken) {
       setAccessToken(accessToken);
-      router.push('/');
+      handleNavigation(lastPath);
     } else {
-      router.push('/auth/login');
+      handleNavigation('/auth/login');
     }
-  }, [searchParams, router, setAccessToken]);
+  }, [searchParams, setAccessToken, handleNavigation, lastPath]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

@@ -1,24 +1,23 @@
-import { IUser } from '@/interfaces/user';
 import { create } from 'zustand';
 import { signOut } from 'next-auth/react';
-import { login as emailLogin } from '@/services/auth/login';
 import { logout as emailLogout } from '@/services/auth/logout';
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+import { IUser } from '@/interfaces/user';
+import { getUserByGoogleIdService } from '@/services/auth/get-user-by-google-id';
 
 interface State {
   user: IUser | null;
   setUser: (user: IUser | null) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  updateAuthState: (session: any) => void;
-  login: (credentials: LoginCredentials) => Promise<void>;
+  updateAuthState: (
+    userId?: string | null,
+    accessToken?: string | null,
+  ) => void;
   logout: () => Promise<void>;
   authProvider: 'credentials' | 'google' | null;
   setAuthProvider: (provider: 'credentials' | 'google' | null) => void;
+  accessToken: string | null;
+  setAccessToken: (accessToken: string | null) => void;
 }
 
 export const useAuthStore = create<State>((set, get) => ({
@@ -28,48 +27,34 @@ export const useAuthStore = create<State>((set, get) => ({
   setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
   authProvider: null,
   setAuthProvider: (provider) => set(() => ({ authProvider: provider })),
-  login: async (credentials) => {
-    try {
-      const data = await emailLogin(credentials);
-      set({
-        user: data,
-        isAuthenticated: true,
-        authProvider: 'credentials',
-      });
-    } catch (error) {
+  updateAuthState: async (userId, accessToken) => {
+    if (!userId && !accessToken) {
       set({
         user: null,
         isAuthenticated: false,
         authProvider: null,
-      });
-      throw error;
-    }
-  },
-  updateAuthState: (session) => {
-    if (!session) {
-      set({
-        user: null,
-        isAuthenticated: false,
-        authProvider: null,
+        accessToken: null,
       });
       return;
     }
 
-    const userData: IUser = {
-      id: session.user.id,
-      name: session.user.name || '',
-      email: session.user.email || '',
-      image: session.user.image || null,
-      role: 'USER',
-      two_factor_enabled: false,
-      profilePicture: null,
-      createdAt: new Date().toISOString(),
-    };
+    if (userId) {
+      const user = await getUserByGoogleIdService(userId);
+      set({
+        user,
+        authProvider: 'google',
+      });
+    }
+
+    if (accessToken) {
+      set({
+        authProvider: 'credentials',
+        accessToken,
+      });
+    }
 
     set({
-      user: userData,
       isAuthenticated: true,
-      authProvider: 'google',
     });
   },
   logout: async () => {
@@ -83,6 +68,9 @@ export const useAuthStore = create<State>((set, get) => ({
       user: null,
       isAuthenticated: false,
       authProvider: null,
+      accessToken: null,
     });
   },
+  accessToken: null,
+  setAccessToken: (accessToken) => set(() => ({ accessToken })),
 }));

@@ -177,13 +177,13 @@ const ProfileData = () => {
         <div className="flex gap-6 justify-evenly items-center bg-white shadow-lg rounded-lg p-5">
           <div className="flex flex-col gap-1 items-center">
             <span className="text-4xl font-bold">
-              {user?.places_count || 0}
+              {user?.placesCount || 0}
             </span>
             <span className="text-sm">Publicaciones creadas</span>
           </div>
           <div className="flex flex-col gap-1 items-center">
             <span className="text-4xl font-bold">
-              {user?.review_count || 0}
+              {user?.reviewCount || 0}
             </span>
             <span className="text-sm">Opiniones</span>
           </div>
