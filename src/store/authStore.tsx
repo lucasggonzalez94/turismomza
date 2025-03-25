@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { signOut } from 'next-auth/react';
-import { logout as emailLogout } from '@/services/auth/logout';
+import { logout } from '@/services/auth/logout';
 import { IUser } from '@/interfaces/user';
 import { getUserByGoogleIdService } from '@/services/auth/get-user-by-google-id';
 
@@ -55,17 +55,24 @@ export const useAuthStore = create<State>((set, get) => ({
   },
   logout: async () => {
     const { authProvider } = get();
-    if (authProvider === 'google') {
-      await signOut();
-    } else if (authProvider === 'credentials') {
-      await emailLogout();
+    // eslint-disable-next-line no-useless-catch
+    try {
+      if (authProvider === 'google') {
+        await signOut();
+        await logout();
+      } else if (authProvider === 'credentials') {
+        await logout();
+      }
+      set({
+        user: null,
+        isAuthenticated: false,
+        authProvider: null,
+        accessToken: null,
+      });
+      window.location.href = '/auth/login';
+    } catch (error) {
+      throw error;
     }
-    set({
-      user: null,
-      isAuthenticated: false,
-      authProvider: null,
-      accessToken: null,
-    });
   },
   accessToken: null,
   setAccessToken: (accessToken) => set(() => ({ accessToken })),

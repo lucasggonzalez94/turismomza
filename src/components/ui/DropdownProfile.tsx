@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 import DropdownButton from './DropdownButton';
 import { IUser } from '@/interfaces/user';
 import { ROLS } from '@/utils/constants';
-import { logout } from '@/services/auth/logout';
 import useNavigation from '@/hooks/useNavigation';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigationStore } from '@/store/navigationStore';
@@ -32,18 +31,14 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
 }) => {
   const { handleNavigation } = useNavigation();
   const pathname = usePathname();
-  const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
+  const { logout } = useAuthStore((state) => state);
   const setBackPath = useNavigationStore((state) => state.setBackPath);
 
   const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
 
   const handleLogout = async () => {
     try {
-      setUser(null);
-      setIsAuthenticated(false);
       await logout();
-
-      handleNavigation('/auth/login');
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
     }
