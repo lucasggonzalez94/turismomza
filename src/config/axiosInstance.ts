@@ -84,13 +84,16 @@ axiosInstance.interceptors.response.use(
 
     return new Promise((resolve, reject) => {
       refreshAccessToken()
-        .then(({ accessToken, user }) => {
+        .then(({ accessToken, user, authProvider }) => {
           if (accessToken) {
             useAuthStore.getState().setAccessToken(accessToken);
           }
           if (user) {
             useAuthStore.getState().setUser(user);
             useAuthStore.getState().setIsAuthenticated(true);
+          }
+          if (authProvider) {
+            useAuthStore.getState().setAuthProvider(authProvider);
           }
           processQueue(null, accessToken);
           resolve(axiosInstance(originalRequest));

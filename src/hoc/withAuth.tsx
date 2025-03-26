@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
+import { useAuthStore } from '@/store/authStore';
 
 export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>,

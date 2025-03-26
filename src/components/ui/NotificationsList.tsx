@@ -8,6 +8,7 @@ import { listNotificationsService } from '@/services/notifications/list-notifica
 import { useAuthStore } from '@/store/authStore';
 import { Spinner } from '@nextui-org/react';
 import { useSocketStore } from '@/store/socketStore';
+import { withAuth } from '../../hoc/withAuth';
 
 const NotificationsList = () => {
   const user = useAuthStore((state) => state.user);
@@ -20,7 +21,6 @@ const NotificationsList = () => {
   const getNotifications = async () => {
     try {
       setLoading(true);
-      debugger;
       const response = await listNotificationsService();
       setErrorService(false);
       setNotifications(response);
@@ -84,4 +84,4 @@ const NotificationsList = () => {
   );
 };
 
-export default NotificationsList;
+export default withAuth(NotificationsList);
