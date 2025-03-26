@@ -29,8 +29,9 @@ const schema = yup
 const LoginForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
-  const { setAccessToken, setUser, setIsAuthenticated, setAuthProvider } =
-    useAuthStore((state) => state);
+  const { setUser, setIsAuthenticated, setAuthProvider } = useAuthStore(
+    (state) => state,
+  );
 
   const {
     register,
@@ -48,8 +49,7 @@ const LoginForm = () => {
     try {
       setLoading(true);
       const response = await login(data);
-      const { accessToken, user } = response;
-      setAccessToken(accessToken);
+      const { user } = response;
       setUser(user);
       setIsAuthenticated(true);
       setAuthProvider('credentials');

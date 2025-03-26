@@ -1,10 +1,7 @@
 import axios from 'axios';
-import { useAuthStore } from '@/store/authStore';
 import { refreshAccessToken } from '@/services/auth/refreshToken';
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-const getAccessToken = () => useAuthStore.getState().accessToken;
 
 const axiosInstance = axios.create({
   baseURL: isProduction
@@ -31,19 +28,6 @@ const processQueue = (error: any, token: string | null = null) => {
 
   failedQueue = [];
 };
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
 
 axiosInstance.interceptors.response.use(
   (response): any => {
@@ -84,18 +68,8 @@ axiosInstance.interceptors.response.use(
 
     return new Promise((resolve, reject) => {
       refreshAccessToken()
-        .then(({ accessToken, user, authProvider }) => {
-          if (accessToken) {
-            useAuthStore.getState().setAccessToken(accessToken);
-          }
-          if (user) {
-            useAuthStore.getState().setUser(user);
-            useAuthStore.getState().setIsAuthenticated(true);
-          }
-          if (authProvider) {
-            useAuthStore.getState().setAuthProvider(authProvider);
-          }
-          processQueue(null, accessToken);
+        .then((newAccessToken) => {
+          processQueue(null, newAccessToken);
           resolve(axiosInstance(originalRequest));
         })
         .catch((err) => {

@@ -37,7 +37,9 @@ const schema = yup
 const RegisterForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
-  const { setAccessToken, setUser, setIsAuthenticated, setAuthProvider } = useAuthStore((state) => state);
+  const { setUser, setIsAuthenticated, setAuthProvider } = useAuthStore(
+    (state) => state,
+  );
   const {
     register,
     handleSubmit,
@@ -59,9 +61,8 @@ const RegisterForm = () => {
         name: `${name} ${lastname}`,
       };
       const response = await registerService(registerBody);
-      const { accessToken, user } = response;
+      const { user } = response;
       setUser(user);
-      setAccessToken(accessToken);
       setIsAuthenticated(true);
       setAuthProvider('credentials');
       handleNavigation(lastPath);

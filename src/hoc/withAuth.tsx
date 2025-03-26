@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { useAuthStore } from '@/store/authStore';
 
 export function withAuth<P extends object>(
@@ -8,17 +7,28 @@ export function withAuth<P extends object>(
 ) {
   return function WithAuthComponent(props: P) {
     const router = useRouter();
-    const { data: session } = useSession();
-    const { isAuthenticated, accessToken } = useAuthStore();
+    const {
+      isAuthenticated,
+      setIsAuthenticated,
+      setUser,
+      setAuthProvider,
+      checkAuth,
+    } = useAuthStore();
 
     useEffect(() => {
-      if (!session && !isAuthenticated && !accessToken) {
-        router.replace('/auth/login');
-      }
-    }, [session, isAuthenticated, accessToken, router]);
+      const verifyAuthentication = async () => {
+        const isAuth = await checkAuth();
+        setIsAuthenticated(isAuth);
+        if (!isAuth) {
+          router.replace('/auth/login');
+        }
+      };
 
-    if (!session && !isAuthenticated && !accessToken) {
-      return null; // O un componente de loading
+      verifyAuthentication();
+    }, [checkAuth, router, setAuthProvider, setIsAuthenticated, setUser]);
+
+    if (!isAuthenticated) {
+      return null;
     }
 
     return <WrappedComponent {...props} />;

@@ -35,12 +35,6 @@ export const authOptions: NextAuthOptions = {
             return false;
           }
 
-          const data = await response.json();
-          if (!data.accessToken) {
-            return false;
-          }
-
-          user.accessToken = data.accessToken;
           user.id = account.providerAccountId;
           return true;
         } catch {
@@ -50,19 +44,13 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async session({ session, token }) {
-      if (token.accessToken) {
-        session.accessToken = token.accessToken;
-      }
       if (token.sub) {
         session.user = session.user || {};
         session.user.id = token.sub;
       }
       return session;
     },
-    async jwt({ token, user, account }) {
-      if (user?.accessToken) {
-        token.accessToken = user.accessToken;
-      }
+    async jwt({ token, account }) {
       if (account?.providerAccountId) {
         token.sub = account.providerAccountId;
       }
