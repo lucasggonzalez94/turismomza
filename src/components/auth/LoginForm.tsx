@@ -29,7 +29,8 @@ const schema = yup
 const LoginForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
-  const { setAccessToken, setUser } = useAuthStore((state) => state);
+  const { setAccessToken, setUser, setIsAuthenticated, setAuthProvider } =
+    useAuthStore((state) => state);
 
   const {
     register,
@@ -50,6 +51,9 @@ const LoginForm = () => {
       const { accessToken, user } = response;
       setAccessToken(accessToken);
       setUser(user);
+      setIsAuthenticated(true);
+      setAuthProvider('credentials');
+
       handleNavigation(lastPath);
     } catch (error: any) {
       if (error.status === 401) {

@@ -20,8 +20,9 @@ const NotificationsList = () => {
   const getNotifications = async () => {
     try {
       setLoading(true);
-      setErrorService(false);
+      debugger;
       const response = await listNotificationsService();
+      setErrorService(false);
       setNotifications(response);
     } catch {
       setErrorService(true);

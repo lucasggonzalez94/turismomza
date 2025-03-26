@@ -25,7 +25,7 @@ export const login = async ({
     if (res.status !== 200) {
       throw new Error('Credenciales inválidas');
     } else {
-      return res.data.accessToken;
+      return res.data;
     }
   } catch (error: any) {
     if (error.response) {

@@ -4,7 +4,6 @@ import { refreshAccessToken } from '@/services/auth/refreshToken';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Función para obtener el token más reciente del store
 const getAccessToken = () => useAuthStore.getState().accessToken;
 
 const axiosInstance = axios.create({
@@ -33,10 +32,8 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// Interceptor para agregar el token a las peticiones
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Obtenemos el token más reciente cada vez que se hace una petición
     const accessToken = getAccessToken();
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -87,8 +84,15 @@ axiosInstance.interceptors.response.use(
 
     return new Promise((resolve, reject) => {
       refreshAccessToken()
-        .then((newAccessToken) => {
-          processQueue(null, newAccessToken);
+        .then(({ accessToken, user }) => {
+          if (accessToken) {
+            useAuthStore.getState().setAccessToken(accessToken);
+          }
+          if (user) {
+            useAuthStore.getState().setUser(user);
+            useAuthStore.getState().setIsAuthenticated(true);
+          }
+          processQueue(null, accessToken);
           resolve(axiosInstance(originalRequest));
         })
         .catch((err) => {

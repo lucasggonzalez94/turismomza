@@ -207,7 +207,7 @@ const Topbar = () => {
               width={250}
               height={100}
               priority
-              className="h-14 object-contain object-left drop-shadow-lg"
+              className="h-14 object-contain object-left"
             ></Image>
           </Link>
         </div>

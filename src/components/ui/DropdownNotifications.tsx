@@ -44,6 +44,7 @@ const DropdownNotifications: FC<IPropsDropdownNotifications> = ({
     try {
       setLoading(true);
       const response = await listNotificationsService();
+      setErrorService(false);
       setCount(countUnreadNotifications(response));
       setNotifications(response);
     } catch {

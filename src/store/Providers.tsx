@@ -11,18 +11,18 @@ interface Props {
 
 const AuthStateManager = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession();
-  const { updateAuthState } = useAuthStore();
+  const { updateAuthState, authProvider } = useAuthStore();
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.id) {
-      const token = session.accessToken;
-      if (token) {
-        updateAuthState(session.user.id, token);
+    if (authProvider !== 'credentials') {
+      if (status === 'authenticated' && session?.user?.id) {
+        const token = session.accessToken;
+        if (token) {
+          updateAuthState(session.user.id, token);
+        }
       }
-    } else if (status === 'unauthenticated') {
-      updateAuthState(null, null);
     }
-  }, [status, session, updateAuthState]);
+  }, [status, session, updateAuthState, authProvider]);
 
   return <>{children}</>;
 };

@@ -38,18 +38,18 @@ export const useAuthStore = create<State>((set, get) => ({
       return;
     }
 
+    if (accessToken) {
+      set({
+        accessToken,
+        isAuthenticated: true,
+      });
+    }
+
     if (googleId) {
       const user = await getUserByGoogleIdService(googleId);
       set({
         user,
         authProvider: 'google',
-      });
-    }
-
-    if (accessToken) {
-      set({
-        accessToken,
-        isAuthenticated: true,
       });
     }
   },

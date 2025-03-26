@@ -37,7 +37,7 @@ const schema = yup
 const RegisterForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
-  const { setAccessToken, setUser } = useAuthStore((state) => state);
+  const { setAccessToken, setUser, setIsAuthenticated, setAuthProvider } = useAuthStore((state) => state);
   const {
     register,
     handleSubmit,
@@ -60,8 +60,10 @@ const RegisterForm = () => {
       };
       const response = await registerService(registerBody);
       const { accessToken, user } = response;
-      setAccessToken(accessToken);
       setUser(user);
+      setAccessToken(accessToken);
+      setIsAuthenticated(true);
+      setAuthProvider('credentials');
       handleNavigation(lastPath);
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
@@ -130,7 +132,7 @@ const RegisterForm = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 mt-10">
+      <div className="flex flex-col gap-3 mt-10 items-center">
         <Button
           color="primary"
           className="w-full font-bold"

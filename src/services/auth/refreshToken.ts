@@ -5,9 +5,9 @@ export const refreshAccessToken = async () => {
     const res = await axiosInstance.post('/auth/refresh-token');
 
     if (res.status !== 200) {
-      return null;
+      throw new Error('Could not refresh token');
     } else {
-      return res.data.accessToken;
+      return res.data;
     }
   } catch {
     throw new Error('Could not refresh token');
