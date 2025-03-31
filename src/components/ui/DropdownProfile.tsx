@@ -39,13 +39,20 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
 
   const handleLogout = async () => {
     try {
+      await logout();
+
       setUser(null);
       setIsAuthenticated(false);
-      await logout();
 
       handleNavigation('/auth/login');
     } catch {
-      toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
+      setUser(null);
+      setIsAuthenticated(false);
+
+      toast.error(
+        'Hubo un problema al cerrar sesión, pero has sido desconectado localmente.',
+      );
+      handleNavigation('/auth/login');
     }
   };
 

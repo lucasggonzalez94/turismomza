@@ -10,6 +10,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useNavigation from '@/hooks/useNavigation';
+import GoogleAuthButton from './GoogleAuthButton';
 
 const schema = yup
   .object({
@@ -132,13 +133,7 @@ const RegisterForm = () => {
         >
           Regístrate
         </Button>
-        {/* <Button
-          color="primary"
-          className="w-full font-bold bg-white border border-gray-400 text-black"
-          startContent={<FcGoogle size={30} />}
-        >
-          Regístrate con Google
-        </Button> */}
+        <GoogleAuthButton />
       </div>
     </form>
   );

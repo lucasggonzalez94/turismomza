@@ -2,7 +2,14 @@ import axiosInstance from '@/config/axiosInstance';
 
 export const logout = async () => {
   try {
-    const response = await axiosInstance.post('/auth/logout');
+    const response = await axiosInstance.post(
+      '/auth/logout',
+      {},
+      {
+        withCredentials: true, // Asegurar que se envíen las cookies
+      },
+    );
+
     if (response.status === 200) {
       return response.data;
     }

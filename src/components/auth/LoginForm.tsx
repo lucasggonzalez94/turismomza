@@ -11,6 +11,7 @@ import InputPassword from '../ui/InputPassword';
 import { login } from '@/services/auth/login';
 import useNavigation from '@/hooks/useNavigation';
 import { useNavigationStore } from '@/store/navigationStore';
+import GoogleAuthButton from './GoogleAuthButton';
 
 const schema = yup
   .object({
@@ -102,13 +103,7 @@ const LoginForm = () => {
         >
           Ingresar
         </Button>
-        {/* <Button
-          color="primary"
-          className="w-full font-bold bg-white border border-gray-400 text-black"
-          startContent={<FcGoogle size={30} />}
-        >
-          Ingresar con Google
-        </Button> */}
+        <GoogleAuthButton />
       </div>
     </form>
   );
