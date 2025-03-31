@@ -5,6 +5,7 @@ export interface IUser {
   role: string;
   two_factor_enabled: boolean;
   profilePicture: IProfilePicture;
+  googleId?: string;
   createdAt: string;
   bio?: string;
   location?: string;

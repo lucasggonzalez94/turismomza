@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-// import { FcGoogle } from 'react-icons/fc';
 import InputPassword from '../ui/InputPassword';
 import { login } from '@/services/auth/login';
 import useNavigation from '@/hooks/useNavigation';

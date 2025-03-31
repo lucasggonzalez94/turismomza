@@ -4,7 +4,6 @@ import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { IoCamera } from 'react-icons/io5';
-import { usePlaceStore } from '@/store/placeStore';
 import { updateUserService } from '@/services/auth/update-user';
 import SliderCarousel from './SliderCarousel/SliderCarousel';
 import CustomModal from './CustomModal';

@@ -87,7 +87,7 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
       ref={searchRef}
       data-dropdown-button
     >
-      {user && profile ? (
+      {user?.profilePicture && profile ? (
         <div className="h-10" onClick={onOpen}>
           <ProfilePicture changePicture={false} openPicture={false} />
         </div>
