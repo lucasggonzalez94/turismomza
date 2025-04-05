@@ -1,7 +1,6 @@
 import { IUser } from '@/interfaces/user';
 import { verifySession } from '@/services/auth/verifySession';
 import { create } from 'zustand';
-import { useLoadingStore } from './loadingStore';
 
 interface State {
   user: IUser | null;
@@ -17,19 +16,18 @@ export const useAuthStore = create<State>((set) => ({
   isAuthenticated: false,
   setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
   checkAuth: async () => {
-    const setLoading = useLoadingStore.getState().setLoading;
-    setLoading(true);
-
     try {
-      const res = await verifySession();
-      if (res?.error) throw new Error('No autenticado');
+      const { isAuthenticated } = useAuthStore.getState();
 
-      const user = await res;
-      set({ user, isAuthenticated: true });
+      if (!isAuthenticated) {
+        const res = await verifySession();
+        if (res?.error) throw new Error('No autenticado');
+
+        const user = await res;
+        set({ user, isAuthenticated: true });
+      }
     } catch {
       set({ user: null, isAuthenticated: false });
-    } finally {
-      setLoading(false);
     }
   },
 }));
