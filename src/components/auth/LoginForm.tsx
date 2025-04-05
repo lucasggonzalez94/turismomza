@@ -11,6 +11,7 @@ import { login } from '@/services/auth/login';
 import useNavigation from '@/hooks/useNavigation';
 import { useNavigationStore } from '@/store/navigationStore';
 import GoogleAuthButton from './GoogleAuthButton';
+import { useAuthStore } from '@/store/authStore';
 
 const schema = yup
   .object({
@@ -28,6 +29,7 @@ const schema = yup
 const LoginForm = () => {
   const { handleNavigation } = useNavigation();
   const lastPath = useNavigationStore((state) => state.lastPath);
+  const { setUser, setIsAuthenticated } = useAuthStore();
 
   const {
     register,
@@ -44,7 +46,9 @@ const LoginForm = () => {
   const handleLogin = async (data: any) => {
     try {
       setLoading(true);
-      await login(data);
+      const res = await login(data);
+      setUser(res);
+      setIsAuthenticated(true);
       handleNavigation(lastPath);
     } catch (error: any) {
       if (error.status === 401) {

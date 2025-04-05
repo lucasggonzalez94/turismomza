@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useNavigation from '@/hooks/useNavigation';
 import GoogleAuthButton from './GoogleAuthButton';
+import { useAuthStore } from '@/store/authStore';
 
 const schema = yup
   .object({
@@ -34,6 +35,7 @@ const schema = yup
 
 const RegisterForm = () => {
   const { handleNavigation } = useNavigation();
+  const { setUser, setIsAuthenticated } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -54,7 +56,9 @@ const RegisterForm = () => {
         ...restValues,
         name: `${name} ${lastname}`,
       };
-      await registerService(registerBody);
+      const res = await registerService(registerBody);
+      setUser(res);
+      setIsAuthenticated(true);
       handleNavigation('/');
     } catch {
       toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
