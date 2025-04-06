@@ -18,21 +18,13 @@ import {
 import { IUser } from '@/interfaces/user';
 import useNavigation from '@/hooks/useNavigation';
 import { useNavigationStore } from '@/store/navigationStore';
-import useWindowSize from '@/hooks/useWindowSize';
 
 interface IPropsPlaceCard {
   user: IUser | null;
   place: IPlace;
-  forceListView?: boolean;
-  forceCardView?: boolean;
 }
 
-const PlaceCard: FC<IPropsPlaceCard> = ({
-  user,
-  place,
-  forceListView,
-  forceCardView,
-}) => {
+const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
   const {
     id,
     title,
@@ -53,21 +45,8 @@ const PlaceCard: FC<IPropsPlaceCard> = ({
   const { handleNavigation } = useNavigation();
   const pathname = usePathname();
   const { setLastPath, setBackPath } = useNavigationStore((state) => state);
-  const { width } = useWindowSize();
 
   const [favorite, setFavorite] = useState(false);
-  const [isListView, setIsListView] = useState(false);
-
-  useEffect(() => {
-    // Determinar si debemos usar vista de lista basado en props o tamaño de pantalla
-    if (forceListView) {
-      setIsListView(true);
-    } else if (forceCardView) {
-      setIsListView(false);
-    } else {
-      setIsListView(width < 640); // Usar vista de lista en móviles por defecto
-    }
-  }, [width, forceListView, forceCardView]);
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -97,147 +76,109 @@ const PlaceCard: FC<IPropsPlaceCard> = ({
     setBackPath(pathname);
   };
 
-  // Vista de lista para móviles
-  if (isListView) {
-    return (
-      <div
-        className={`flex h-28 w-full bg-white overflow-hidden border rounded-lg cursor-pointer ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
-        onClick={handleNavigateToDetail}
-      >
-        <div className="relative h-full w-24 flex-shrink-0">
-          {advertisements?.length ? (
-            <div className="absolute left-1 top-1 flex items-center gap-1 bg-yellow-500 rounded-sm p-[2px] z-10">
-              <IoStar size={8} />
-              <span className="text-[8px]">Destacado</span>
-            </div>
-          ) : null}
-          {imageCard ? (
-            <Image
-              src={imageCard}
-              alt={`${title} - ${category} en ${location || 'Mendoza'}`}
-              width={96}
-              height={96}
-              className="object-cover w-full h-full"
-              loading="eager"
-            />
-          ) : (
-            <Image
-              src="/images/default-image.webp"
-              alt={`${title} - Sin imagen disponible`}
-              width={96}
-              height={96}
-              className="object-cover w-full h-full"
-              loading="eager"
-            />
-          )}
-        </div>
+  const borderClass = advertisements?.length
+    ? 'border-yellow-500 border-2'
+    : 'border-gray-300';
 
-        <div className="flex flex-col justify-between p-2 flex-grow">
-          <div className="flex flex-col">
-            <div className="flex justify-between items-start">
-              <div className="flex-grow pr-2">
-                <h3 className="font-bold line-clamp-1 text-sm">{title}</h3>
-                <span className="text-tiny text-gray-600">{category}</span>
-                {location && (
-                  <span className="text-tiny text-gray-600 flex items-center">
-                    <IoLocationOutline
-                      size={10}
-                      className="mr-1 flex-shrink-0"
-                    />
-                    <span className="line-clamp-1">{location}</span>
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col items-end">
-                <span className="font-bold text-gray-700 text-xs whitespace-nowrap">
-                  {price && currencyPrice
-                    ? formatPrice(price, currencyPrice)
-                    : 'Gratis'}
-                </span>
-                {reviews?.length ? (
-                  <span className="font-bold text-trinidad-600 flex items-center gap-1 text-xs">
-                    <IoStar className="mb-[1px]" /> {averageRating}
-                  </span>
-                ) : null}
-              </div>
-            </div>
+  return (
+    <div
+      className={`w-full bg-white overflow-hidden border rounded-lg cursor-pointer ${borderClass} md:flex-col md:transition-transform md:duration-300 md:transform md:hover:scale-105 flex h-28 sm:h-auto`}
+      onClick={handleNavigateToDetail}
+    >
+      {/* Sección de imagen */}
+      <div className="relative h-full w-24 flex-shrink-0 md:w-full md:h-auto">
+        {advertisements?.length ? (
+          <div className="absolute left-1 top-1 md:left-2 md:top-2 flex items-center gap-1 bg-yellow-500 rounded-md p-[2px] md:p-1 z-10">
+            <IoStar size={8} className="md:mb-[2px] md:text-[12px]" />
+            <span className="text-[8px] md:text-tiny">
+              {window.innerWidth < 640 ? 'Destacado' : 'Contenido destacado'}
+            </span>
           </div>
+        ) : null}
 
-          <div className="flex justify-between items-center mt-1">
+        <div className="hidden md:block">
+          <Tooltip
+            content={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          >
             <Button
               isIconOnly
-              size="sm"
-              variant="light"
-              className="min-w-0 p-1"
+              className="absolute right-2 top-2 shadow-md z-10"
               onClick={handleFavorite}
               aria-label={
                 favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'
               }
             >
               {favorite ? (
-                <IoHeart size={18} className="text-red-600" />
+                <IoHeart size={20} className="text-red-600" />
               ) : (
-                <IoHeartOutline size={18} />
+                <IoHeartOutline size={20} />
               )}
             </Button>
-            <IoChevronForward size={16} className="text-gray-400" />
+          </Tooltip>
+        </div>
+
+        <Image
+          src={imageCard || '/images/default-image.webp'}
+          alt={
+            imageCard
+              ? `${title} - ${category} en ${location || 'Mendoza'}`
+              : `${title} - Sin imagen disponible`
+          }
+          width={600}
+          height={600}
+          className="object-cover w-full h-full sm:max-h-48 md:max-h-56"
+          loading="eager"
+        />
+      </div>
+
+      <div className="flex flex-col justify-between p-2 flex-grow md:hidden">
+        <div className="flex flex-col">
+          <div className="flex justify-between items-start">
+            <div className="flex-grow pr-2">
+              <h3 className="font-bold line-clamp-1 text-sm">{title}</h3>
+              <span className="text-tiny text-gray-600">{category}</span>
+              {location && (
+                <span className="text-tiny text-gray-600 flex items-center">
+                  <IoLocationOutline size={10} className="mr-1" />
+                  <span className="line-clamp-1">{location}</span>
+                </span>
+              )}
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="font-bold text-gray-700 text-xs whitespace-nowrap">
+                {price && currencyPrice
+                  ? formatPrice(price, currencyPrice)
+                  : 'Gratis'}
+              </span>
+              {reviews?.length ? (
+                <span className="font-bold text-trinidad-600 flex items-center gap-1 text-xs">
+                  <IoStar className="mb-[1px]" /> {averageRating}
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
 
-  // Vista de tarjeta para tablets y desktop (diseño original)
-  return (
-    <div
-      className={`flex flex-col justify-between rounded-lg w-full bg-white overflow-hidden border cursor-pointer transition-transform duration-300 transform hover:scale-105 ${advertisements?.length ? 'border-yellow-500 border-2' : 'border-gray-300'}`}
-      onClick={handleNavigateToDetail}
-    >
-      <div className="relative object-cover w-full h-full">
-        {advertisements?.length ? (
-          <div className="absolute left-2 top-2 flex items-center gap-1 bg-yellow-500 rounded-sm p-1 z-10">
-            <IoStar size={12} className="mb-[2px]" />
-            <span className="text-tiny">Contenido destacado</span>
-          </div>
-        ) : null}
-        <Tooltip
-          content={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-        >
+        <div className="flex justify-between items-center mt-1">
           <Button
             isIconOnly
-            className="absolute right-2 top-2 shadow-md z-10"
+            size="sm"
+            variant="light"
+            className="min-w-0 p-1"
             onClick={handleFavorite}
             aria-label={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
             {favorite ? (
-              <IoHeart size={20} className="text-red-600" />
+              <IoHeart size={18} className="text-red-600" />
             ) : (
-              <IoHeartOutline size={20} />
+              <IoHeartOutline size={18} />
             )}
           </Button>
-        </Tooltip>
-        {imageCard ? (
-          <Image
-            src={imageCard}
-            alt={`${title} - ${category} en ${location || 'Mendoza'}`}
-            width={300}
-            height={200}
-            className="object-cover w-full h-full max-h-48 sm:max-h-56"
-            loading="eager"
-          />
-        ) : (
-          <Image
-            src="/images/default-image.webp"
-            alt={`${title} - Sin imagen disponible`}
-            width={300}
-            height={200}
-            className="object-cover w-full h-full max-h-48 sm:max-h-56"
-            loading="eager"
-          />
-        )}
+          <IoChevronForward size={16} className="text-gray-400" />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-1 sm:gap-2 p-2 sm:p-3 w-full">
+      <div className="hidden md:flex md:flex-col md:gap-2 md:p-3 md:w-full">
         <div className="flex flex-col w-full">
           <div className="flex justify-between items-center gap-4">
             <h3 className="font-bold line-clamp-1 text-sm lg:text-md">
@@ -252,7 +193,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({
           <span className="text-tiny text-gray-600">{category}</span>
           {location && (
             <span className="text-tiny text-gray-600 flex items-center mt-1">
-              <IoLocationOutline size={12} className="mr-1 flex-shrink-0" />
+              <IoLocationOutline size={12} className="mr-1" />
               {location}
             </span>
           )}
