@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import { X, Upload, Move } from 'lucide-react';
 import Image from 'next/image';
-import { usePlaceStore } from '@/store/placeStore';
 
 interface ImageUploaderProps {
   defaultImages?: File[];
@@ -22,9 +21,11 @@ const ImageUploader = ({
   onImagesChange,
 }: ImageUploaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
 
   const [errorMinMax, setErrorMinMax] = useState<string | null>(null);
   const [errorImages, setErrorImages] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const [parent, images, _setValues] = useDragAndDrop<HTMLDivElement, File>([]);
 
@@ -90,8 +91,7 @@ const ImageUploader = ({
     if (images.length) {
       onImagesChange(images);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
+  }, [images, onImagesChange]);
 
   useEffect(() => {
     if (defaultImages?.length) {
@@ -101,13 +101,57 @@ const ImageUploader = ({
     }
   }, [_setValues, defaultImages]);
 
+  const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isDragging) {
+        setIsDragging(true);
+      }
+    },
+    [isDragging],
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+
+      const files = Array.from(e.dataTransfer.files);
+      if (files.length > 0) {
+        addImages(files);
+      }
+    },
+    [addImages],
+  );
+
   return (
     <div className="w-full p-6 bg-gray-100 rounded-lg">
       <h2 className="text-xl font-semibold text-center mb-6">
         Subí {minImages > 1 ? ' tus imágenes' : ' tu imágen'}
       </h2>
       <div
-        className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 'border-gray-300`}
+        ref={dropZoneRef}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 ${
+          isDragging ? 'border-black bg-gray-200' : 'border-gray-300'
+        } transition-colors duration-200`}
       >
         <input
           ref={fileInputRef}
