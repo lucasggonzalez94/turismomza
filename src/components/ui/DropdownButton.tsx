@@ -4,10 +4,12 @@ import {
   FC,
   ReactElement,
   ReactNode,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
+  memo,
 } from 'react';
 
 import { Button } from '@nextui-org/react';
@@ -15,11 +17,19 @@ import { IoPerson } from 'react-icons/io5';
 import ProfilePicture from './ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
 
+type DropdownPosition = 'center' | 'left' | 'right';
+
+const POSITION_MAP: Record<DropdownPosition, string> = {
+  left: '-translate-x-[90%]',
+  right: 'translate-x-0',
+  center: 'translate-x-[-45%]',
+};
+
 interface IPropsDropdownButton {
   icon?: ReactElement;
   text?: string;
   children: ReactNode;
-  position?: 'center' | 'left' | 'right';
+  position?: DropdownPosition;
   square?: boolean;
   profile?: boolean;
   isOpen: boolean;
@@ -39,72 +49,83 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   onClose,
 }) => {
   const user = useAuthStore((state) => state.user);
-  const [positionValue, setPositionValue] = useState('translate-x-[90%]');
+  const [positionValue, setPositionValue] = useState(POSITION_MAP.center);
   const [hidden, setHidden] = useState(true);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
       const target = event.target as HTMLElement;
 
       if (
-        searchRef.current &&
-        !searchRef.current.contains(target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
         !target.closest('[data-dropdown-button]')
       ) {
         onClose();
       }
-    };
+    },
+    [onClose, dropdownRef],
+  );
 
+  // Agregar y remover event listener para clics fuera del dropdown
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [handleClickOutside]);
 
+  // Actualizar posición cuando cambia la prop position
   useEffect(() => {
-    switch (position) {
-      case 'left':
-        setPositionValue('-translate-x-[90%]');
-        break;
-      case 'right':
-        setPositionValue('translate-x-0');
-        break;
-      default:
-        setPositionValue('translate-x-[-45%]');
-        break;
-    }
+    setPositionValue(POSITION_MAP[position] || POSITION_MAP.center);
   }, [position]);
 
+  // Mostrar el dropdown después de que el componente se monte
   useLayoutEffect(() => {
     setHidden(false);
   }, []);
 
+  // Renderizar el botón de perfil o el botón estándar
+  const renderButton = useCallback(() => {
+    if (user?.profilePicture && profile) {
+      return (
+        <div
+          className="h-10"
+          onClick={onOpen}
+          role="button"
+          aria-label="Abrir menú de perfil"
+          tabIndex={0}
+        >
+          <ProfilePicture changePicture={false} openPicture={false} />
+        </div>
+      );
+    }
+
+    return (
+      <Button
+        isIconOnly={!!icon || profile}
+        variant="light"
+        className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
+        onPress={onOpen}
+        aria-label={text || (profile ? 'Abrir menú de perfil' : 'Abrir menú')}
+      >
+        {profile ? (
+          <IoPerson size={25} color="#000" className="mb-[2px]" />
+        ) : (
+          (icon ?? text)
+        )}
+      </Button>
+    );
+  }, [user?.profilePicture, profile, icon, text, square, onOpen]);
+
   return (
     <div
       className="flex items-center justify-center relative"
-      ref={searchRef}
+      ref={dropdownRef}
       data-dropdown-button
     >
-      {user?.profilePicture && profile ? (
-        <div className="h-10" onClick={onOpen}>
-          <ProfilePicture changePicture={false} openPicture={false} />
-        </div>
-      ) : (
-        <Button
-          isIconOnly={!!icon || profile}
-          variant="light"
-          className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
-          onPress={onOpen}
-        >
-          {profile ? (
-            <IoPerson size={25} color="#000" className="mb-[2px]" />
-          ) : (
-            (icon ?? text)
-          )}
-        </Button>
-      )}
+      {renderButton()}
 
       {!hidden && (
         <div
@@ -113,6 +134,8 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
               ? `opacity-100 transform translate-y-12 ${positionValue} pointer-events-auto`
               : `opacity-0 -translate-y-0 ${positionValue} pointer-events-none`
           }`}
+          aria-hidden={!isOpen}
+          role="menu"
         >
           {children}
         </div>
@@ -121,4 +144,4 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   );
 };
 
-export default DropdownButton;
+export default memo(DropdownButton);
