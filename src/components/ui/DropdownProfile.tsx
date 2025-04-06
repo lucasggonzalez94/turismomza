@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -35,164 +35,155 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
   const { setUser, setIsAuthenticated } = useAuthStore((state) => state);
   const setBackPath = useNavigationStore((state) => state.setBackPath);
 
-  const [menuOptions, setMenuOptions] = useState<IPropsMenuOption[]>([]);
-
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
-
       setUser(null);
       setIsAuthenticated(false);
-
       handleNavigation('/auth/login');
     } catch {
       setUser(null);
       setIsAuthenticated(false);
-
       toast.error(
         'Hubo un problema al cerrar sesión, pero has sido desconectado localmente.',
       );
       handleNavigation('/auth/login');
     }
-  };
+  }, [handleNavigation, setIsAuthenticated, setUser]);
 
-  useEffect(() => {
-    const DEFAULT_OPTIONS: IPropsMenuOption[] = [
-      {
-        id: 'login',
-        text: 'Iniciar sesión',
-        onClick: () => handleNavigation('/auth/login'),
+  const createNavigationOption = useCallback(
+    (
+      id: string,
+      text: string,
+      path: string,
+      hasDivider = false,
+      icon = null,
+    ) => ({
+      id,
+      text,
+      onClick: () => {
+        handleNavigation(path);
+        setBackPath(pathname);
       },
-      {
-        id: 'register',
-        text: 'Registrarse',
-        onClick: () => handleNavigation('/auth/register'),
-        divider: true,
-      },
-      {
-        id: 'help',
-        text: 'Ayuda',
-        onClick: () => {
-          handleNavigation('/faqs');
-          setBackPath(pathname);
-        },
-      },
-    ];
+      divider: hasDivider,
+      icon,
+    }),
+    [handleNavigation, pathname, setBackPath],
+  );
 
-    if (user) {
-      if (user.role === ROLS.viewer) {
-        setMenuOptions([
-          {
-            id: 'profile',
-            text: 'Ver datos del perfil',
-            onClick: () => {
-              handleNavigation('/profile');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'help',
-            text: 'Ayuda',
-            onClick: () => {
-              handleNavigation('/faqs');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'logout',
-            text: 'Cerrar sesión',
-            onClick: handleLogout,
-            icon: <IoLogOutOutline size={15} />,
-          },
-        ]);
-      } else if (user.role === ROLS.publisher) {
-        setMenuOptions([
-          {
-            id: 'profile',
-            text: 'Ver datos del perfil',
-            onClick: () => {
-              handleNavigation('/profile');
-              setBackPath(pathname);
-            },
-          },
-          {
-            id: 'publications',
-            text: 'Mis publicaciones',
-            onClick: () => {
-              handleNavigation('/profile/publications');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'help',
-            text: 'Ayuda',
-            onClick: () => {
-              handleNavigation('/faqs');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'logout',
-            text: 'Cerrar sesión',
-            onClick: handleLogout,
-            icon: <IoLogOutOutline size={15} />,
-          },
-        ]);
-      } else {
-        setMenuOptions([
-          {
-            id: 'profile',
-            text: 'Ver datos del perfil',
-            onClick: () => {
-              handleNavigation('/profile');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'publications',
-            text: 'Mis publicaciones',
-            onClick: () => {
-              handleNavigation('/profile/publications');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'admin',
-            text: 'Administrar',
-            onClick: () => {
-              handleNavigation('/admin');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'help',
-            text: 'Ayuda',
-            onClick: () => {
-              handleNavigation('/faqs');
-              setBackPath(pathname);
-            },
-            divider: true,
-          },
-          {
-            id: 'logout',
-            text: 'Cerrar sesión',
-            onClick: handleLogout,
-            icon: <IoLogOutOutline size={15} />,
-          },
-        ]);
-      }
-    } else {
-      setMenuOptions(DEFAULT_OPTIONS);
+  const DEFAULT_OPTIONS = useMemo(
+    () => [
+      createNavigationOption('login', 'Iniciar sesión', '/auth/login'),
+      {
+        ...createNavigationOption(
+          'register',
+          'Registrarse',
+          '/auth/register',
+          true,
+        ),
+      },
+      createNavigationOption('help', 'Ayuda', '/faqs'),
+    ],
+    [createNavigationOption],
+  );
+
+  const commonAuthenticatedOptions = useMemo(
+    () => [
+      createNavigationOption(
+        'profile',
+        'Ver datos del perfil',
+        '/profile',
+        true,
+      ),
+      createNavigationOption('help', 'Ayuda', '/faqs', true),
+      {
+        id: 'logout',
+        text: 'Cerrar sesión',
+        onClick: handleLogout,
+        icon: <IoLogOutOutline size={15} />,
+        divider: false,
+      },
+    ],
+    [createNavigationOption, handleLogout],
+  );
+
+  const publisherOptions = useMemo(
+    () => [
+      createNavigationOption('profile', 'Ver datos del perfil', '/profile'),
+      createNavigationOption(
+        'publications',
+        'Mis publicaciones',
+        '/profile/publications',
+        true,
+      ),
+      createNavigationOption('help', 'Ayuda', '/faqs', true),
+      {
+        id: 'logout',
+        text: 'Cerrar sesión',
+        onClick: handleLogout,
+        icon: <IoLogOutOutline size={15} />,
+        divider: false,
+      },
+    ],
+    [createNavigationOption, handleLogout],
+  );
+
+  const adminOptions = useMemo(
+    () => [
+      createNavigationOption(
+        'profile',
+        'Ver datos del perfil',
+        '/profile',
+        true,
+      ),
+      createNavigationOption(
+        'publications',
+        'Mis publicaciones',
+        '/profile/publications',
+        true,
+      ),
+      createNavigationOption('admin', 'Administrar', '/admin', true),
+      createNavigationOption('help', 'Ayuda', '/faqs', true),
+      {
+        id: 'logout',
+        text: 'Cerrar sesión',
+        onClick: handleLogout,
+        icon: <IoLogOutOutline size={15} />,
+        divider: false,
+      },
+    ],
+    [createNavigationOption, handleLogout],
+  );
+
+  const menuOptions = useMemo(() => {
+    if (!user) return DEFAULT_OPTIONS;
+
+    switch (user.role) {
+      case ROLS.viewer:
+        return commonAuthenticatedOptions;
+      case ROLS.publisher:
+        return publisherOptions;
+      default:
+        return adminOptions;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [
+    user,
+    DEFAULT_OPTIONS,
+    commonAuthenticatedOptions,
+    publisherOptions,
+    adminOptions,
+  ]);
+
+  const handleOptionClick = useCallback(
+    (option: IPropsMenuOption) => {
+      if (option?.onClick) {
+        option.onClick();
+        setIsOpen(null);
+        setBackPath(pathname);
+      }
+    },
+    [setIsOpen, setBackPath, pathname],
+  );
 
   return (
     <>
@@ -225,13 +216,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
               <div
                 key={option.id}
                 className={`cursor-pointer p-4 hover:bg-gray-200 transition duration-150 ease-in-out ${option.divider ? 'border-b border-gray-200' : ''}`}
-                onClick={() => {
-                  if (option?.onClick) {
-                    option.onClick();
-                    setIsOpen(null);
-                    setBackPath(pathname);
-                  }
-                }}
+                onClick={() => handleOptionClick(option)}
               >
                 <div className="flex items-center cursor-pointer">
                   <div>
