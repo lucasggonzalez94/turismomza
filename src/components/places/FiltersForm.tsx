@@ -19,6 +19,20 @@ import { usePlaceStore } from '@/store/placeStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CATEGORIES } from '@/utils/constants';
 
+// Componente para renderizar estrellas de calificación
+const RatingStars = ({ rating }: { rating: number }) => {
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, index) => (
+        <IoStar
+          key={index}
+          className={index < rating ? 'text-trinidad-600' : 'text-gray-400'}
+        />
+      ))}
+    </div>
+  );
+};
+
 const schema = yup
   .object({
     searchTerm: yup.string(),
@@ -243,51 +257,11 @@ const FiltersForm = () => {
                 onValueChange={onChange}
                 size="sm"
               >
-                <Checkbox value="5">
-                  <div className="flex items-center gap-1">
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                  </div>
-                </Checkbox>
-                <Checkbox value="4">
-                  <div className="flex items-center gap-1">
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-gray-400" />
-                  </div>
-                </Checkbox>
-                <Checkbox value="3">
-                  <div className="flex items-center gap-1">
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                  </div>
-                </Checkbox>
-                <Checkbox value="2">
-                  <div className="flex items-center gap-1">
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                  </div>
-                </Checkbox>
-                <Checkbox value="1">
-                  <div className="flex items-center gap-1">
-                    <IoStar className="text-trinidad-600" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                    <IoStar className="text-gray-400" />
-                  </div>
-                </Checkbox>
+                {[5, 4, 3, 2, 1].map((rating) => (
+                  <Checkbox key={rating} value={rating.toString()}>
+                    <RatingStars rating={rating} />
+                  </Checkbox>
+                ))}
               </CheckboxGroup>
             )}
           />
