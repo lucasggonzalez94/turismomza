@@ -58,12 +58,56 @@ const FiltersForm = () => {
     };
     setFilters(filteredData);
 
+    const params = new URLSearchParams();
     if (filteredData.searchTerm) {
-      // TODO: Agregar todos los filtros a la url
-      router.push(`/places?search=${filteredData.searchTerm}`);
+      params.set('search', filteredData.searchTerm);
+    }
+    if (filteredData.categories.length > 0) {
+      params.set('categories', filteredData.categories.join(','));
+    }
+    if (filteredData.rating.length > 0) {
+      params.set('rating', filteredData.rating.join(','));
+    }
+    if (filteredData.priceMin !== prices?.minPrice) {
+      params.set('priceMin', filteredData.priceMin.toString());
+    }
+    if (filteredData.priceMax !== prices?.maxPrice) {
+      params.set('priceMax', filteredData.priceMax.toString());
+    }
+    const queryString = params.toString();
+    if (queryString) {
+      router.push(`/places?${queryString}`);
     } else {
       router.push('/places');
     }
+  };
+
+  const readFiltersFromURL = () => {
+    const search = searchParams.get('search');
+    const categories = searchParams.get('categories');
+    const rating = searchParams.get('rating');
+    const priceMin = searchParams.get('priceMin');
+    const priceMax = searchParams.get('priceMax');
+    if (search) setValue('searchTerm', search);
+    if (categories) {
+      const categoriesArray = categories.split(',');
+      setValue('categories', categoriesArray);
+    }
+    if (rating) {
+      const ratingArray = rating.split(',');
+      setValue('rating', ratingArray);
+    }
+    const minPrice = priceMin ? Number(priceMin) : prices?.minPrice;
+    const maxPrice = priceMax ? Number(priceMax) : prices?.maxPrice;
+    setPriceRangeValue([minPrice, maxPrice]);
+    setValue('priceRange', [minPrice, maxPrice]);
+    setFilters({
+      searchTerm: search || '',
+      categories: categories ? categories.split(',') : [],
+      rating: rating ? rating.split(',') : [],
+      priceMin: minPrice,
+      priceMax: maxPrice,
+    });
   };
 
   useEffect(() => {
@@ -74,12 +118,14 @@ const FiltersForm = () => {
   }, [prices?.minPrice, prices?.maxPrice]);
 
   useEffect(() => {
-    if (searchQuery) {
+    if (searchParams.toString()) {
+      readFiltersFromURL();
+    } else if (searchQuery) {
       setValue('searchTerm', searchQuery);
       setFilters({ searchTerm: searchQuery });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+  }, [searchParams, searchQuery]);
 
   return (
     <form
@@ -98,28 +144,34 @@ const FiltersForm = () => {
         <Controller
           name="categories"
           control={control}
-          render={({ field: { onChange, value } }) => (
-            <Select
-              label="Categorías"
-              labelPlacement="outside"
-              placeholder="Seleccioná las categorías"
-              selectionMode="multiple"
-              variant="faded"
-              className="w-full"
-              value={
-                (value?.filter((val) => val !== undefined) as string[]) || []
-              }
-              onChange={(e) => {
-                onChange(e.target.value.split(','));
-              }}
-            >
-              {CATEGORIES.map((category) => (
-                <SelectItem key={category.key} value={category.key}>
-                  {category.label}
-                </SelectItem>
-              ))}
-            </Select>
-          )}
+          render={({ field: { onChange, value } }) => {
+            const selectedKeys =
+              value && Array.isArray(value)
+                ? new Set(value.filter(Boolean))
+                : new Set();
+
+            return (
+              <Select
+                label="Categorías"
+                labelPlacement="outside"
+                placeholder="Seleccioná las categorías"
+                selectionMode="multiple"
+                variant="faded"
+                className="w-full"
+                selectedKeys={selectedKeys as Set<string>}
+                onSelectionChange={(keys) => {
+                  const newSelectedKeys = Array.from(keys) as string[];
+                  onChange(newSelectedKeys);
+                }}
+              >
+                {CATEGORIES.map((category) => (
+                  <SelectItem key={category.key} value={category.key}>
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            );
+          }}
         />
         <div>
           <h3 className="text-sm mb-3">Precio</h3>
@@ -134,6 +186,7 @@ const FiltersForm = () => {
               value={priceRangeValue[0]?.toString()}
               onChange={(e) => {
                 const minPrice = Number(e.target.value);
+                setPriceRangeValue([minPrice, priceRangeValue[1]]);
                 setValue('priceRange', [minPrice, priceRangeValue[1]]);
               }}
             />
@@ -147,6 +200,7 @@ const FiltersForm = () => {
               value={priceRangeValue[1]?.toString()}
               onChange={(e) => {
                 const maxPrice = Number(e.target.value);
+                setPriceRangeValue([priceRangeValue[0], maxPrice]);
                 setValue('priceRange', [priceRangeValue[0], maxPrice]);
               }}
             />
@@ -242,7 +296,6 @@ const FiltersForm = () => {
           <Button type="submit" color="primary">
             Aplicar
           </Button>
-          {/* TODO: Setear precio por defecto */}
           <Button
             color="primary"
             variant="ghost"

@@ -17,15 +17,11 @@ export const useAuthStore = create<State>((set) => ({
   setIsAuthenticated: (isAuthenticated) => set(() => ({ isAuthenticated })),
   checkAuth: async () => {
     try {
-      const { isAuthenticated } = useAuthStore.getState();
+      const res = await verifySession();
+      if (res?.error) throw new Error('No autenticado');
 
-      if (!isAuthenticated) {
-        const res = await verifySession();
-        if (res?.error) throw new Error('No autenticado');
-
-        const user = await res;
-        set({ user, isAuthenticated: true });
-      }
+      const user = await res;
+      set({ user, isAuthenticated: true });
     } catch {
       set({ user: null, isAuthenticated: false });
     }
