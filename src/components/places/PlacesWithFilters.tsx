@@ -6,8 +6,13 @@ import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
-import { Button, Pagination } from '@nextui-org/react';
-import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
+import { Button, Pagination, Switch } from '@nextui-org/react';
+import {
+  IoAlertCircle,
+  IoOptionsOutline,
+  IoGridOutline,
+  IoListOutline,
+} from 'react-icons/io5';
 import { usePlaceStore } from '@/store/placeStore';
 import { IUser } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
@@ -28,6 +33,7 @@ const PlacesWithFilters = () => {
   const [userData, setUserData] = useState<IUser | null>(null);
   const [hideFilters, setHideFilters] = useState(false);
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
+  const [forceListView, setForceListView] = useState(false);
 
   useEffect(() => {
     if (width > 1024) {
@@ -56,7 +62,7 @@ const PlacesWithFilters = () => {
         const { data, totalPages, maxPrice } = await getPlacesService({
           filters,
           page: currentPage,
-          pageSize: pageSize,
+          pageSize,
         });
         setPlaces(data);
         setTotalPages(totalPages);
@@ -75,23 +81,54 @@ const PlacesWithFilters = () => {
       getPlaces();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, filters, userData]);
+  }, [currentPage, pageSize, filters, userData, setPrices]);
+
+  const getGridColumns = () => {
+    if (forceListView || width < 640) {
+      return 'grid-cols-1 gap-2';
+    } else if (width < 1024) {
+      return 'md:grid-cols-2 gap-4';
+    } else {
+      return 'md:grid-cols-2 lg:grid-cols-3 gap-4';
+    }
+  };
 
   return (
     <>
       <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl">Lugares turísticos</h2>
-          {hideFilters && (
-            <Button
-              color="default"
-              variant="ghost"
-              isIconOnly
-              onClick={() => setOpenSidedrawer((prev) => !prev)}
-            >
-              <IoOptionsOutline size={25} />
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {width >= 640 && (
+              <div className="flex items-center gap-1">
+                <IoGridOutline
+                  size={18}
+                  className={!forceListView ? 'text-primary' : 'text-gray-400'}
+                />
+                <Switch
+                  size="sm"
+                  color="primary"
+                  isSelected={forceListView}
+                  onValueChange={setForceListView}
+                  aria-label="Cambiar vista"
+                />
+                <IoListOutline
+                  size={18}
+                  className={forceListView ? 'text-primary' : 'text-gray-400'}
+                />
+              </div>
+            )}
+            {hideFilters && (
+              <Button
+                color="default"
+                variant="ghost"
+                isIconOnly
+                onClick={() => setOpenSidedrawer((prev) => !prev)}
+              >
+                <IoOptionsOutline size={25} />
+              </Button>
+            )}
+          </div>
         </div>
         <hr className="border-gray-300 w-full" />
         <div className="flex gap-7 items-start">
@@ -106,7 +143,7 @@ const PlacesWithFilters = () => {
               </div>
             ) : (
               <div
-                className={`${places.length || loading ? 'grid md:grid-cols-2 lg:grid-cols-3' : 'flex justify-center items-center h-full p-24'} gap-4 w-full`}
+                className={`${places.length || loading ? `grid ${getGridColumns()}` : 'flex justify-center items-center h-full p-24'} w-full`}
               >
                 {loading ? (
                   Array.from({ length: pageSize }).map((_, index) => (
@@ -118,7 +155,12 @@ const PlacesWithFilters = () => {
                   </div>
                 ) : (
                   places.map((place: IPlace) => (
-                    <PlaceCard key={place?.id} place={place} user={user} />
+                    <PlaceCard
+                      key={place.id}
+                      place={place}
+                      user={user}
+                      forceListView={forceListView}
+                    />
                   ))
                 )}
               </div>
