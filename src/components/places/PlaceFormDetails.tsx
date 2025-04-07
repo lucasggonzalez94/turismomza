@@ -1,8 +1,9 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+
 import ImageUploader from '../ui/ImageUploader';
 import { CATEGORIES, CURRENCIES, SERVICES } from '@/utils/constants';
 import { usePlaceStore } from '@/store/placeStore';
@@ -65,6 +66,20 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
 }) => {
   const { setPlaceFormDetails } = usePlaceStore((state) => state);
 
+  const initialValues = useMemo(
+    () => ({
+      name: '',
+      description: '',
+      category: '',
+      services: [],
+      price: undefined,
+      currency: 'ars',
+      address: '',
+      images: [],
+    }),
+    [],
+  );
+
   const {
     register,
     handleSubmit,
@@ -74,21 +89,18 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     setValue,
     reset,
     watch,
-  } = useForm({
+  } = useForm<IPlaceFormDetails>({
     mode: 'onChange',
-    resolver: yupResolver(schema),
-    defaultValues: {
-      name: '',
-      description: '',
-      category: '',
-      services: [],
-      price: undefined,
-      currency: 'ars',
-      address: '',
-      images: [],
-    },
+    resolver: yupResolver<IPlaceFormDetails>(schema),
+    defaultValues: initialValues,
   });
 
+  // Observar los campos para mostrar campos condicionales
+  const watchedFields = watch();
+  const showOtherCategory = watchedFields.category === 'Otra';
+  const showOtherServices = watchedFields.services?.includes('other');
+
+  // Manejar cambios en las imágenes
   const handleImagesChange = useCallback(
     (newImages: File[]) => {
       setValue('images', newImages, { shouldValidate: true });
@@ -96,15 +108,20 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     [setValue],
   );
 
-  const handleSaveAndContinue = (data: any) => {
-    setPlaceFormDetails({
-      ...defaultValues,
-      ...data,
-    });
-    setSaved(true);
-    setSelectedTab('contact');
-  };
+  // Guardar datos y continuar al siguiente paso
+  const handleSaveAndContinue = useCallback(
+    (data: IPlaceFormDetails) => {
+      setPlaceFormDetails({
+        ...defaultValues,
+        ...data,
+      });
+      setSaved(true);
+      setSelectedTab('contact');
+    },
+    [defaultValues, setPlaceFormDetails, setSaved, setSelectedTab],
+  );
 
+  // Actualizar el formulario cuando cambian los valores por defecto
   useEffect(() => {
     if (defaultValues) {
       reset({
@@ -118,29 +135,22 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
         images: defaultValues?.images || [],
       });
     } else {
-      reset({
-        name: '',
-        description: '',
-        category: '',
-        services: [],
-        price: undefined,
-        currency: 'ars',
-        address: '',
-        images: [],
-      });
+      reset(initialValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValues]);
+  }, [defaultValues, initialValues, reset]);
 
+  // Guardar los datos al desmontar el componente
   useEffect(() => {
     return () => {
-      setPlaceFormDetails({
-        ...defaultValues,
-        ...getValues(),
-      });
+      const currentValues = getValues();
+      const hasChanges =
+        JSON.stringify(currentValues) !== JSON.stringify(defaultValues);
+
+      if (hasChanges) {
+        setPlaceFormDetails({ ...defaultValues, ...currentValues });
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [defaultValues, getValues, setPlaceFormDetails]);
 
   return (
     <form
@@ -160,6 +170,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             errorMessage={errors.name?.message}
             {...register('name')}
           />
+
           <Textarea
             isRequired
             label="Descripción"
@@ -171,6 +182,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             errorMessage={errors.description?.message}
             {...register('description')}
           />
+
           <Controller
             name="category"
             control={control}
@@ -198,7 +210,8 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               </Select>
             )}
           />
-          {watch().category === 'Otra' && (
+
+          {showOtherCategory && (
             <Input
               isRequired
               type="text"
@@ -211,6 +224,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               {...register('otherCategory')}
             />
           )}
+
           <Controller
             name="services"
             control={control}
@@ -241,7 +255,8 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               </Select>
             )}
           />
-          {watch().services.find((service) => service === 'other') && (
+
+          {showOtherServices && (
             <Input
               isRequired
               type="text"
@@ -256,6 +271,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
               {...register('otherServices')}
             />
           )}
+
           <Input
             isRequired
             type="text"
@@ -267,6 +283,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             errorMessage={errors.address?.message}
             {...register('address')}
           />
+
           <Input
             label={
               <label>
@@ -308,10 +325,12 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
           />
         </div>
       </div>
+
       <ImageUploader
         defaultImages={defaultValues?.images}
         onImagesChange={handleImagesChange}
       />
+
       <Button type="submit" color="primary">
         Guardar y continuar
       </Button>

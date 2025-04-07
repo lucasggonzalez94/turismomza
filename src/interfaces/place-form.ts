@@ -1,4 +1,5 @@
 import { DayConfig } from './schedule';
+import { IImage } from './place';
 
 export interface IPlaceFormDetails {
   name?: string;
@@ -21,3 +22,14 @@ export interface IPlaceFormContact {
   email?: string;
   schedule?: DayConfig[];
 }
+
+// Nueva interfaz unificada para el formulario completo
+export interface IPlaceForm extends IPlaceFormDetails, IPlaceFormContact {}
+
+// Tipo para los valores por defecto que vienen del servidor
+export type PlaceFormWithCustomImages = Omit<IPlaceForm, 'images'> & {
+  images?: IImage[];
+};
+
+// Tipo para el estado de progreso del formulario
+export type FormProgress = 'details' | 'contact' | 'completed';

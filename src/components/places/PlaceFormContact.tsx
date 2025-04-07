@@ -1,12 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button, Input } from '@nextui-org/react';
-import Schedule from '../ui/Schedule';
 import { usePathname } from 'next/navigation';
-import { usePlaceStore } from '@/store/placeStore';
 import { useForm } from 'react-hook-form';
+
+import Schedule from '../ui/Schedule';
+import { usePlaceStore } from '@/store/placeStore';
 import { createPlaceService } from '@/services/places/create-place';
 import { DayConfig } from '@/interfaces/schedule';
 import { editPlaceService } from '@/services/places/edit-place';
@@ -70,6 +71,19 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
     (state) => state,
   );
   const setErrorFeedback = useFeedbackStore((state) => state.setErrorFeedback);
+
+  const initialValues = useMemo(
+    () => ({
+      website: '',
+      instagram: '',
+      facebook: '',
+      phonenumber: '',
+      email: '',
+      schedule: [],
+    }),
+    [],
+  );
+
   const {
     register,
     handleSubmit,
@@ -80,22 +94,15 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
-    defaultValues: {
-      website: '',
-      instagram: '',
-      facebook: '',
-      phonenumber: '',
-      email: '',
-      schedule: [],
-    },
+    defaultValues: initialValues,
   });
-  const pathname = usePathname();
 
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
 
-  const handleFinish = async (data: any) => {
-    try {
-      setLoading(true);
+  // Función para preparar el FormData para enviar al servidor
+  const prepareFormData = useCallback(
+    (data: IPlaceFormContact) => {
       const formData = new FormData();
 
       formData.append('title', placeFormDetails?.name || '');
@@ -107,7 +114,6 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
           : placeFormDetails?.category || '',
       );
       let allServices: string[] = [];
-
       if (
         placeFormDetails?.services?.includes('other') &&
         placeFormDetails?.otherServices
@@ -115,6 +121,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         const filteredServices = placeFormDetails?.services?.filter(
           (service) => service !== 'other',
         );
+
         allServices = [
           ...filteredServices,
           ...placeFormDetails.otherServices
@@ -128,13 +135,18 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
                 service.slice(1).toLowerCase(),
             ),
         ];
+      } else {
+        allServices = placeFormDetails?.services || [];
       }
+
       formData.append('services', JSON.stringify(allServices));
       formData.append('location', placeFormDetails?.address || '');
+
       if (placeFormDetails?.price) {
         formData.append('price', placeFormDetails?.price.toString());
         formData.append('currencyPrice', placeFormDetails?.currency || 'ars');
       }
+
       if (placeFormDetails?.images) {
         placeFormDetails?.images.forEach((image) => {
           formData.append('images', image);
@@ -145,10 +157,10 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         'contactNumber',
         data.phonenumber ? `+54${data.phonenumber}` : '',
       );
-      formData.append('email', data.email);
-      formData.append('website', data.website);
-      formData.append('instagram', data.instagram);
-      formData.append('facebook', data.facebook);
+      formData.append('email', data.email || '');
+      formData.append('website', data.website || '');
+      formData.append('instagram', data.instagram || '');
+      formData.append('facebook', data.facebook || '');
       formData.append(
         'schedule',
         JSON.stringify(
@@ -156,40 +168,64 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
             ({ open24hours, times }) =>
               open24hours ||
               times.some(({ from, to }) => from !== '' && to !== ''),
-          ),
+          ) || [],
         ),
       );
 
-      if (isEditing && placeId) {
-        const place = await editPlaceService(formData, placeId);
-        reset();
-        setPlaceFormContact(null);
-        handleNavigation(`/places/${place?.slug}`);
-      } else {
-        const place = await createPlaceService(formData);
-        reset();
-        setPlaceFormContact(null);
-        handleNavigation(`/places/${place?.slug}`);
-      }
-    } catch (error) {
-      const err = error as ErrorFeedback;
-      if (err.status === 406) {
-        setErrorFeedback({
-          ...err,
-          pathname,
-        });
-        handleNavigation('/error');
-      } else {
-        toast.error('¡Algo salio mal! Vuelve a intentarlo más tarde');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+      return formData;
+    },
+    [placeFormDetails],
+  );
 
-  const setSchedule = (schedule: DayConfig[]) => {
-    setValue('schedule', schedule);
-  };
+  const handleFinish = useCallback(
+    async (data: IPlaceFormContact) => {
+      try {
+        setLoading(true);
+        const formData = prepareFormData(data);
+
+        let place;
+        if (isEditing && placeId) {
+          place = await editPlaceService(formData, placeId);
+        } else {
+          place = await createPlaceService(formData);
+        }
+
+        reset();
+        setPlaceFormContact(null);
+        handleNavigation(`/places/${place?.slug}`);
+      } catch (error) {
+        const err = error as ErrorFeedback;
+        if (err.status === 406) {
+          setErrorFeedback({
+            ...err,
+            pathname,
+          });
+          handleNavigation('/error');
+        } else {
+          toast.error('¡Algo salió mal! Vuelve a intentarlo más tarde');
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      isEditing,
+      placeId,
+      prepareFormData,
+      reset,
+      setPlaceFormContact,
+      handleNavigation,
+      setErrorFeedback,
+      pathname,
+    ],
+  );
+
+  const setSchedule = useCallback(
+    (schedule: DayConfig[]) => {
+      setValue('schedule', schedule);
+    },
+    [setValue],
+  );
 
   useEffect(() => {
     if (defaultValues) {
@@ -202,27 +238,21 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         schedule: defaultValues?.schedule || [],
       });
     } else {
-      reset({
-        website: '',
-        instagram: '',
-        facebook: '',
-        phonenumber: '',
-        email: '',
-        schedule: [],
-      });
+      reset(initialValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValues]);
+  }, [defaultValues, initialValues, reset]);
 
   useEffect(() => {
     return () => {
-      setPlaceFormContact({
-        ...defaultValues,
-        ...getValues(),
-      });
+      const currentValues = getValues();
+      const hasChanges =
+        JSON.stringify(currentValues) !== JSON.stringify(defaultValues);
+
+      if (hasChanges) {
+        setPlaceFormContact({ ...defaultValues, ...currentValues });
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [defaultValues, getValues, setPlaceFormContact]);
 
   return (
     <>
@@ -233,6 +263,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
         <div className="flex gap-4 w-full">
           <div className="flex flex-col gap-4">
             <Schedule onSaveSchedule={setSchedule} />
+
             <Input
               type="text"
               label={
@@ -248,6 +279,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
               placeholder="https://..."
               {...register('website')}
             />
+
             <Input
               type="text"
               label={
@@ -263,6 +295,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
               errorMessage={errors.instagram?.message}
               {...register('instagram')}
             />
+
             <Input
               type="text"
               label={
@@ -278,6 +311,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
               errorMessage={errors.facebook?.message}
               {...register('facebook')}
             />
+
             <Input
               type="text"
               label={
@@ -293,6 +327,7 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
               errorMessage={errors.email?.message}
               {...register('email')}
             />
+
             <Input
               type="text"
               label={

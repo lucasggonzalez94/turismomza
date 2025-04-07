@@ -217,8 +217,8 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
                     <Image
                       src={img?.url}
                       alt={`Imágen ${index}`}
-                      width={300}
-                      height={200}
+                      width={600}
+                      height={600}
                       defaultValue="/images/default-image.webp"
                       className={`w-full h-full object-cover object-center`}
                     />
@@ -230,8 +230,8 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
                   key={img?.publicId}
                   src={img?.url}
                   alt={`Imágen ${index}`}
-                  width={300}
-                  height={200}
+                  width={600}
+                  height={600}
                   defaultValue="/images/default-image.webp"
                   className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
                   onClick={() => handleImageClick(index)}

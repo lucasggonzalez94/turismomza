@@ -91,8 +91,8 @@ const SliderCarousel: React.FC<IPropsSliderCarousel> = ({
               <Image
                 src={src}
                 alt={`Carousel image ${index + 1}`}
-                width={600}
-                height={600}
+                width={1000}
+                height={1000}
                 className={`${fullscreen ? '' : profilePicture ? 'w-96 object-cover object-center' : 'object-cover object-center w-full h-full'}`}
               />
             </div>

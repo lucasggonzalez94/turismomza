@@ -43,12 +43,20 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
     images: place.images,
   };
 
+  // Generamos un key único basado en los datos para forzar la recreación del componente
+  const formKey = `place-form-${place.id}-${Date.now()}`;
+
   return (
     <>
       <Chevron />
       <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
         <h2 className="font-bold text-xl">Editar publicación</h2>
-        <PlaceForm isEditing={true} dataPlace={formData} placeId={place.id} />
+        <PlaceForm
+          key={formKey}
+          isEditing={true}
+          dataPlace={formData}
+          placeId={place.id}
+        />
       </div>
     </>
   );

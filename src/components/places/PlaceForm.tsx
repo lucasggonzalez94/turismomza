@@ -1,27 +1,22 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
-
+import { FC, useEffect, useState, useCallback } from 'react';
 import { Tab, Tabs } from '@nextui-org/react';
 import { PiNumberCircleOneFill, PiNumberCircleTwoFill } from 'react-icons/pi';
 import { FaCircleCheck } from 'react-icons/fa6';
+import { usePathname } from 'next/navigation';
+import { Key } from '@react-types/shared';
+
 import PlaceFormDetails from './PlaceFormDetails';
 import PlaceFormContact from './PlaceFormContact';
-import { IPlaceFormContact, IPlaceFormDetails } from '@/interfaces/place-form';
-import { IImage } from '@/interfaces/place';
+import {
+  FormProgress,
+  PlaceFormWithCustomImages,
+} from '@/interfaces/place-form';
 import { usePlaceStore } from '@/store/placeStore';
 import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
-import Spinner from '../ui/Spinner/Spinner';
-import { usePathname } from 'next/navigation';
 import { useLoadingStore } from '@/store/loadingStore';
-
-type PlaceFormWithCustomImages = Omit<
-  IPlaceFormDetails & IPlaceFormContact,
-  'images'
-> & {
-  images?: IImage[];
-};
 
 interface IPropsPlaceForm {
   isEditing?: boolean;
@@ -36,74 +31,124 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     setPlaceFormDetails,
     setPlaceFormContact,
   } = usePlaceStore((state) => state);
-  const { loading, setLoading } = useLoadingStore((state) => state);
+  const { setLoading } = useLoadingStore((state) => state);
   const { width } = useWindowSize();
   const pathname = usePathname();
 
-  const [selectedTab, setSelectedTab] = useState<string>('details');
+  const [selectedTab, setSelectedTab] = useState<FormProgress>('details');
   const [hideTextTabs, setHideTextTabs] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    if (isEditing && dataPlace) {
+  // Función para cargar los datos iniciales cuando se está editando
+  const loadInitialData = useCallback(async () => {
+    if (!isEditing || !dataPlace) return;
+
+    try {
+      setLoading(true);
       const { images, ...restDataPlace } = dataPlace;
 
-      const fetchImagesAsFiles = async () => {
-        setLoading(true);
-        const imagesAsFile = await Promise.all(
-          images?.map(
-            async (image) => await fetchImageAsFile(image.url, image.publicId),
-          ) || [],
-        );
-        setPlaceFormDetails({
-          name: restDataPlace?.name,
-          description: restDataPlace?.description,
-          category: restDataPlace?.category,
-          services: restDataPlace?.services,
-          price: restDataPlace?.price,
-          currency: restDataPlace?.currency,
-          address: restDataPlace?.address,
-          images: imagesAsFile,
-        });
-        setPlaceFormContact({
-          website: restDataPlace?.website,
-          instagram: restDataPlace?.instagram,
-          facebook: restDataPlace?.facebook,
-          phonenumber: restDataPlace?.phonenumber,
-          email: restDataPlace?.email,
-          schedule: restDataPlace?.schedule,
-        });
-        setLoading(false);
-      };
+      // Convertir las imágenes a objetos File
+      const imagesAsFile = await Promise.all(
+        images?.map(
+          async (image) => await fetchImageAsFile(image.url, image.publicId),
+        ) || [],
+      );
+
+      // Actualizar el estado de detalles
+      setPlaceFormDetails({
+        name: restDataPlace?.name,
+        description: restDataPlace?.description,
+        category: restDataPlace?.category,
+        services: restDataPlace?.services,
+        price: restDataPlace?.price,
+        currency: restDataPlace?.currency,
+        address: restDataPlace?.address,
+        images: imagesAsFile,
+      });
+
+      // Actualizar el estado de contacto
+      setPlaceFormContact({
+        website: restDataPlace?.website,
+        instagram: restDataPlace?.instagram,
+        facebook: restDataPlace?.facebook,
+        phonenumber: restDataPlace?.phonenumber,
+        email: restDataPlace?.email,
+        schedule: restDataPlace?.schedule,
+      });
 
       setSaved(true);
-      fetchImagesAsFiles();
-    } else {
+      setDataLoaded(true);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error al cargar datos iniciales:', error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [
+    isEditing,
+    dataPlace,
+    setLoading,
+    setPlaceFormDetails,
+    setPlaceFormContact,
+  ]);
+
+  // Resetear el formulario cuando cambia la ruta o cuando se inicia un nuevo formulario
+  const resetForm = useCallback(() => {
+    if (!isEditing) {
       setPlaceFormDetails(null);
       setPlaceFormContact(null);
-      setLoading(false);
       setSaved(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditing, dataPlace, pathname]);
+    setLoading(false);
+  }, [isEditing, setPlaceFormDetails, setPlaceFormContact, setLoading]);
 
+  // Efecto para cargar datos iniciales o resetear el formulario
   useEffect(() => {
-    if (width > 420) {
-      setHideTextTabs(false);
+    if (isEditing && dataPlace) {
+      loadInitialData();
     } else {
-      setHideTextTabs(true);
+      resetForm();
     }
+  }, [isEditing, dataPlace, pathname, loadInitialData, resetForm]);
+
+  // Efecto para verificar si los datos están cargados correctamente
+  useEffect(() => {
+    // Si estamos en modo edición pero los datos no están cargados en el estado,
+    // intentamos cargarlos de nuevo
+    if (
+      isEditing &&
+      dataPlace &&
+      (!placeFormDetails || !placeFormContact) &&
+      !dataLoaded
+    ) {
+      loadInitialData();
+    }
+  }, [
+    isEditing,
+    dataPlace,
+    placeFormDetails,
+    placeFormContact,
+    dataLoaded,
+    loadInitialData,
+  ]);
+
+  // Efecto para ajustar la UI en dispositivos móviles
+  useEffect(() => {
+    setHideTextTabs(width <= 420);
   }, [width]);
 
-  if (loading) return <Spinner />;
+  // Función para manejar el cambio entre pestañas
+  const handleTabChange = useCallback((key: Key) => {
+    setSelectedTab(key as FormProgress);
+  }, []);
 
   return (
     <Tabs
       aria-label="Pasos para publicar"
       selectedKey={selectedTab}
-      onSelectionChange={(key) => {
-        setSelectedTab(key as string);
-      }}
+      onSelectionChange={handleTabChange}
     >
       <Tab
         key="details"
@@ -125,8 +170,23 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
         {selectedTab === 'details' && (
           <PlaceFormDetails
             setSaved={setSaved}
-            setSelectedTab={setSelectedTab}
-            defaultValues={placeFormDetails}
+            setSelectedTab={(tab: string) =>
+              setSelectedTab(tab as FormProgress)
+            }
+            defaultValues={
+              placeFormDetails ||
+              (dataPlace
+                ? {
+                    name: dataPlace.name,
+                    description: dataPlace.description,
+                    category: dataPlace.category,
+                    services: dataPlace.services,
+                    price: dataPlace.price,
+                    currency: dataPlace.currency,
+                    address: dataPlace.address,
+                  }
+                : undefined)
+            }
           />
         )}
       </Tab>
@@ -148,7 +208,19 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
           <PlaceFormContact
             isEditing={isEditing}
             placeId={placeId}
-            defaultValues={placeFormContact}
+            defaultValues={
+              placeFormContact ||
+              (dataPlace
+                ? {
+                    website: dataPlace.website,
+                    instagram: dataPlace.instagram,
+                    facebook: dataPlace.facebook,
+                    phonenumber: dataPlace.phonenumber,
+                    email: dataPlace.email,
+                    schedule: dataPlace.schedule,
+                  }
+                : undefined)
+            }
           />
         )}
       </Tab>
