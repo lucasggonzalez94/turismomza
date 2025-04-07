@@ -50,10 +50,12 @@ const schema = yup
       )
       .test(
         'fileType',
-        'Solo se permiten archivos .jpg, .jpeg y .png.',
+        'Solo se permiten archivos .jpg, .jpeg, .png y .webp.',
         (files) =>
           files?.every((file) =>
-            ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type),
+            ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(
+              file.type,
+            ),
           ),
       ),
   })
