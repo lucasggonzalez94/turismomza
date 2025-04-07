@@ -3,6 +3,7 @@ import PlaceForm from '@/components/places/PlaceForm';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Chevron from '@/components/ui/Chevron';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 interface IPropsEditPlacePage {
   params: {
@@ -47,7 +48,7 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
   const formKey = `place-form-${place.id}-${Date.now()}`;
 
   return (
-    <>
+    <ProtectedRoute>
       <Chevron />
       <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
         <h2 className="font-bold text-xl">Editar publicación</h2>
@@ -58,7 +59,7 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
           placeId={place.id}
         />
       </div>
-    </>
+    </ProtectedRoute>
   );
 };
 
