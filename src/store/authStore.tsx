@@ -8,6 +8,8 @@ interface State {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   checkAuth: () => Promise<void>;
+  validated: boolean;
+  setValidated: (validated: boolean) => void;
 }
 
 export const useAuthStore = create<State>((set) => ({
@@ -25,5 +27,8 @@ export const useAuthStore = create<State>((set) => ({
     } catch {
       set({ user: null, isAuthenticated: false });
     }
+    set({ validated: true });
   },
+  validated: false,
+  setValidated: (validated) => set(() => ({ validated })),
 }));

@@ -10,14 +10,14 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, validated } = useAuthStore();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && validated) {
       // Redirigir al login si no está autenticado
       router.push('/auth/login');
     }
-  }, [isAuthenticated, router]);
+  }, [validated, isAuthenticated, router]);
 
   // Si está autenticado, mostrar el contenido protegido
   return isAuthenticated ? <>{children}</> : null;
