@@ -63,7 +63,9 @@ const EditProfileForm = () => {
       formData.append('bio', data.bio || '');
       formData.append('location', data.location || '');
       formData.append('website', data.website || '');
-      formData.append('currentPassword', data.password);
+      if (user?.hasPassword) {
+        formData.append('currentPassword', data.password);
+      }
 
       if (data.languages && data.languages.length > 0) {
         data.languages.forEach((lang: string) => {
@@ -186,13 +188,13 @@ const EditProfileForm = () => {
                 </Select>
               )}
             />
-            <div className="flex flex-col gap-1 w-full">
+            {user?.hasPassword && (
               <Controller
                 name="password"
                 control={control}
                 render={({ field }) => <InputPassword required {...field} />}
               />
-            </div>
+            )}
             <Button
               type="submit"
               color="primary"

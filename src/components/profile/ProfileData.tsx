@@ -17,6 +17,7 @@ import InputPassword from '../ui/InputPassword';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUserService } from '@/services/auth/update-user';
+import { IUser } from '@/interfaces/user';
 
 const schema = yup
   .object({
@@ -42,7 +43,7 @@ const ProfileData = () => {
   });
 
   const { handleNavigation } = useNavigation();
-  const user = useAuthStore((state) => state.user);
+  const { user, setUser } = useAuthStore((state) => state);
 
   const [openPasswordChange, setOpenPasswordChange] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -70,6 +71,11 @@ const ProfileData = () => {
 
       await updateUserService(formData);
 
+      setUser({
+        ...(user as IUser),
+        hasPassword: true,
+      });
+      setOpenPasswordChange(false);
       toast.success('Contraseña actualizada correctamente.');
     } catch {
       toast.error('Error al actualizar la contraseña.');
