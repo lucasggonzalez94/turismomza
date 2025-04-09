@@ -244,8 +244,16 @@ const ProfileData = () => {
             control={control}
             render={({ field }) => (
               <InputPassword
-                label="Contraseña actual"
-                placeholder="Ingresa tu contraseña actual"
+                label={
+                  user?.hasPassword
+                    ? 'Contraseña actual'
+                    : 'Confirmar contraseña'
+                }
+                placeholder={
+                  user?.hasPassword
+                    ? 'Ingresa tu contraseña actual'
+                    : 'Ingresa la nueva contraseña'
+                }
                 required
                 {...field}
               />
