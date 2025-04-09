@@ -150,16 +150,26 @@ const ProfileData = () => {
               </p>
             </div>
             <Divider className="my-2" />
-            {/* TODO: Integrar cambio de password */}
             <div className="w-full h-full flex gap-3 items-end justify-end">
-              <Button
-                size="sm"
-                color="primary"
-                variant="light"
-                onPress={() => setOpenPasswordChange(true)}
-              >
-                Cambiar contraseña
-              </Button>
+              {user?.hasPassword ? (
+                <Button
+                  size="sm"
+                  color="primary"
+                  variant="light"
+                  onPress={() => setOpenPasswordChange(true)}
+                >
+                  Cambiar contraseña
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  color="primary"
+                  variant="light"
+                  onPress={() => setOpenPasswordChange(true)}
+                >
+                  Establecer contraseña
+                </Button>
+              )}
             </div>
             {/* TODO: Integrar 2FA */}
             {/* <div className="w-full h-full flex gap-3 items-end justify-end">
@@ -202,7 +212,9 @@ const ProfileData = () => {
         </div>
       </div>
       <CustomModal
-        title="Cambiar contraseña"
+        title={
+          user?.hasPassword ? 'Cambiar contraseña' : 'Establecer contraseña'
+        }
         isOpen={openPasswordChange}
         onOpenChange={setOpenPasswordChange}
         textButton="Guardar"
