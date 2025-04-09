@@ -11,6 +11,8 @@ interface ImageUploaderProps {
   maxImages?: number;
   maxSizeMB?: number;
   onImagesChange: (files: File[]) => void;
+  isInvalid?: boolean;
+  errorMessage?: string;
 }
 
 const ImageUploader = ({
@@ -19,11 +21,12 @@ const ImageUploader = ({
   maxImages = 10,
   maxSizeMB = 5,
   onImagesChange,
+  isInvalid,
+  errorMessage,
 }: ImageUploaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
-  const [errorMinMax, setErrorMinMax] = useState<string | null>(null);
   const [errorImages, setErrorImages] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -31,7 +34,7 @@ const ImageUploader = ({
 
   const addImages = useCallback(
     (files: File[]) => {
-      setErrorMinMax(null);
+      setErrorImages(null);
       const validFiles = files.filter((file) => {
         if (file.size > maxSizeMB * 1024 * 1024) {
           setErrorImages(`El tamaño máximo por imagen es ${maxSizeMB}MB`);
@@ -47,12 +50,12 @@ const ImageUploader = ({
       _setValues((prevImages) => {
         const newImages = [...prevImages, ...validFiles].slice(0, maxImages);
         if (newImages.length > maxImages) {
-          setErrorMinMax(
+          setErrorImages(
             `Has alcanzado el límite máximo de ${maxImages} imágenes`,
           );
         }
         if (newImages.length < minImages) {
-          setErrorMinMax(`El mínimo de imágenes es de ${minImages}.`);
+          setErrorImages(`El mínimo de imágenes es de ${minImages}.`);
         }
         return newImages;
       });
@@ -65,13 +68,13 @@ const ImageUploader = ({
       _setValues((prevImages) => {
         const newImages = prevImages.filter((_, i) => i !== index);
         if (newImages.length < minImages) {
-          setErrorMinMax(`El mínimo de imágenes es de ${minImages}.`);
+          setErrorImages(`El mínimo de imágenes es de ${minImages}.`);
         } else {
-          setErrorMinMax(null);
+          setErrorImages(null);
         }
         return newImages;
       });
-      setErrorMinMax(null);
+      setErrorImages(null);
     },
     [_setValues, minImages],
   );
@@ -100,6 +103,14 @@ const ImageUploader = ({
       _setValues([]);
     }
   }, [_setValues, defaultImages]);
+
+  useEffect(() => {
+    if (isInvalid) {
+      setErrorImages(errorMessage || '');
+    } else {
+      setErrorImages(null);
+    }
+  }, [errorMessage, setErrorImages, isInvalid]);
 
   const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -151,7 +162,7 @@ const ImageUploader = ({
         onDrop={handleDrop}
         className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 ${
           isDragging ? 'border-black bg-gray-200' : 'border-gray-300'
-        } transition-colors duration-200`}
+        } transition-colors duration-200 ${isInvalid ? 'border-red-500' : ''}`}
       >
         <input
           ref={fileInputRef}
@@ -178,19 +189,11 @@ const ImageUploader = ({
       <div className="text-center mb-4 w-full flex justify-center items-center">
         <div className="flex flex-col w-fit items-center px-3 py-1 rounded-xl text-sm font-medium bg-gray-200 text-gray-800">
           <span className="mr-1">ℹ️</span>
-          <span>Formatos aceptados: .jpg, .jpeg, .png</span>
+          <span>Formatos aceptados: .jpg, .jpeg, .png, .webp</span>
           <span>Tamaño máximo: 5Mb</span>
         </div>
       </div>
 
-      {errorMinMax && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-          role="alert"
-        >
-          <span className="block sm:inline">{errorMinMax}</span>
-        </div>
-      )}
       {errorImages && (
         <div
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"

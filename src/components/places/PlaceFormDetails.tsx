@@ -92,7 +92,7 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
     reset,
     watch,
   } = useForm<IPlaceFormDetails>({
-    mode: 'onChange',
+    mode: 'onTouched',
     resolver: yupResolver<IPlaceFormDetails>(schema),
     defaultValues: initialValues,
   });
@@ -331,6 +331,8 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
       <ImageUploader
         defaultImages={defaultValues?.images}
         onImagesChange={handleImagesChange}
+        isInvalid={!!errors.images?.message}
+        errorMessage={errors.images?.message}
       />
 
       <Button type="submit" color="primary">
