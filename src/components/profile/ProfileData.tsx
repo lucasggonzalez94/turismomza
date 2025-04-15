@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUserService } from '@/services/auth/update-user';
 import { IUser } from '@/interfaces/user';
+import GoogleLinkButton from './GoogleLinkButton';
 
 interface PasswordFormData {
   password: string;
@@ -233,6 +234,10 @@ const ProfileData = () => {
                   Establecer contraseña
                 </Button>
               )}
+              <GoogleLinkButton
+                hasGoogleAccount={!!user?.googleId}
+                hasPassword={!!user?.hasPassword}
+              />
             </div>
             {/* TODO: Integrar 2FA */}
             {/* <div className="w-full h-full flex gap-3 items-end justify-end">
