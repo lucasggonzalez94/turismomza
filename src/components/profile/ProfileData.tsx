@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import useNavigation from '@/hooks/useNavigation';
 import { Button, Divider } from '@nextui-org/react';
 import { IoTrashOutline } from 'react-icons/io5';
@@ -19,7 +19,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUserService } from '@/services/auth/update-user';
 import { IUser } from '@/interfaces/user';
 
-const schema = yup
+interface PasswordFormData {
+  password: string;
+  currentPassword: string;
+}
+
+const passwordSchema = yup
   .object({
     password: yup
       .string()
@@ -32,9 +37,70 @@ const schema = yup
   })
   .required();
 
+// Componente para mostrar estadísticas del usuario
+const UserStats = ({
+  places_count = 0,
+  review_count = 0,
+}: {
+  places_count?: number;
+  review_count?: number;
+}) => (
+  <div className="flex gap-6 justify-evenly items-center bg-white shadow-lg rounded-lg p-5">
+    <div className="flex flex-col gap-1 items-center">
+      <span className="text-4xl font-bold">{places_count}</span>
+      <span className="text-sm">Publicaciones creadas</span>
+    </div>
+    <div className="flex flex-col gap-1 items-center">
+      <span className="text-4xl font-bold">{review_count}</span>
+      <span className="text-sm">Opiniones</span>
+    </div>
+  </div>
+);
+
+// Componente para mostrar información del usuario
+const UserInfoCard = ({
+  bio,
+  location,
+  website,
+}: {
+  bio?: string;
+  location?: string;
+  website?: string;
+}) => (
+  <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
+    <div className="w-full flex flex-col gap-2">
+      <h4 className="text-sm font-bold">Bio</h4>
+      <p className="text-sm">{bio || 'No existe una bio para este usuario.'}</p>
+    </div>
+    <Divider className="my-2" />
+    <div className="w-full flex flex-col gap-2">
+      <h4 className="text-sm font-bold">Ubicación</h4>
+      <p className="text-sm">
+        {location || 'No existe una ubicación para este usuario'}
+      </p>
+    </div>
+    <Divider className="my-2" />
+    <div className="w-full flex flex-col gap-2">
+      <h4 className="text-sm font-bold">Sitio web</h4>
+      {website ? (
+        <Link
+          href={website}
+          className="text-sm text-trinidad-600 hover:underline"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {website}
+        </Link>
+      ) : (
+        <p className="text-sm">No existe un sitio web para este usuario</p>
+      )}
+    </div>
+  </div>
+);
+
 const ProfileData = () => {
-  const { handleSubmit, control } = useForm({
-    resolver: yupResolver(schema),
+  const { handleSubmit, control } = useForm<PasswordFormData>({
+    resolver: yupResolver(passwordSchema),
     mode: 'onChange',
     defaultValues: {
       password: '',
@@ -43,13 +109,20 @@ const ProfileData = () => {
   });
 
   const { handleNavigation } = useNavigation();
-  const { user, setUser } = useAuthStore((state) => state);
+  const { user, setUser } = useAuthStore();
 
   const [openPasswordChange, setOpenPasswordChange] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
-  const handleDelete = async () => {
+  const mappedLanguages = useMemo(
+    () =>
+      mapLanguages(user?.language || [])?.join(', ') ||
+      'No existen idiomas para este usuario',
+    [user?.language],
+  );
+
+  const handleDelete = useCallback(async () => {
     try {
       setLoadingDelete(true);
       await deleteUserService();
@@ -59,30 +132,45 @@ const ProfileData = () => {
     } finally {
       setLoadingDelete(false);
     }
-  };
+  }, [handleNavigation]);
 
-  const handlePasswordChange = async (data: any) => {
-    try {
-      setLoadingPasswordChange(true);
+  const handlePasswordChange = useCallback(
+    async (data: PasswordFormData) => {
+      try {
+        setLoadingPasswordChange(true);
 
-      const formData = new FormData();
-      formData.append('password', data.password);
-      formData.append('currentPassword', data.currentPassword);
+        const formData = new FormData();
+        formData.append('password', data.password);
+        formData.append('currentPassword', data.currentPassword);
 
-      await updateUserService(formData);
+        await updateUserService(formData);
 
-      setUser({
-        ...(user as IUser),
-        hasPassword: true,
-      });
-      setOpenPasswordChange(false);
-      toast.success('Contraseña actualizada correctamente.');
-    } catch {
-      toast.error('Error al actualizar la contraseña.');
-    } finally {
-      setLoadingPasswordChange(false);
-    }
-  };
+        setUser({
+          ...(user as IUser),
+          hasPassword: true,
+        });
+        setOpenPasswordChange(false);
+        toast.success('Contraseña actualizada correctamente.');
+      } catch {
+        toast.error('Error al actualizar la contraseña.');
+      } finally {
+        setLoadingPasswordChange(false);
+      }
+    },
+    [user, setUser],
+  );
+
+  const openPasswordModal = useCallback(() => setOpenPasswordChange(true), []);
+
+  const navigateToEditProfile = useCallback(
+    () => handleNavigation('/profile/edit'),
+    [handleNavigation],
+  );
+
+  const passwordModalTitle = useMemo(
+    () => (user?.hasPassword ? 'Cambiar contraseña' : 'Establecer contraseña'),
+    [user?.hasPassword],
+  );
 
   return (
     <>
@@ -106,54 +194,23 @@ const ProfileData = () => {
             variant="flat"
             isIconOnly
             size="sm"
-            onPress={() => handleNavigation('/profile/edit')}
+            onPress={navigateToEditProfile}
           >
             <RiEditLine size={20} />
           </Button>
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-3 justify-between items-stretch">
-          <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
-            <div className="w-full flex flex-col gap-2">
-              <h4 className="text-sm font-bold">Bio</h4>
-              <p className="text-sm">
-                {user?.bio || 'No existe una bio para este usuario.'}
-              </p>
-            </div>
-            <Divider className="my-2" />
-            <div className="w-full flex flex-col gap-2">
-              <h4 className="text-sm font-bold">Ubicación</h4>
-              <p className="text-sm">
-                {user?.location || 'No existe una ubicación para este usuario'}
-              </p>
-            </div>
-            <Divider className="my-2" />
-            <div className="w-full flex flex-col gap-2">
-              <h4 className="text-sm font-bold">Sitio web</h4>
-              {user?.website ? (
-                <Link
-                  href={user?.website}
-                  className="text-sm text-trinidad-600 hover:underline"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {user?.website}
-                </Link>
-              ) : (
-                <p className="text-sm">
-                  No existe un sitio web para este usuario
-                </p>
-              )}
-            </div>
-          </div>
+          <UserInfoCard
+            bio={user?.bio}
+            location={user?.location}
+            website={user?.website}
+          />
 
           <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-start bg-white shadow-lg rounded-lg p-5">
             <div className="w-full flex flex-col gap-2">
               <h4 className="text-sm font-bold">Idiomas</h4>
-              <p className="text-sm">
-                {mapLanguages(user?.language || [])?.join(', ') ||
-                  'No existen idiomas para este usuario'}
-              </p>
+              <p className="text-sm">{mappedLanguages}</p>
             </div>
             <Divider className="my-2" />
             <div className="w-full h-full flex gap-3 items-end justify-end">
@@ -162,7 +219,7 @@ const ProfileData = () => {
                   size="sm"
                   color="primary"
                   variant="light"
-                  onPress={() => setOpenPasswordChange(true)}
+                  onPress={openPasswordModal}
                 >
                   Cambiar contraseña
                 </Button>
@@ -171,7 +228,7 @@ const ProfileData = () => {
                   size="sm"
                   color="primary"
                   variant="light"
-                  onPress={() => setOpenPasswordChange(true)}
+                  onPress={openPasswordModal}
                 >
                   Establecer contraseña
                 </Button>
@@ -190,23 +247,12 @@ const ProfileData = () => {
           </div>
         </div>
 
-        <div className="flex gap-6 justify-evenly items-center bg-white shadow-lg rounded-lg p-5">
-          <div className="flex flex-col gap-1 items-center">
-            <span className="text-4xl font-bold">
-              {user?.places_count || 0}
-            </span>
-            <span className="text-sm">Publicaciones creadas</span>
-          </div>
-          <div className="flex flex-col gap-1 items-center">
-            <span className="text-4xl font-bold">
-              {user?.review_count || 0}
-            </span>
-            <span className="text-sm">Opiniones</span>
-          </div>
-        </div>
+        <UserStats
+          places_count={user?.places_count}
+          review_count={user?.review_count}
+        />
 
         <div className="flex gap-3 items-center">
-          {/* <Button color="primary">Guardar</Button> */}
           <Button
             className="bg-red-800 text-white"
             endContent={<IoTrashOutline />}
@@ -218,13 +264,11 @@ const ProfileData = () => {
         </div>
       </div>
       <CustomModal
-        title={
-          user?.hasPassword ? 'Cambiar contraseña' : 'Establecer contraseña'
-        }
+        title={passwordModalTitle}
         isOpen={openPasswordChange}
         onOpenChange={setOpenPasswordChange}
         textButton="Guardar"
-        onAction={() => handleSubmit(handlePasswordChange)}
+        onAction={handleSubmit(handlePasswordChange)}
         idForm="updatePassword"
         loadingAction={loadingPasswordChange}
       >
