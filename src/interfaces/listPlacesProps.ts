@@ -5,3 +5,7 @@ export interface ListPlacesProps {
   page?: number;
   pageSize?: number;
 }
+
+export interface ListPlacesByUserProps extends ListPlacesProps {
+  userId: string;
+}

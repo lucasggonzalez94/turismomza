@@ -113,7 +113,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       createNavigationOption(
         'publications',
         'Mis publicaciones',
-        '/profile/publications',
+        '/publications',
         true,
       ),
       createNavigationOption('help', 'Ayuda', '/faqs', true),
@@ -139,7 +139,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
       createNavigationOption(
         'publications',
         'Mis publicaciones',
-        '/profile/publications',
+        '/publications',
         true,
       ),
       createNavigationOption('admin', 'Administrar', '/admin', true),

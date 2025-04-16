@@ -130,7 +130,7 @@ const Topbar = () => {
             id: 'publications',
             text: 'Mis publicaciones',
             onClick: () => {
-              handleNavigation('/profile/publications');
+              handleNavigation('/publications');
               setBackPath(pathname);
             },
             divider: true,
@@ -157,7 +157,7 @@ const Topbar = () => {
             id: 'publications',
             text: 'Mis publicaciones',
             onClick: () => {
-              handleNavigation('/profile/publications');
+              handleNavigation('/publications');
               setBackPath(pathname);
             },
             divider: true,

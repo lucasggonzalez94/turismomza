@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,9 +15,13 @@ import {
 } from '@nextui-org/react';
 import { IoLogoUsd } from 'react-icons/io5';
 import { IoStar } from 'react-icons/io5';
-import { usePlaceStore } from '@/store/placeStore';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { CATEGORIES } from '@/utils/constants';
+
+interface FiltersFormProps {
+  prices: { minPrice: number; maxPrice: number };
+  setFilters: (filters: any) => void;
+}
 
 // Componente para renderizar estrellas de calificación
 const RatingStars = ({ rating }: { rating: number }) => {
@@ -42,11 +46,11 @@ const schema = yup
   })
   .required();
 
-const FiltersForm = () => {
-  const { prices, setFilters } = usePlaceStore((state) => state);
+const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
   const [priceRangeValue, setPriceRangeValue] = useState([0, 0]);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const searchQuery = searchParams.get('search');
 
@@ -90,9 +94,9 @@ const FiltersForm = () => {
     }
     const queryString = params.toString();
     if (queryString) {
-      router.push(`/places?${queryString}`);
+      router.push(`${pathname}?${queryString}`);
     } else {
-      router.push('/places');
+      router.push(pathname);
     }
   };
 

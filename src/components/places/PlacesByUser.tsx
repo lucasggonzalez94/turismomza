@@ -3,17 +3,16 @@
 import { useEffect, useState } from 'react';
 import useWindowSize from '@/hooks/useWindowSize';
 import { IPlace } from '@/interfaces/place';
-import { getPlacesService } from '@/services/places/get-places';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
 import { Button, Pagination } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
-import { IUser } from '@/interfaces/user';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
+import { getPlacesByUserService } from '@/services/places/get-places-by-user';
 
-const PlacesWithFilters = () => {
+const PlacesByUser = () => {
   const user = useAuthStore((state) => state.user);
   const { width } = useWindowSize();
 
@@ -28,7 +27,6 @@ const PlacesWithFilters = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<IUser | null>(null);
   const [hideFilters, setHideFilters] = useState(false);
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
 
@@ -47,16 +45,11 @@ const PlacesWithFilters = () => {
   }, [width]);
 
   useEffect(() => {
-    if (user) {
-      setUserData(user);
-    }
-  }, [user]);
-
-  useEffect(() => {
     const getPlaces = async () => {
       try {
         setLoading(true);
-        const { data, totalPages, maxPrice } = await getPlacesService({
+        const { data, totalPages, maxPrice } = await getPlacesByUserService({
+          userId: user!.id,
           filters,
           page: currentPage,
           pageSize,
@@ -78,13 +71,13 @@ const PlacesWithFilters = () => {
       getPlaces();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, filters, userData, setPrices]);
+  }, [currentPage, pageSize, filters, user, setPrices]);
 
   return (
     <>
       <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-xl">Lugares turísticos</h2>
+          <h2 className="font-bold text-xl">Mis publicaciones</h2>
           {hideFilters && (
             <Button
               color="default"
@@ -123,7 +116,7 @@ const PlacesWithFilters = () => {
                   </div>
                 ) : (
                   places.map((place: IPlace) => (
-                    <PlaceCard key={place.id} place={place} user={userData} />
+                    <PlaceCard key={place.id} place={place} user={user} />
                   ))
                 )}
               </div>
@@ -154,4 +147,4 @@ const PlacesWithFilters = () => {
   );
 };
 
-export default PlacesWithFilters;
+export default PlacesByUser;
