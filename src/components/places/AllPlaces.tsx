@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import useWindowSize from '@/hooks/useWindowSize';
 import { IPlace } from '@/interfaces/place';
+import { getPlacesService } from '@/services/places/get-places';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
 import { Button } from '@nextui-org/react';
@@ -10,9 +11,8 @@ import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
-import { getFavoritePlacesService } from '@/services/places/get-favorite-places';
 
-const FavoritePlaces = () => {
+const AllPlaces = () => {
   const user = useAuthStore((state: any) => state.user);
   const { width } = useWindowSize();
 
@@ -45,7 +45,7 @@ const FavoritePlaces = () => {
           setLoadingMore(true);
         }
 
-        const { data, totalPages, maxPrice } = await getFavoritePlacesService({
+        const { data, totalPages, maxPrice } = await getPlacesService({
           filters,
           page,
           pageSize,
@@ -75,6 +75,7 @@ const FavoritePlaces = () => {
     [filters, pageSize],
   );
 
+  // Configurar el tamaño de página y visibilidad de filtros según el ancho de la ventana
   useEffect(() => {
     if (width > 1024) {
       setPageSize(8);
@@ -139,7 +140,7 @@ const FavoritePlaces = () => {
     <>
       <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-xl">Favoritos</h2>
+          <h2 className="font-bold text-xl">Lugares turísticos</h2>
           {hideFilters && (
             <Button
               color="default"
@@ -223,4 +224,4 @@ const FavoritePlaces = () => {
   );
 };
 
-export default FavoritePlaces;
+export default AllPlaces;

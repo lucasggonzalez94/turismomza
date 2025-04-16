@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import useWindowSize from '@/hooks/useWindowSize';
 import { IPlace } from '@/interfaces/place';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
-import { Button, Pagination } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
@@ -13,7 +13,7 @@ import { useAuthStore } from '@/store/authStore';
 import { getPlacesByUserService } from '@/services/places/get-places-by-user';
 
 const PlacesByUser = () => {
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state: any) => state.user);
   const { width } = useWindowSize();
 
   const [places, setPlaces] = useState<IPlace[]>([]);
@@ -24,11 +24,57 @@ const PlacesByUser = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [totalPages, setTotalPages] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hideFilters, setHideFilters] = useState(false);
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
+
+  // Referencia para el elemento observador del scroll infinito
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Memoizar la función de carga de lugares para evitar recreaciones innecesarias
+  const getPlaces = useCallback(
+    async (page: number, append: boolean = false) => {
+      try {
+        if (page === 1) {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+
+        const { data, totalPages, maxPrice } = await getPlacesByUserService({
+          userId: user!.id,
+          filters,
+          page,
+          pageSize,
+        });
+
+        if (append) {
+          setPlaces((prevPlaces) => [...prevPlaces, ...data]);
+        } else {
+          setPlaces(data);
+        }
+
+        setHasMore(page < totalPages);
+
+        if (page === 1) {
+          setPrices({
+            minPrice: 0,
+            maxPrice,
+          });
+        }
+      } catch {
+        setErrorService(true);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    },
+    [filters, pageSize, user],
+  );
 
   useEffect(() => {
     if (width > 1024) {
@@ -44,34 +90,51 @@ const PlacesByUser = () => {
     }
   }, [width]);
 
+  // Cargar lugares iniciales cuando cambian los filtros o el tamaño de página
   useEffect(() => {
-    const getPlaces = async () => {
-      try {
-        setLoading(true);
-        const { data, totalPages, maxPrice } = await getPlacesByUserService({
-          userId: user!.id,
-          filters,
-          page: currentPage,
-          pageSize,
+    if (pageSize > 0 && user) {
+      setCurrentPage(1);
+      getPlaces(1, false);
+    }
+  }, [pageSize, filters, user, getPlaces]);
+
+  // Configurar el observer para el scroll infinito
+  useEffect(() => {
+    // Desconectar el observer anterior si existe
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    // Función para manejar la intersección
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasMore && !loadingMore && !loading) {
+        setCurrentPage((prevPage) => {
+          const nextPage = prevPage + 1;
+          getPlaces(nextPage, true);
+          return nextPage;
         });
-        setPlaces(data);
-        setTotalPages(totalPages);
-        setPrices({
-          minPrice: 0,
-          maxPrice,
-        });
-      } catch {
-        setErrorService(true);
-      } finally {
-        setLoading(false);
       }
     };
 
-    if (pageSize > 0) {
-      getPlaces();
+    // Crear un nuevo observer
+    observerRef.current = new IntersectionObserver(handleObserver, {
+      rootMargin: '0px 0px 400px 0px', // Cargar más elementos antes de llegar al final
+      threshold: 0.1,
+    });
+
+    // Observar el elemento de carga si existe
+    if (loadMoreRef.current && hasMore) {
+      observerRef.current.observe(loadMoreRef.current);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, filters, user, setPrices]);
+
+    // Limpiar el observer al desmontar
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [hasMore, loadingMore, loading, getPlaces]);
 
   return (
     <>
@@ -103,33 +166,47 @@ const PlacesByUser = () => {
                 </span>
               </div>
             ) : (
-              <div
-                className={`${places.length || loading ? 'grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4' : 'flex justify-center items-center h-full p-24'} w-full`}
-              >
-                {loading ? (
-                  Array.from({ length: pageSize }).map((_, index) => (
-                    <CardSkeleton key={index} />
-                  ))
-                ) : !places.length ? (
-                  <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
-                    <span>No se encontraron lugares.</span>
+              <>
+                <div
+                  className={`${
+                    places.length || loading
+                      ? 'grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4'
+                      : 'flex justify-center items-center h-full p-24'
+                  } w-full`}
+                >
+                  {loading && currentPage === 1 ? (
+                    Array.from({ length: pageSize }).map((_, index) => (
+                      <CardSkeleton key={`skeleton-${index}`} />
+                    ))
+                  ) : !places.length ? (
+                    <div className="w-full min-h-20 flex justify-center items-center gap-3 text-xl">
+                      <span>No se encontraron lugares.</span>
+                    </div>
+                  ) : (
+                    places.map((place: IPlace) => (
+                      <PlaceCard key={place.id} place={place} user={user} />
+                    ))
+                  )}
+                </div>
+
+                {/* Elemento observado para el scroll infinito */}
+                {!errorService && places.length > 0 && (
+                  <div
+                    ref={loadMoreRef}
+                    className="w-full py-4 flex justify-center"
+                  >
+                    {loadingMore && (
+                      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-4 w-full">
+                        {Array.from({ length: Math.min(pageSize, 4) }).map(
+                          (_, index) => (
+                            <CardSkeleton key={`load-more-skeleton-${index}`} />
+                          ),
+                        )}
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  places.map((place: IPlace) => (
-                    <PlaceCard key={place.id} place={place} user={user} />
-                  ))
                 )}
-              </div>
-            )}
-            {!errorService && !!places.length && (
-              <Pagination
-                total={totalPages || 1}
-                initialPage={1}
-                page={currentPage}
-                onChange={setCurrentPage}
-                color="primary"
-                showControls
-              />
+              </>
             )}
           </div>
         </div>
