@@ -23,7 +23,7 @@ const AllPlaces = () => {
     maxPrice: 0,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
+  const [pageSize, setPageSize] = useState(20);
   const [hasMore, setHasMore] = useState(true);
   const [errorService, setErrorService] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,14 +31,17 @@ const AllPlaces = () => {
   const [hideFilters, setHideFilters] = useState(false);
   const [openSidedrawer, setOpenSidedrawer] = useState(false);
 
-  // Referencia para el elemento observador del scroll infinito
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef(false);
 
-  // Memoizar la función de carga de lugares para evitar recreaciones innecesarias
   const getPlaces = useCallback(
     async (page: number, append: boolean = false) => {
       try {
+        if (loadingRef.current) return;
+
+        loadingRef.current = true;
+
         if (page === 1) {
           setLoading(true);
         } else {
@@ -51,10 +54,16 @@ const AllPlaces = () => {
           pageSize,
         });
 
-        if (append) {
-          setPlaces((prevPlaces) => [...prevPlaces, ...data]);
-        } else {
+        if (page === 1 || !append) {
           setPlaces(data);
+        } else {
+          setPlaces((prevPlaces) => {
+            const existingIds = new Set(prevPlaces.map((place) => place.id));
+            const uniqueNewPlaces = data.filter(
+              (place: IPlace) => !existingIds.has(place.id),
+            );
+            return [...prevPlaces, ...uniqueNewPlaces];
+          });
         }
 
         setHasMore(page < totalPages);
@@ -70,17 +79,17 @@ const AllPlaces = () => {
       } finally {
         setLoading(false);
         setLoadingMore(false);
+        loadingRef.current = false;
       }
     },
     [filters, pageSize],
   );
 
-  // Configurar el tamaño de página y visibilidad de filtros según el ancho de la ventana
   useEffect(() => {
     if (width > 1024) {
-      setPageSize(8);
+      setPageSize(20);
     } else {
-      setPageSize(6);
+      setPageSize(15);
     }
 
     if (width < 1536) {
@@ -90,7 +99,6 @@ const AllPlaces = () => {
     }
   }, [width]);
 
-  // Cargar lugares iniciales cuando cambian los filtros o el tamaño de página
   useEffect(() => {
     if (pageSize > 0) {
       setCurrentPage(1);
@@ -98,17 +106,14 @@ const AllPlaces = () => {
     }
   }, [pageSize, filters, user, getPlaces]);
 
-  // Configurar el observer para el scroll infinito
   useEffect(() => {
-    // Desconectar el observer anterior si existe
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
 
-    // Función para manejar la intersección
     const handleObserver = (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
-      if (entry.isIntersecting && hasMore && !loadingMore && !loading) {
+      if (entry.isIntersecting && hasMore && !loadingRef.current) {
         setCurrentPage((prevPage) => {
           const nextPage = prevPage + 1;
           getPlaces(nextPage, true);
@@ -117,24 +122,21 @@ const AllPlaces = () => {
       }
     };
 
-    // Crear un nuevo observer
     observerRef.current = new IntersectionObserver(handleObserver, {
-      rootMargin: '0px 0px 400px 0px', // Cargar más elementos antes de llegar al final
+      rootMargin: '0px 0px 400px 0px',
       threshold: 0.1,
     });
 
-    // Observar el elemento de carga si existe
     if (loadMoreRef.current && hasMore) {
       observerRef.current.observe(loadMoreRef.current);
     }
 
-    // Limpiar el observer al desmontar
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
     };
-  }, [hasMore, loadingMore, loading, getPlaces]);
+  }, [hasMore, getPlaces, loadingMore, loading]);
 
   return (
     <>
@@ -189,7 +191,6 @@ const AllPlaces = () => {
                   )}
                 </div>
 
-                {/* Elemento observado para el scroll infinito */}
                 {!errorService && places.length > 0 && (
                   <div
                     ref={loadMoreRef}

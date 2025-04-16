@@ -1,13 +1,12 @@
 import axiosInstance from '@/config/axiosInstance';
-import { ListPlacesByUserProps } from '@/interfaces/listPlacesProps';
+import { ListPlacesProps } from '@/interfaces/listPlacesProps';
 
 export const getPlacesByUserService = async ({
-  userId,
   filters,
   page = 1,
   pageSize = 10,
-}: ListPlacesByUserProps): Promise<any> => {
-  const response = await axiosInstance.get(`/places/user/${userId}`, {
+}: ListPlacesProps): Promise<any> => {
+  const response = await axiosInstance.get(`/places/user`, {
     params: {
       ...filters,
       page,
