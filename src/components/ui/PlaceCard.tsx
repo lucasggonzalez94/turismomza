@@ -48,7 +48,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
 
   const [favorite, setFavorite] = useState(false);
   const [imgSrc, setImgSrc] = useState(
-    imageCard || '/images/default-image.webp',
+    imageCard ?? '/images/default-image.webp',
   );
 
   const handleFavorite = async (e: React.MouseEvent) => {

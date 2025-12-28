@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
-      <body className={`${rootFont.className} antialiased`}>
+      <body className={`${rootFont.className} antialiased bg-zinc-200`}>
         <Providers>
           <NextUIProvider>
             <Spinner />
