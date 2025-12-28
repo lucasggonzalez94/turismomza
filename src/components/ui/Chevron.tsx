@@ -15,7 +15,7 @@ const Chevron: FC<IChevron> = ({ path }) => {
   return (
     <Link
       href={path || backPath}
-      className="flex items-center gap-1 px-3 py-4 w-fit font-bold text-primary hover:transform hover:scale-110 transition-all"
+      className="flex items-center gap-1 w-fit font-bold text-primary hover:transform hover:scale-110 transition-all"
     >
       <IoChevronBack />
       <span>Volver</span>

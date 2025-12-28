@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import AllPlaces from '@/components/places/AllPlaces';
+import Container from '@/components/ui/Container';
 import Chevron from '@/components/ui/Chevron';
 
 export const metadata: Metadata = {
@@ -10,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function PlacesPage() {
   return (
-    <>
-      <Chevron />
-      <Suspense fallback={<div>Cargando...</div>}>
+    <Suspense fallback={<div>Cargando...</div>}>
+      <Container>
+        <Chevron />
         <AllPlaces />
-      </Suspense>
-    </>
+      </Container>
+    </Suspense>
   );
 }

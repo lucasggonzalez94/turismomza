@@ -1,5 +1,7 @@
 import ContactForm from '@/components/contact/ContactForm';
 import AccordionCustom from '@/components/ui/AccordionCustom';
+import Chevron from '@/components/ui/Chevron';
+import Container from '@/components/ui/Container';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -114,10 +116,13 @@ export default function FAQsPage() {
     },
   ];
   return (
-    <div className="flex flex-col flex-grow gap-6 p-8 md:p-12">
-      <h2 className="font-bold text-xl">Preguntas frecuentes (FAQs)</h2>
-      <AccordionCustom items={FAQs} />
-      <ContactForm />
-    </div>
+    <Container>
+      <div className="flex flex-col flex-grow gap-1">
+        <Chevron />
+        <h2 className="font-bold text-xl">Preguntas frecuentes (FAQs)</h2>
+        <AccordionCustom items={FAQs} />
+        <ContactForm />
+      </div>
+    </Container>
   );
 }

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Chevron from '@/components/ui/Chevron';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import Container from '@/components/ui/Container';
 
 interface IPropsEditPlacePage {
   params: {
@@ -49,16 +50,18 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
 
   return (
     <ProtectedRoute>
-      <Chevron />
-      <div className="flex flex-col items-center md:items-start flex-grow gap-6 pb-4 px-4 lg:px-[20%] xl:px-[30%]">
-        <h2 className="font-bold text-xl">Editar publicación</h2>
-        <PlaceForm
-          key={formKey}
-          isEditing={true}
-          dataPlace={formData}
-          placeId={place.id}
-        />
-      </div>
+      <Container>
+        <Chevron />
+        <div className="flex flex-col items-center md:items-start flex-grow gap-6 lg:px-[20%] xl:px-[30%]">
+          <h2 className="font-bold text-xl">Editar publicación</h2>
+          <PlaceForm
+            key={formKey}
+            isEditing={true}
+            dataPlace={formData}
+            placeId={place.id}
+          />
+        </div>
+      </Container>
     </ProtectedRoute>
   );
 };

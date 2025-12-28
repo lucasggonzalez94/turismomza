@@ -48,6 +48,7 @@ const PlacesByUser = () => {
           setLoadingMore(true);
         }
 
+        debugger;
         const { data, totalPages, maxPrice } = await getPlacesByUserService({
           filters,
           page,
@@ -74,7 +75,9 @@ const PlacesByUser = () => {
             maxPrice,
           });
         }
-      } catch {
+      } catch (error: any) {
+        debugger;
+        console.error('Error fetching places:', error?.message || error);
         setErrorService(true);
       } finally {
         setLoading(false);
@@ -140,7 +143,7 @@ const PlacesByUser = () => {
 
   return (
     <>
-      <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
+      <div className="flex flex-col flex-grow gap-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl">Mis publicaciones</h2>
           {hideFilters && (

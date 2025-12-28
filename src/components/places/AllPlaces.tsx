@@ -11,6 +11,7 @@ import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
+import Chevron from '../ui/Chevron';
 
 const AllPlaces = () => {
   const user = useAuthStore((state: any) => state.user);
@@ -140,7 +141,7 @@ const AllPlaces = () => {
 
   return (
     <>
-      <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
+      <div className="flex flex-col flex-grow gap-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl">Lugares turísticos</h2>
           {hideFilters && (

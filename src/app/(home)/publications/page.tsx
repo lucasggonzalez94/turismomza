@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Chevron from '@/components/ui/Chevron';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import PlacesByUser from '@/components/places/PlacesByUser';
+import Container from '@/components/ui/Container';
 
 export const metadata: Metadata = {
   title: 'Lugares',
@@ -12,10 +13,12 @@ export const metadata: Metadata = {
 export default function PlacesByUserPage() {
   return (
     <ProtectedRoute>
-      <Chevron />
-      <Suspense fallback={<div>Cargando...</div>}>
-        <PlacesByUser />
-      </Suspense>
+      <Container>
+        <Chevron />
+        <Suspense fallback={<div>Cargando...</div>}>
+          <PlacesByUser />
+        </Suspense>
+      </Container>
     </ProtectedRoute>
   );
 }

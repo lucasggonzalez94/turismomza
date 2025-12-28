@@ -140,7 +140,7 @@ const FavoritePlaces = () => {
 
   return (
     <>
-      <div className="flex flex-col flex-grow gap-4 px-4 pb-8">
+      <div className="flex flex-col flex-grow gap-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl">Favoritos</h2>
           {hideFilters && (

@@ -47,6 +47,9 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
   const { setLastPath, setBackPath } = useNavigationStore((state) => state);
 
   const [favorite, setFavorite] = useState(false);
+  const [imgSrc, setImgSrc] = useState(
+    imageCard || '/images/default-image.webp',
+  );
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -68,7 +71,8 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
 
   useEffect(() => {
     setFavorite(isFavorite);
-  }, [isFavorite]);
+    setImgSrc(imageCard || '/images/default-image.webp');
+  }, [isFavorite, imageCard]);
 
   const handleNavigateToDetail = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -118,7 +122,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
         </div>
 
         <Image
-          src={imageCard || '/images/default-image.webp'}
+          src={imgSrc}
           alt={
             imageCard
               ? `${title} - ${category} en ${location || 'Mendoza'}`
@@ -128,6 +132,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
           height={600}
           className="object-cover w-full h-full sm:max-h-48 md:max-h-56"
           loading="eager"
+          onError={() => setImgSrc('/images/default-image.webp')}
         />
       </div>
 

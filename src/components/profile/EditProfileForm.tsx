@@ -105,7 +105,7 @@ const EditProfileForm = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col justify-center items-center flex-grow gap-3 px-4 pb-8">
+      <div className="w-full flex flex-col justify-center items-center flex-grow gap-3">
         <h1 className="w-1/2 font-bold text-xl text-center xl:text-left">
           Editar usuario
         </h1>

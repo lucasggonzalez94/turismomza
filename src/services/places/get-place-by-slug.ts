@@ -6,7 +6,7 @@ export const getPlaceBySlugService = async (
   userId?: string,
 ): Promise<IPlace | null> => {
   try {
-    const response = await axiosInstance.get(`/places/${slug}`, {
+    const response = await axiosInstance.get(`/places/slug/${slug}`, {
       params: {
         userId,
       },

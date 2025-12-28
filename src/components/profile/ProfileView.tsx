@@ -38,7 +38,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
   }, [userId]);
 
   return (
-    <div className="flex flex-col flex-grow gap-3 px-4 pb-8">
+    <div className="flex flex-col flex-grow gap-3">
       <div className="flex gap-6 justify-start items-center mb-4">
         <ProfilePicture />
         <div className="flex flex-col">

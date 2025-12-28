@@ -24,7 +24,7 @@ interface IPropsPlaceDetails {
 }
 
 const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
-  const [place, setPlace] = useState<Partial<IPlace>>({});
+  const [place, setPlace] = useState<Partial<IPlace> | null>({});
   const [averageRating, setAverageRating] = useState('0');
   const [servicesAccordion, setServicesAccordion] = useState<
     {
@@ -40,6 +40,7 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
   >([]);
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
+  const [imgSrcs, setImgSrcs] = useState<string[]>([]);
 
   const user = useAuthStore((state) => state.user);
   const setLoading = useLoadingStore((state) => state.setLoading);
@@ -64,13 +65,13 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
     creatorId,
     location,
     schedule,
-  } = place;
+  } = place || {};
 
   const getPlace = async () => {
     try {
       setLoading(true);
       const response = await getPlaceBySlugService(slug, user?.id);
-      setPlace(response);
+      setPlace(response || {});
     } catch {
       router.push('/not-found');
     } finally {
@@ -144,8 +145,14 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
     }
   }, [schedule]);
 
+  useEffect(() => {
+    if (images?.length) {
+      setImgSrcs(images.map((img) => img.url));
+    }
+  }, [images]);
+
   return (
-    <div className="flex flex-col flex-grow gap-6 px-4 pb-8 relative">
+    <div className="flex flex-col flex-grow gap-6 relative">
       <div className="flex flex-col gap-3 lg:flex-row justify-between items-center border-b border-gray-300 pb-4">
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center gap-2 justify-between w-full">
@@ -215,12 +222,16 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
                       <span className="text-white font-bold">Ver más...</span>
                     </div>
                     <Image
-                      src={img?.url}
+                      src={imgSrcs[index] || '/images/default-image.webp'}
                       alt={`Imágen ${index}`}
                       width={600}
                       height={600}
-                      defaultValue="/images/default-image.webp"
                       className={`w-full h-full object-cover object-center`}
+                      onError={() => {
+                        const newImgSrcs = [...imgSrcs];
+                        newImgSrcs[index] = '/images/default-image.webp';
+                        setImgSrcs(newImgSrcs);
+                      }}
                     />
                   </div>
                 );
@@ -228,20 +239,24 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
               return (
                 <Image
                   key={img?.publicId}
-                  src={img?.url}
+                  src={imgSrcs[index] || '/images/default-image.webp'}
                   alt={`Imágen ${index}`}
                   width={600}
                   height={600}
-                  defaultValue="/images/default-image.webp"
                   className={`w-full h-full object-cover object-center cursor-pointer hover:brightness-75 ${index === 0 || index === 3 ? 'col-span-4' : 'col-span-3'}`}
                   onClick={() => handleImageClick(index)}
+                  onError={() => {
+                    const newImgSrcs = [...imgSrcs];
+                    newImgSrcs[index] = '/images/default-image.webp';
+                    setImgSrcs(newImgSrcs);
+                  }}
                 />
               );
             })}
           </div>
           <div className="w-full md:hidden h-[450px]">
             <SliderCarousel
-              images={images?.map((img) => img.url) as string[]}
+              images={imgSrcs.length ? imgSrcs : ['/images/default-image.webp']}
               showPrevNextButtons
             />
           </div>
@@ -278,7 +293,7 @@ const PlaceDetails: FC<IPropsPlaceDetails> = ({ slug }) => {
       />
       {isCarouselOpen && images?.length && (
         <SliderCarousel
-          images={images?.map((img) => img.url)}
+          images={imgSrcs.length ? imgSrcs : ['/images/default-image.webp']}
           initialIndex={initialIndex}
           fullscreen
           showPrevNextButtons

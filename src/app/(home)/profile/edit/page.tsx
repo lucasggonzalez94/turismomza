@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import EditProfileForm from '@/components/profile/EditProfileForm';
 import Chevron from '@/components/ui/Chevron';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import Container from '@/components/ui/Container';
 
 export const metadata: Metadata = {
   title: 'Perfil',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 export default function EditProfilePage() {
   return (
     <ProtectedRoute>
-      <div className="flex flex-col flex-grow gap-6 pb-4 px-4">
-        <Chevron path="/profile" />
-        <EditProfileForm />
-      </div>
+      <Container>
+        <div className="flex flex-col flex-grow gap-6">
+          <Chevron path="/profile" />
+          <EditProfileForm />
+        </div>
+      </Container>
     </ProtectedRoute>
   );
 }
