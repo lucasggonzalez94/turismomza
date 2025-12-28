@@ -1,11 +1,9 @@
 'use client';
 
 import { FC, useEffect, useState, useCallback } from 'react';
-import { Tab, Tabs } from '@nextui-org/react';
 import { PiNumberCircleOneFill, PiNumberCircleTwoFill } from 'react-icons/pi';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { usePathname } from 'next/navigation';
-import { Key } from '@react-types/shared';
 
 import PlaceFormDetails from './PlaceFormDetails';
 import PlaceFormContact from './PlaceFormContact';
@@ -17,6 +15,7 @@ import { usePlaceStore } from '@/store/placeStore';
 import { fetchImageAsFile } from '@/utils/helpers';
 import useWindowSize from '@/hooks/useWindowSize';
 import { useLoadingStore } from '@/store/loadingStore';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 
 interface IPropsPlaceForm {
   isEditing?: boolean;
@@ -139,34 +138,39 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
     setHideTextTabs(width <= 420);
   }, [width]);
 
-  // Función para manejar el cambio entre pestañas
-  const handleTabChange = useCallback((key: Key) => {
-    setSelectedTab(key as FormProgress);
-  }, []);
-
   return (
     <Tabs
       aria-label="Pasos para publicar"
-      selectedKey={selectedTab}
-      onSelectionChange={handleTabChange}
+      value={selectedTab}
+      onValueChange={(val) => setSelectedTab(val as FormProgress)}
+      className="w-full"
     >
-      <Tab
-        key="details"
-        title={
-          <div className="flex items-center space-x-2">
-            {saved ? (
-              <FaCircleCheck size={21} color="#E95718" />
-            ) : (
-              <PiNumberCircleOneFill
-                size={25}
-                color={selectedTab === 'details' ? '#E95718' : '#676767'}
-              />
-            )}
-            {!hideTextTabs && <span>Detalles de la ubicación</span>}
-          </div>
-        }
-        className="w-full"
-      >
+      <TabsList className="w-full justify-start gap-2 mb-2 overflow-x-auto">
+        <TabsTrigger value="details" className="flex items-center gap-2">
+          {saved ? (
+            <FaCircleCheck size={21} color="#E95718" />
+          ) : (
+            <PiNumberCircleOneFill
+              size={25}
+              color={selectedTab === 'details' ? '#E95718' : '#676767'}
+            />
+          )}
+          {!hideTextTabs && <span>Detalles generales</span>}
+        </TabsTrigger>
+        <TabsTrigger
+          value="contact"
+          disabled={!saved}
+          className="flex items-center gap-2"
+        >
+          <PiNumberCircleTwoFill
+            size={25}
+            color={selectedTab === 'contact' || saved ? '#E95718' : '#676767'}
+          />
+          {!hideTextTabs && <span>Contacto y horarios</span>}
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="details" className="w-full">
         {selectedTab === 'details' && (
           <PlaceFormDetails
             setSaved={setSaved}
@@ -189,21 +193,9 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
             }
           />
         )}
-      </Tab>
-      <Tab
-        key="contact"
-        title={
-          <div className="flex items-center space-x-2">
-            <PiNumberCircleTwoFill
-              size={25}
-              color={selectedTab === 'contact' || saved ? '#E95718' : '#676767'}
-            />
-            {!hideTextTabs && <span>Contacto y horarios</span>}
-          </div>
-        }
-        isDisabled={!saved}
-        className="w-full"
-      >
+      </TabsContent>
+
+      <TabsContent value="contact" className="w-full">
         {selectedTab === 'contact' && (
           <PlaceFormContact
             isEditing={isEditing}
@@ -223,7 +215,7 @@ const PlaceForm: FC<IPropsPlaceForm> = ({ isEditing, dataPlace, placeId }) => {
             }
           />
         )}
-      </Tab>
+      </TabsContent>
     </Tabs>
   );
 };

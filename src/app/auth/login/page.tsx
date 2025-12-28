@@ -19,7 +19,7 @@ export default function LoginPage() {
 
       <div className="flex justify-center items-center gap-2">
         <span>¿No tienes una cuenta?</span>
-        <Link href="/auth/register" className="font-bold">
+        <Link href="/auth/register" className="font-bold text-siren-900">
           Regístrate
         </Link>
       </div>

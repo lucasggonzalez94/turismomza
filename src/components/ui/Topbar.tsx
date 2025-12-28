@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'sonner';
-import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DropdownSearch from './DropdownSearch';
@@ -24,6 +23,7 @@ import { IPropsMenuOption } from '@/interfaces/menu';
 import useNavigation from '@/hooks/useNavigation';
 import { ROLS } from '@/utils/constants';
 import { logout } from '@/services/auth/logout';
+import { Button } from '@/components/ui/Button';
 
 const Topbar = () => {
   const { user, setUser, isAuthenticated, setIsAuthenticated } = useAuthStore(
@@ -236,12 +236,17 @@ const Topbar = () => {
               FAVORITOS
             </AnimatedLink>
             <Button
-              as={Link}
-              color="secondary"
-              className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-              href={isAuthenticated ? '/places/create' : '/auth/login'}
+              asChild
+              variant="secondary"
+              className={`text-medium flex items-center gap-2 ${
+                black
+                  ? 'bg-black/70 text-white hover:bg-black/90'
+                  : 'bg-black/60 text-white hover:bg-black/80'
+              }`}
             >
-              Publicar
+              <Link href={isAuthenticated ? '/places/create' : '/auth/login'}>
+                Publicar
+              </Link>
             </Button>
             {/* <Button
             color="secondary"
@@ -270,20 +275,17 @@ const Topbar = () => {
         <div className="block xl:hidden col-span-5">
           <div className="flex justify-end items-center gap-4">
             {isAuthenticated && (
-              <Button
-                as={Link}
-                isIconOnly
-                variant="light"
-                href="/notifications"
-              >
-                <IoNotificationsOutline size={25} color="#fff" />
+              <Button asChild variant="ghost" size="icon">
+                <Link href="/notifications">
+                  <IoNotificationsOutline size={25} color="#fff" />
+                </Link>
               </Button>
             )}
             <Button
-              color="secondary"
-              isIconOnly
-              className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-              onPress={() => setOpenSidedrawer(true)}
+              variant="secondary"
+              size="icon"
+              className={`${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
+              onClick={() => setOpenSidedrawer(true)}
             >
               <IoMenuOutline size={20} />
             </Button>
@@ -328,14 +330,18 @@ const Topbar = () => {
             </div>
             <div className="flex justify-end items-center px-4">
               <Button
-                as={Link}
-                color="secondary"
-                className={`text-medium ${black ? 'bg-gray-500 hover:bg-gray-300 hover:text-black' : ''}`}
-                href={isAuthenticated ? '/places/create' : '/auth/login'}
-                size="md"
-                endContent={<IoAddOutline />}
+                asChild
+                variant="secondary"
+                className={`text-medium flex items-center gap-2 ${
+                  black
+                    ? 'bg-black/70 text-white hover:bg-black/90'
+                    : 'bg-black/60 text-white hover:bg-black/80'
+                }`}
               >
-                Publicar
+                <Link href={isAuthenticated ? '/places/create' : '/auth/login'}>
+                  <span>Publicar</span>
+                  <IoAddOutline />
+                </Link>
               </Button>
             </div>
           </div>

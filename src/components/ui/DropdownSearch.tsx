@@ -1,10 +1,11 @@
 'use client';
 
-import { Input } from '@nextui-org/react';
-import { IoSearch } from 'react-icons/io5';
-import DropdownButton from './DropdownButton';
 import { FC, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { IoClose, IoSearch } from 'react-icons/io5';
+
+import DropdownButton from './DropdownButton';
+import { Input } from '@/components/ui/Input';
 import { useNavigationStore } from '@/store/navigationStore';
 
 interface IPropsDropdownSearch {
@@ -25,6 +26,16 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
 
   const [searchValue, setSearchValue] = useState('');
 
+  const handleSearch = () => {
+    setBackPath(pathname);
+    router.push(`/places?search=${searchValue}`);
+  };
+
+  const clearSearch = () => {
+    setSearchValue('');
+    inputRef.current?.focus();
+  };
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
@@ -40,22 +51,26 @@ const DropdownSearch: FC<IPropsDropdownSearch> = ({
     >
       <Input
         ref={inputRef}
-        isClearable
-        radius="md"
-        classNames={{
-          input: ['text-black/90', 'placeholder:text-default-700/50'],
-          inputWrapper: ['shadow-xl', 'bg-default-200'],
-        }}
+        className="shadow-xl bg-slate-200 text-black placeholder:text-muted-foreground"
         placeholder="Buscar..."
-        startContent={
-          <IoSearch className="text-gray-700 pointer-events-none flex-shrink-0" />
+        startContent={<IoSearch className="text-gray-700" />}
+        endContent={
+          searchValue ? (
+            <button
+              type="button"
+              className="text-gray-600 hover:text-gray-800 focus-visible:outline-none"
+              onClick={clearSearch}
+              aria-label="Limpiar búsqueda"
+            >
+              <IoClose />
+            </button>
+          ) : null
         }
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={({ key }) => {
           if (key === 'Enter') {
-            setBackPath(pathname);
-            router.push(`/places?search=${searchValue}`);
+            handleSearch();
           }
         }}
       />

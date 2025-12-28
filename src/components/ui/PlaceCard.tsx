@@ -1,10 +1,6 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { IPlace } from '@/interfaces/place';
-import { addFavoriteService } from '@/services/places/add-favorite';
-import { calculateAverageRating, formatPrice } from '@/utils/helpers';
-import { Button, Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { toast } from 'sonner';
@@ -15,9 +11,14 @@ import {
   IoLocationOutline,
   IoChevronForward,
 } from 'react-icons/io5';
+
+import { Button } from '@/components/ui/Button';
+import { IPlace } from '@/interfaces/place';
 import { IUser } from '@/interfaces/user';
 import useNavigation from '@/hooks/useNavigation';
+import { addFavoriteService } from '@/services/places/add-favorite';
 import { useNavigationStore } from '@/store/navigationStore';
+import { calculateAverageRating, formatPrice } from '@/utils/helpers';
 
 interface IPropsPlaceCard {
   user: IUser | null;
@@ -101,24 +102,20 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
         ) : null}
 
         <div className="hidden md:block">
-          <Tooltip
-            content={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-2 shadow-md z-10 bg-white/90 text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900"
+            onClick={handleFavorite}
+            aria-label={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+            title={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
-            <Button
-              isIconOnly
-              className="absolute right-2 top-2 shadow-md z-10"
-              onClick={handleFavorite}
-              aria-label={
-                favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'
-              }
-            >
-              {favorite ? (
-                <IoHeart size={20} className="text-red-600" />
-              ) : (
-                <IoHeartOutline size={20} />
-              )}
-            </Button>
-          </Tooltip>
+            {favorite ? (
+              <IoHeart size={20} className="text-red-600" />
+            ) : (
+              <IoHeartOutline size={20} />
+            )}
+          </Button>
         </div>
 
         <Image
@@ -166,12 +163,12 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
 
         <div className="flex justify-between items-center mt-1">
           <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            className="min-w-0 p-1"
+            variant="ghost"
+            size="icon"
+            className="min-w-0 p-1 bg-white/90 text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900"
             onClick={handleFavorite}
             aria-label={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+            title={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
             {favorite ? (
               <IoHeart size={18} className="text-red-600" />
@@ -208,9 +205,8 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
 
         <div className="flex justify-between items-center">
           <Button
-            color="primary"
             size="sm"
-            className="min-w-20"
+            className="min-w-20 text-xs"
             onClick={(e) => {
               e.stopPropagation();
               handleNavigation(`/places/${slug}`);

@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Input } from '@nextui-org/react';
 import { toast } from 'sonner';
-import InputPassword from '../ui/InputPassword';
-import { register as registerService } from '@/services/auth/register';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
+import { Button } from '@/components/ui/Button';
+import InputField from '@/components/ui/InputField';
+import InputPassword from '../ui/InputPassword';
+import { register as registerService } from '@/services/auth/register';
 import useNavigation from '@/hooks/useNavigation';
 import GoogleAuthButton from './GoogleAuthButton';
 import { useAuthStore } from '@/store/authStore';
@@ -72,69 +74,44 @@ const RegisterForm = () => {
       <div className="flex flex-col">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 w-full">
-            {/* TODO: Crear componente Input reutilizable */}
-            <div className="flex flex-col gap-1 w-full">
-              <Input
-                type="text"
-                label="Nombre"
-                labelPlacement="outside"
-                placeholder="Ingresá tu nombre"
-                variant="faded"
-                {...register('name')}
-              />
-              <span className="text-sm text-red-500">
-                {errors.name?.message}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <Input
-                type="text"
-                label="Apellido"
-                labelPlacement="outside"
-                placeholder="Ingresá tu apellido"
-                variant="faded"
-                {...register('lastname')}
-              />
-              <span className="text-sm text-red-500">
-                {errors.lastname?.message}
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Input
-              type="email"
-              label="Email"
-              labelPlacement="outside"
-              placeholder="Ingresá tu email"
-              variant="faded"
-              {...register('email')}
+            <InputField
+              className="w-full"
+              type="text"
+              label="Nombre"
+              placeholder="Ingresá tu nombre"
+              error={errors.name?.message}
+              {...register('name')}
             />
-            <span className="text-sm text-red-500">
-              {errors.email?.message}
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              render={({ field }) => <InputPassword {...field} />}
+            <InputField
+              className="w-full"
+              type="text"
+              label="Apellido"
+              placeholder="Ingresá tu apellido"
+              error={errors.lastname?.message}
+              {...register('lastname')}
             />
-            <span className="text-sm text-red-500 text-wrap">
-              {errors.password?.message}
-            </span>
           </div>
+          <InputField
+            type="email"
+            label="Email"
+            placeholder="Ingresá tu email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <InputPassword {...field} error={errors.password?.message} />
+            )}
+          />
         </div>
       </div>
 
       <div className="flex flex-col gap-3 mt-10">
-        <Button
-          color="primary"
-          className="w-full font-bold"
-          type="submit"
-          isLoading={loading}
-        >
-          Regístrate
+        <Button className="w-full font-bold" type="submit" disabled={loading}>
+          {loading ? 'Registrando...' : 'Regístrate'}
         </Button>
         <GoogleAuthButton />
       </div>
