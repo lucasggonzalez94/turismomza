@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@nextui-org/react';
 import { FcGoogle } from 'react-icons/fc';
 import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/Button';
 
 const GoogleAuthButton = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +34,15 @@ const GoogleAuthButton = () => {
 
   return (
     <Button
-      color="primary"
-      className="w-full font-bold bg-white border border-gray-400 text-black"
-      startContent={<FcGoogle size={30} />}
-      onPress={handleGoogleLogin}
-      isLoading={isLoading}
+      className="w-full font-bold bg-white border border-gray-400 text-black hover:bg-gray-200"
+      onClick={handleGoogleLogin}
+      disabled={isLoading}
       type="button"
     >
-      Ingresar con Google
+      <span className="flex items-center justify-center gap-2">
+        <FcGoogle size={24} />
+        {isLoading ? 'Conectando...' : 'Ingresar con Google'}
+      </span>
     </Button>
   );
 };

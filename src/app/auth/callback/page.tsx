@@ -28,7 +28,7 @@ export default function AuthCallback() {
   }, [searchParams, router, handleNavigation, lastPath]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center h-full w-full">
       <p>Procesando autenticación...</p>
     </div>
   );

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button } from '@nextui-org/react';
 import { FcGoogle } from 'react-icons/fc';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { unlinkGoogleAccount } from '@/services/auth/unlink-google';
+import { Button } from '@/components/ui/Button';
 
 interface GoogleLinkButtonProps {
   hasGoogleAccount: boolean;
@@ -66,13 +66,14 @@ const GoogleLinkButton: React.FC<GoogleLinkButtonProps> = ({
     return (
       <Button
         size="sm"
-        color="primary"
-        variant="ghost"
-        startContent={<FcGoogle size={20} />}
-        onPress={handleGoogleUnlink}
-        isLoading={isLoading}
+        variant="outline"
+        onClick={handleGoogleUnlink}
+        disabled={isLoading}
       >
-        Desvincular cuenta de Google
+        <span className="flex items-center gap-2">
+          <FcGoogle size={20} />
+          {isLoading ? 'Desvinculando...' : 'Desvincular cuenta de Google'}
+        </span>
       </Button>
     );
   }
@@ -80,13 +81,14 @@ const GoogleLinkButton: React.FC<GoogleLinkButtonProps> = ({
   return (
     <Button
       size="sm"
-      color="primary"
-      variant="ghost"
-      startContent={<FcGoogle size={20} />}
-      onPress={handleGoogleLink}
-      isLoading={isLoading}
+      variant="outline"
+      onClick={handleGoogleLink}
+      disabled={isLoading}
     >
-      Vincular cuenta de Google
+      <span className="flex items-center gap-2">
+        <FcGoogle size={20} />
+        {isLoading ? 'Conectando...' : 'Vincular cuenta de Google'}
+      </span>
     </Button>
   );
 };

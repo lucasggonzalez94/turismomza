@@ -21,8 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
-      <body className={`${rootFont.className} antialiased bg-zinc-200`}>
+    <html lang="es" className="scrollbar scrollbar-thin text-sm md:text-base">
+      <body
+        className={`${rootFont.className} antialiased bg-[#d9d9d9] box-border`}
+      >
         <Providers>
           <Spinner />
           {children}

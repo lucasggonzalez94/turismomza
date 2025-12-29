@@ -8,11 +8,11 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="h-screen w-screen flex relative">
+    <main className="fixed inset-0 h-[100dvh] w-screen flex overflow-hidden">
       <Link href="/">
         <IoCloseCircleOutline size={40} className="absolute right-2 top-2" />
       </Link>
-      <div className="hidden lg:block w-1/2 overflow-hidden relative">
+      <div className="hidden lg:block w-1/2 relative h-full">
         <div className="absolute inset-0 bg-black opacity-40 pointer-events-none"></div>
         <Image
           src="/images/logoTurismomza.webp"
@@ -29,8 +29,10 @@ export default function HomeLayout({
           className="object-cover object-center w-full h-full"
         />
       </div>
-      <div className="w-full lg:w-1/2 flex justify-center items-center">
-        {children}
+      <div className="w-full lg:w-1/2 flex justify-center items-center p-6 overflow-hidden h-full max-h-full">
+        <div className="w-full max-w-md max-h-full overflow-y-auto">
+          {children}
+        </div>
       </div>
     </main>
   );
