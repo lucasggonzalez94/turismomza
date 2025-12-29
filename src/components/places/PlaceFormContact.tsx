@@ -2,7 +2,6 @@ import { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Button, Input } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
@@ -15,6 +14,8 @@ import { ErrorFeedback } from '@/interfaces/errorFeedback';
 import useNavigation from '@/hooks/useNavigation';
 import { IPlaceFormContact } from '@/interfaces/place-form';
 import { useFeedbackStore } from '@/store/feedbackStore';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 interface IPropsPlaceFormContact {
   isEditing?: boolean;
@@ -266,91 +267,56 @@ const PlaceFormContact: FC<IPropsPlaceFormContact> = ({
 
             <Input
               type="text"
-              label={
-                <label>
-                  Sitio web <span className="text-tiny">(Opcional)</span>
-                </label>
-              }
-              labelPlacement="outside"
-              variant="faded"
-              className="w-full md:w-1/2"
-              isInvalid={!!errors.website?.message}
-              errorMessage={errors.website?.message}
+              label="Sitio web"
+              containerClassName="w-full md:w-1/2"
+              errorMessage={errors.website?.message as string | undefined}
               placeholder="https://..."
               {...register('website')}
             />
 
             <Input
               type="text"
-              label={
-                <label>
-                  Instagram <span className="text-tiny">(Opcional)</span>
-                </label>
-              }
-              labelPlacement="outside"
-              variant="faded"
-              className="w-full md:w-1/2"
+              label="Instagram"
+              containerClassName="w-full md:w-1/2"
               placeholder="https://..."
-              isInvalid={!!errors.instagram?.message}
-              errorMessage={errors.instagram?.message}
+              errorMessage={errors.instagram?.message as string | undefined}
               {...register('instagram')}
             />
 
             <Input
               type="text"
-              label={
-                <label>
-                  Facebook <span className="text-tiny">(Opcional)</span>
-                </label>
-              }
-              labelPlacement="outside"
-              variant="faded"
-              className="w-full md:w-1/2"
+              label="Facebook"
+              containerClassName="w-full md:w-1/2"
               placeholder="https://..."
-              isInvalid={!!errors.facebook?.message}
-              errorMessage={errors.facebook?.message}
+              errorMessage={errors.facebook?.message as string | undefined}
               {...register('facebook')}
             />
 
             <Input
               type="text"
-              label={
-                <label>
-                  Email <span className="text-tiny">(Opcional)</span>
-                </label>
-              }
-              labelPlacement="outside"
-              variant="faded"
+              label="Email"
               placeholder="Email de contacto"
-              className="w-full md:w-1/2"
-              isInvalid={!!errors.email?.message}
-              errorMessage={errors.email?.message}
+              containerClassName="w-full md:w-1/2"
+              errorMessage={errors.email?.message as string | undefined}
               {...register('email')}
             />
 
             <Input
               type="text"
-              label={
-                <label>
-                  Teléfono <span className="text-tiny">(Opcional)</span>
-                </label>
-              }
-              labelPlacement="outside"
-              variant="faded"
-              className="w-full md:w-1/2"
+              label="Teléfono"
+              containerClassName="w-full md:w-1/2"
               startContent={
                 <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">+54</span>
+                  <span className="text-muted-foreground text-sm">+54</span>
                 </div>
               }
-              isInvalid={!!errors.phonenumber?.message}
-              errorMessage={errors.phonenumber?.message}
+              errorMessage={errors.phonenumber?.message as string | undefined}
               {...register('phonenumber')}
             />
           </div>
         </div>
-        <Button isLoading={loading} type="submit" color="primary">
-          Guardar y finalizar
+        <Button disabled={loading} type="submit">
+          {loading ? 'Guardando...' : 'Guardar y finalizar'}
         </Button>
       </form>
     </>

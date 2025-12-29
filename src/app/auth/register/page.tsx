@@ -1,6 +1,6 @@
-import RegisterForm from '@/components/auth/RegisterForm';
-import { Link } from '@nextui-org/react';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import RegisterForm from '@/components/auth/RegisterForm';
 
 export const metadata: Metadata = {
   title: 'Registro',

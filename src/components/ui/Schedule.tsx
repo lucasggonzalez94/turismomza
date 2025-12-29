@@ -1,11 +1,14 @@
 'use client';
 
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Checkbox, Input } from '@nextui-org/react';
 import { IoClose } from 'react-icons/io5';
+import { Clock } from 'lucide-react';
+
+import { Button } from '@/components/ui/Button';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { Input } from '@/components/ui/Input';
 import { WEEKDAYS } from '@/utils/constants';
 import { usePlaceStore } from '@/store/placeStore';
-import { Clock } from 'lucide-react';
 import { DayConfig } from '@/interfaces/schedule';
 
 interface IPropsSchedule {
@@ -41,6 +44,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   ) => {
     setConfigSchedules((prev) => {
       const indexConfig = prev.findIndex((config) => config.day === day);
+      if (indexConfig === -1) return prev;
       const newPrev = [...prev];
       newPrev[indexConfig] = {
         ...newPrev[indexConfig],
@@ -62,6 +66,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   const toggleOpen24Hours = (day: string) => {
     setConfigSchedules((prev) => {
       const indexConfig = prev.findIndex((config) => config.day === day);
+      if (indexConfig === -1) return prev;
       const newPrev = [...prev];
       newPrev[indexConfig] = {
         ...newPrev[indexConfig],
@@ -74,6 +79,7 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   const addTime = (day: string) => {
     setConfigSchedules((prev) => {
       const indexConfig = prev.findIndex((config) => config.day === day);
+      if (indexConfig === -1) return prev;
       const newPrev = [...prev];
       newPrev[indexConfig] = {
         ...newPrev[indexConfig],
@@ -86,12 +92,13 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
   const deleteTime = (day: string, index: number) => {
     setConfigSchedules((prev) => {
       const indexConfig = prev.findIndex((config) => config.day === day);
+      if (indexConfig === -1) return prev;
       const newPrev = [...prev];
       newPrev[indexConfig] = {
         ...newPrev[indexConfig],
         times:
           newPrev[indexConfig].times.length > 1
-            ? newPrev[indexConfig].times.filter((_, i) => i === index)
+            ? newPrev[indexConfig].times.filter((_, i) => i !== index)
             : [{ from: '00:00', to: '00:00' }],
       };
       return newPrev;
@@ -117,15 +124,17 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
 
       <div className="flex flex-wrap gap-2 mb-4">
         {WEEKDAYS.map((day) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Button
             key={day}
-            color={
+            variant={
               configSchedules?.find((schedule) => schedule?.day === day)
                 ? 'secondary'
-                : 'default'
+                : 'outline'
             }
-            onPress={() => toggleSelectedDay(day)}
-            className="rounded-full"
+            type="button"
+            onClick={() => toggleSelectedDay(day)}
+            className="rounded-full px-4 py-2"
           >
             {day}
           </Button>
@@ -140,44 +149,47 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
           >
             <h2 className="text-lg font-semibold mb-2">{day}</h2>
             <Checkbox
-              isSelected={open24hours}
-              onValueChange={() => toggleOpen24Hours(day)}
-              className="mb-2"
-            >
-              Abierto las 24 horas
-            </Checkbox>
+              checked={open24hours}
+              onCheckedChange={() => toggleOpen24Hours(day)}
+              containerClassName="mb-2"
+              label="Abierto las 24 horas"
+            />
 
             {!open24hours &&
               times.map((time, index) => (
-                <div key={index} className="flex items-center gap-2 mb-2">
+                <div key={index} className="flex items-end gap-2 mb-2">
                   <Input
                     type="time"
                     label="Desde"
                     placeholder="00:00"
-                    variant="faded"
                     value={time.from}
                     onChange={(e) =>
                       updateTime(day, index, 'from', e.target.value)
                     }
-                    startContent={<Clock className="text-gray-400" size={16} />}
-                    className="w-32"
+                    startContent={
+                      <Clock className="text-muted-foreground" size={16} />
+                    }
+                    containerClassName="w-32"
                   />
                   <Input
                     type="time"
                     label="Hasta"
                     placeholder="00:00"
-                    variant="faded"
                     value={time.to}
                     onChange={(e) =>
                       updateTime(day, index, 'to', e.target.value)
                     }
-                    startContent={<Clock className="text-gray-400" size={16} />}
-                    className="w-32"
+                    startContent={
+                      <Clock className="text-muted-foreground" size={16} />
+                    }
+                    containerClassName="w-32"
                   />
                   <Button
-                    className="text-white bg-red-700 hover:bg-red-500"
-                    isIconOnly
-                    onPress={() => deleteTime(day, index)}
+                    variant="destructive"
+                    size="icon"
+                    className="text-white"
+                    type="button"
+                    onClick={() => deleteTime(day, index)}
                   >
                     <IoClose size={20} />
                   </Button>
@@ -186,10 +198,11 @@ const Schedule: FC<IPropsSchedule> = ({ onSaveSchedule }) => {
 
             {!open24hours && (
               <Button
-                className="bg-black hover:bg-gray-900 text-white mt-2"
+                className="mt-2"
                 size="sm"
-                onPress={() => addTime(day)}
-                isDisabled={times.some(
+                type="button"
+                onClick={() => addTime(day)}
+                disabled={times.some(
                   (time) => time?.from === '' || time?.to === '',
                 )}
               >

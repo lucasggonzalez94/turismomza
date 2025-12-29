@@ -4,7 +4,6 @@ import { rootFont } from '../config/fonts';
 import './globals.css';
 import './fonts.css';
 
-import { NextUIProvider } from '@nextui-org/react';
 import Providers from '@/store/Providers';
 import Spinner from '@/components/ui/Spinner/Spinner';
 
@@ -25,11 +24,9 @@ export default function RootLayout({
     <html lang="en" className="scrollbar scrollbar-thin text-sm md:text-base">
       <body className={`${rootFont.className} antialiased bg-zinc-200`}>
         <Providers>
-          <NextUIProvider>
-            <Spinner />
-            {children}
-            <Toaster />
-          </NextUIProvider>
+          <Spinner />
+          {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

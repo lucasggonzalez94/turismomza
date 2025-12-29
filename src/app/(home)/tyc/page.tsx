@@ -1,4 +1,3 @@
-import Chevron from '@/components/ui/Chevron';
 import Container from '@/components/ui/Container';
 import { Metadata } from 'next';
 
@@ -9,8 +8,7 @@ export const metadata: Metadata = {
 
 export default function TyCPage() {
   return (
-    <Container>
-      <Chevron />
+    <Container buttonBack>
       <div className="flex flex-col flex-grow gap-4">
         <h2 className="font-bold text-xl">Términos y condiciones</h2>
         <div className="flex flex-col gap-3">

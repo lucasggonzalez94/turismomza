@@ -11,7 +11,6 @@ import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
-import Chevron from '../ui/Chevron';
 
 const AllPlaces = () => {
   const user = useAuthStore((state: any) => state.user);

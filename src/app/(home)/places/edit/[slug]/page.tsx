@@ -2,7 +2,6 @@ import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 import PlaceForm from '@/components/places/PlaceForm';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import Chevron from '@/components/ui/Chevron';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import Container from '@/components/ui/Container';
 
@@ -50,8 +49,7 @@ const EditPlacePage = async ({ params }: IPropsEditPlacePage) => {
 
   return (
     <ProtectedRoute>
-      <Container>
-        <Chevron />
+      <Container buttonBack>
         <div className="flex flex-col items-center md:items-start flex-grow gap-6 lg:px-[20%] xl:px-[30%]">
           <h2 className="font-bold text-xl">Editar publicación</h2>
           <PlaceForm

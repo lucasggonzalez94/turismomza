@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import PlaceDetails from '@/components/places/PlaceDetails';
-import Chevron from '@/components/ui/Chevron';
 import Container from '@/components/ui/Container';
 import { getPlaceBySlugService } from '@/services/places/get-place-by-slug';
 
@@ -31,8 +30,7 @@ export default async function PlacePage({ params }: Props) {
   const { slug } = params;
 
   return (
-    <Container>
-      <Chevron />
+    <Container buttonBack>
       <PlaceDetails slug={slug} />
     </Container>
   );

@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
-import { nextui } from '@nextui-org/react';
 
 const config: Config = {
   darkMode: ['class'],
@@ -8,7 +7,6 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -104,40 +102,6 @@ const config: Config = {
     },
   },
   plugins: [
-    nextui({
-      layout: {
-        disabledOpacity: '0.3',
-        radius: {
-          small: '4px',
-          medium: '6px',
-          large: '8px',
-        },
-        borderWidth: {
-          small: '1px',
-          medium: '2px',
-          large: '3px',
-        },
-      },
-      themes: {
-        light: {
-          colors: {
-            background: '#ffffff',
-            foreground: '#333333',
-            primary: {
-              DEFAULT: '#7b113a',
-              foreground: '#ffffff',
-            },
-            secondary: {
-              DEFAULT: 'rgba(15, 15, 15, 0.5)',
-              foreground: '#ffffff',
-            },
-            focus: '#7b113a',
-          },
-        },
-      },
-      defaultTheme: 'light',
-      defaultExtendTheme: 'light',
-    }),
     plugin(function ({ addUtilities }) {
       addUtilities({
         '.scrollbar-thin': {
