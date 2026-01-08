@@ -95,7 +95,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
         {advertisements?.length ? (
           <div className="absolute left-1 top-1 md:left-2 md:top-2 flex items-center gap-1 bg-yellow-500 rounded-md p-[2px] md:p-1 z-10">
             <IoStar size={8} className="md:mb-[2px] md:text-[12px]" />
-            <span className="text-[8px] md:text-tiny">
+            <span className="text-[8px] md:text-xs">
               {window.innerWidth < 640 ? 'Destacado' : 'Contenido destacado'}
             </span>
           </div>
@@ -138,9 +138,9 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
           <div className="flex justify-between items-start">
             <div className="flex-grow pr-2">
               <h3 className="font-bold line-clamp-1 text-sm">{title}</h3>
-              <span className="text-tiny text-gray-600">{category}</span>
+              <span className="text-xs text-gray-600">{category}</span>
               {location && (
-                <span className="text-tiny text-gray-600 flex items-center">
+                <span className="text-xs text-gray-600 flex items-center">
                   <IoLocationOutline size={10} className="mr-1" />
                   <span className="line-clamp-1">{location}</span>
                 </span>
@@ -192,9 +192,9 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
                 : 'Gratis'}
             </span>
           </div>
-          <span className="text-tiny text-gray-600">{category}</span>
+          <span className="text-xs text-gray-600">{category}</span>
           {location && (
-            <span className="text-tiny text-gray-600 flex items-center mt-1">
+            <span className="text-xs text-gray-600 flex items-center mt-1">
               <IoLocationOutline size={12} className="mr-1" />
               {location}
             </span>
@@ -222,7 +222,7 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
                   <IoStar className="mb-[2px]" /> {averageRating}
                 </span>
               ) : null}
-              <span className="text-tiny text-gray-600">
+              <span className="text-xs text-gray-600">
                 {reviews?.length
                   ? `(${reviews?.length} ${reviews?.length === 1 ? 'opinión' : 'opiniones'})`
                   : 'Sin opiniones'}

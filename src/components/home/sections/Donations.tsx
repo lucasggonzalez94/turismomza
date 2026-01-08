@@ -28,7 +28,7 @@ const Donations = () => {
               </span>
             </Button>
           </div>
-          <p className="text-tiny text-center">
+          <p className="text-xs text-center">
             Las donaciones son voluntarias. Cualquier aporte, por pequeño que
             sea, es valioso y apreciado.
           </p>

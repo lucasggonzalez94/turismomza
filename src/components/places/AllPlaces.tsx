@@ -6,11 +6,11 @@ import { IPlace } from '@/interfaces/place';
 import { getPlacesService } from '@/services/places/get-places';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
-import { Button } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
+import { Button } from '@/components/ui/Button';
 
 const AllPlaces = () => {
   const user = useAuthStore((state: any) => state.user);
@@ -145,10 +145,11 @@ const AllPlaces = () => {
           <h2 className="font-bold text-xl">Lugares turísticos</h2>
           {hideFilters && (
             <Button
-              color="default"
               variant="ghost"
-              isIconOnly
+              size="icon"
+              type="button"
               onClick={() => setOpenSidedrawer((prev) => !prev)}
+              aria-label="Abrir filtros"
             >
               <IoOptionsOutline size={25} />
             </Button>

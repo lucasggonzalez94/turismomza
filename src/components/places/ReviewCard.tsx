@@ -155,7 +155,7 @@ const ReviewCard: FC<IPropsReviewCard> = ({
             </Button>
             <div className="flex flex-col gap-1">
               <h4 className="font-bold text-md">{review.user?.name}</h4>
-              <span className="text-tiny text-gray-400">
+              <span className="text-xs text-gray-400">
                 Escrita el {formatDate(review.dateAdded)}
               </span>
             </div>

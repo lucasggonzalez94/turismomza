@@ -1,53 +1,36 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  Input,
-  Select,
-  SelectItem,
-  Slider,
-} from '@nextui-org/react';
 import { IoLogoUsd } from 'react-icons/io5';
-import { IoStar } from 'react-icons/io5';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { CATEGORIES } from '@/utils/constants';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Slider } from '@/components/ui/Slider';
+import { MultiSelect } from './MultiSelect';
+import { RatingStarsSelect } from './RatingStarsSelect';
 
 interface FiltersFormProps {
   prices: { minPrice: number; maxPrice: number };
   setFilters: (filters: any) => void;
 }
 
-// Componente para renderizar estrellas de calificación
-const RatingStars = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, index) => (
-        <IoStar
-          key={index}
-          className={index < rating ? 'text-trinidad-600' : 'text-gray-400'}
-        />
-      ))}
-    </div>
-  );
-};
-
 const schema = yup
   .object({
     searchTerm: yup.string(),
     categories: yup.array(yup.string()),
     priceRange: yup.array(yup.number()),
-    rating: yup.array(yup.string()),
+    rating: yup.number(),
   })
   .required();
 
 const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
-  const [priceRangeValue, setPriceRangeValue] = useState([0, 0]);
+  const [priceRangeValue, setPriceRangeValue] = useState<number[]>([
+    prices?.minPrice ?? 0,
+    prices?.maxPrice ?? 0,
+  ]);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -58,19 +41,17 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
     mode: 'onChange',
     resolver: yupResolver(schema),
     defaultValues: {
-      priceRange: [prices?.minPrice, prices?.maxPrice],
-      rating: [],
+      priceRange: [prices?.minPrice ?? 0, prices?.maxPrice ?? 0],
+      rating: 5,
     },
   });
-
-  const [maxPrice, setMaxPrice] = useState(prices?.maxPrice);
 
   const handleFilter = (data: any) => {
     const { priceRange, ...restData } = data;
     const filteredData = {
       ...restData,
       categories: data.categories || [],
-      rating: data.rating || [],
+      rating: typeof data.rating === 'number' ? data.rating : 5,
       priceMin: priceRange[0],
       priceMax: priceRange[1],
     };
@@ -83,8 +64,8 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
     if (filteredData.categories.length > 0) {
       params.set('categories', filteredData.categories.join(','));
     }
-    if (filteredData.rating.length > 0) {
-      params.set('rating', filteredData.rating.join(','));
+    if (filteredData.rating !== undefined && filteredData.rating !== null) {
+      params.set('rating', filteredData.rating.toString());
     }
     if (filteredData.priceMin !== prices?.minPrice) {
       params.set('priceMin', filteredData.priceMin.toString());
@@ -111,10 +92,7 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
       const categoriesArray = categories.split(',');
       setValue('categories', categoriesArray);
     }
-    if (rating) {
-      const ratingArray = rating.split(',');
-      setValue('rating', ratingArray);
-    }
+    setValue('rating', rating ? Number(rating) : 5);
     const minPrice = priceMin ? Number(priceMin) : prices?.minPrice;
     const maxPrice = priceMax ? Number(priceMax) : prices?.maxPrice;
     setPriceRangeValue([minPrice, maxPrice]);
@@ -122,16 +100,17 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
     setFilters({
       searchTerm: search || '',
       categories: categories ? categories.split(',') : [],
-      rating: rating ? rating.split(',') : [],
+      rating: rating ? Number(rating) : 5,
       priceMin: minPrice,
       priceMax: maxPrice,
     });
   };
 
   useEffect(() => {
-    setValue('priceRange', [prices?.minPrice, prices?.maxPrice]);
-    setMaxPrice(prices?.maxPrice);
-    setPriceRangeValue([0, prices?.maxPrice]);
+    const min = prices?.minPrice ?? 0;
+    const max = prices?.maxPrice ?? 0;
+    setValue('priceRange', [min, max]);
+    setPriceRangeValue([min, max]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prices?.minPrice, prices?.maxPrice]);
 
@@ -145,6 +124,9 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, searchQuery]);
 
+  const minPriceLimit = prices?.minPrice ?? 0;
+  const maxPriceLimit = prices?.maxPrice ?? 0;
+
   return (
     <form
       onSubmit={handleSubmit(handleFilter)}
@@ -155,129 +137,124 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
           type="text"
           label="Buscar"
           placeholder="Buscar por título o descripción"
-          variant="faded"
-          labelPlacement="outside"
           {...register('searchTerm')}
         />
         <Controller
           name="categories"
           control={control}
-          render={({ field: { onChange, value } }) => {
-            const selectedKeys =
-              value && Array.isArray(value)
-                ? new Set(value.filter(Boolean))
-                : new Set();
-
-            return (
-              <Select
-                label="Categorías"
-                labelPlacement="outside"
-                placeholder="Seleccioná las categorías"
-                selectionMode="multiple"
-                variant="faded"
-                className="w-full"
-                selectedKeys={selectedKeys as Set<string>}
-                onSelectionChange={(keys) => {
-                  const newSelectedKeys = Array.from(keys) as string[];
-                  onChange(newSelectedKeys);
-                }}
-              >
-                {CATEGORIES.map((category) => (
-                  <SelectItem key={category.key} value={category.key}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            );
-          }}
+          render={({ field: { onChange, value } }) => (
+            <MultiSelect
+              selected={(value as string[]) || []}
+              onChange={onChange}
+            />
+          )}
         />
         <div>
           <h3 className="text-sm mb-3">Precio</h3>
-          <div className="flex gap-2 justify-between items-center">
-            <Input
-              type="number"
-              label="Desde"
-              placeholder="0"
-              labelPlacement="outside"
-              variant="faded"
-              startContent={<IoLogoUsd />}
-              value={priceRangeValue[0]?.toString()}
-              onChange={(e) => {
-                const minPrice = Number(e.target.value);
-                setPriceRangeValue([minPrice, priceRangeValue[1]]);
-                setValue('priceRange', [minPrice, priceRangeValue[1]]);
-              }}
-            />
-            <Input
-              type="number"
-              label="Hasta"
-              placeholder="0"
-              labelPlacement="outside"
-              variant="faded"
-              startContent={<IoLogoUsd />}
-              value={priceRangeValue[1]?.toString()}
-              onChange={(e) => {
-                const maxPrice = Number(e.target.value);
-                setPriceRangeValue([priceRangeValue[0], maxPrice]);
-                setValue('priceRange', [priceRangeValue[0], maxPrice]);
-              }}
-            />
-          </div>
           <Controller
             name="priceRange"
             control={control}
             render={({ field: { onChange } }) => (
-              <Slider
-                step={10}
-                size="sm"
-                minValue={0}
-                maxValue={maxPrice}
-                defaultValue={[0, maxPrice]}
-                value={priceRangeValue}
-                onChange={(newValue) => {
-                  onChange(newValue);
-                  setValue('priceRange', newValue as number[]);
-                  setPriceRangeValue(newValue as number[]);
-                }}
-                formatOptions={{
-                  style: 'currency',
-                  currency: 'ARS',
-                }}
-                className="mt-4"
-              />
+              <div className="flex flex-col gap-3">
+                <Slider
+                  value={priceRangeValue}
+                  min={minPriceLimit}
+                  max={maxPriceLimit}
+                  step={1}
+                  minStepsBetweenThumbs={1}
+                  onValueChange={(values) => {
+                    if (maxPriceLimit <= minPriceLimit) {
+                      const single: [number, number] = [
+                        minPriceLimit,
+                        minPriceLimit,
+                      ];
+                      setPriceRangeValue(single);
+                      onChange(single);
+                      return;
+                    }
+                    const gap = 1;
+                    const [rawLow, rawHigh] = values as [number, number];
+
+                    let low = Math.max(
+                      minPriceLimit,
+                      Math.min(rawLow, maxPriceLimit),
+                    );
+                    let high = Math.max(
+                      minPriceLimit,
+                      Math.min(rawHigh, maxPriceLimit),
+                    );
+
+                    if (high < low) {
+                      [low, high] = [high, low];
+                    }
+
+                    if (high - low < gap) {
+                      const mid = (low + high) / 2;
+                      low = Math.max(minPriceLimit, mid - gap / 2);
+                      high = Math.min(maxPriceLimit, low + gap);
+                    }
+
+                    const nextRange: [number, number] = [low, high];
+                    setPriceRangeValue(nextRange);
+                    onChange(nextRange);
+                  }}
+                />
+                <div className="flex gap-2 justify-between items-center">
+                  <Input
+                    type="number"
+                    label="Desde"
+                    placeholder="0"
+                    startContent={<IoLogoUsd />}
+                    value={priceRangeValue[0]?.toString()}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const minPrice = Number(e.target.value);
+                      const clamped = Math.min(
+                        Math.max(minPriceLimit, minPrice),
+                        priceRangeValue[1],
+                      );
+                      const newRange: number[] = [clamped, priceRangeValue[1]];
+                      setPriceRangeValue(newRange);
+                      onChange(newRange);
+                    }}
+                  />
+                  <Input
+                    type="number"
+                    label="Hasta"
+                    placeholder="0"
+                    startContent={<IoLogoUsd />}
+                    value={priceRangeValue[1]?.toString()}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const maxPrice = Number(e.target.value);
+                      const clamped = Math.max(
+                        priceRangeValue[0],
+                        Math.min(maxPriceLimit, maxPrice),
+                      );
+                      const newRange: number[] = [priceRangeValue[0], clamped];
+                      setPriceRangeValue(newRange);
+                      onChange(newRange);
+                    }}
+                  />
+                </div>
+              </div>
             )}
           />
         </div>
-        <div>
-          <h3 className="text-sm mb-3">Calificación</h3>
-          <Controller
-            name="rating"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CheckboxGroup
-                value={
-                  (value?.filter((val) => val !== undefined) as string[]) || []
-                }
-                onValueChange={onChange}
-                size="sm"
-              >
-                {[5, 4, 3, 2, 1].map((rating) => (
-                  <Checkbox key={rating} value={rating.toString()}>
-                    <RatingStars rating={rating} />
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
-            )}
-          />
-        </div>
+        <Controller
+          name="rating"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <RatingStarsSelect
+              value={(value as number | undefined) ?? 5}
+              onChange={onChange}
+            />
+          )}
+        />
         <div className="mt-4 flex flex-col w-full gap-4">
-          <Button type="submit" color="primary">
-            Aplicar
-          </Button>
+          <Button type="submit">Aplicar</Button>
           <Button
-            color="primary"
             variant="ghost"
-            onPress={() => {
+            type="button"
+            onClick={() => {
               reset();
               setFilters(null);
             }}

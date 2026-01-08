@@ -43,12 +43,12 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
         <ProfilePicture />
         <div className="flex flex-col">
           <h3 className="font-bold">{user?.name}</h3>
-          <span className="text-tiny text-gray-600">
+          <span className="text-xs text-gray-600">
             Fecha de registro: {formatDate(user?.createdAt)}
           </span>
           <Link
             href={`mailto:${user?.email}`}
-            className="text-tiny text-trinidad-600 hover:underline"
+            className="text-xs text-trinidad-600 hover:underline"
           >
             {user?.email}
           </Link>
