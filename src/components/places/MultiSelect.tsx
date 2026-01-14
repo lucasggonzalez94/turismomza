@@ -20,15 +20,17 @@ interface MultiSelectProps {
   onChange: (values: string[]) => void;
   categories?: Option[];
   className?: string;
+  requiredMark?: boolean;
 }
 
 export const MultiSelect: FC<MultiSelectProps> = ({
   label = 'Categorías',
-  placeholder = 'Categorías',
+  placeholder = 'Seleccionar categorías',
   selected,
   onChange,
   categories,
   className,
+  requiredMark = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -74,10 +76,18 @@ export const MultiSelect: FC<MultiSelectProps> = ({
       className={cn('relative flex flex-col gap-2', className)}
       ref={containerRef}
     >
-      {label ? <p className="text-sm font-medium">{label}</p> : null}
+      {label ? (
+        <label className="text-sm font-medium">
+          {label}{' '}
+          {requiredMark ? <span className="text-red-500">*</span> : null}
+        </label>
+      ) : null}
       <button
         type="button"
-        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(
+          'flex h-10 w-full items-center justify-between rounded-md border border-zinc-400 bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          isOpen && 'ring-2 ring-ring',
+        )}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
       >
@@ -90,7 +100,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
         />
       </button>
       {isOpen ? (
-        <div className="absolute left-0 top-full z-30 mt-1 w-full max-w-[360px] sm:max-w-[400px] rounded-md border bg-popover text-popover-foreground shadow-lg overflow-hidden">
+        <div className="absolute left-0 top-full z-30 mt-1 w-full rounded-md border bg-input text-popover-foreground shadow-lg overflow-hidden">
           <div className="p-3 flex flex-col gap-2">
             <Input
               type="text"
@@ -123,7 +133,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
                         }
                         onChange(Array.from(current));
                       }}
-                      containerClassName="flex items-center gap-2 px-2 py-1 rounded hover:bg-muted"
+                      containerClassName="flex items-center gap-2 px-2 py-1 rounded hover:bg-accent"
                     />
                   );
                 })

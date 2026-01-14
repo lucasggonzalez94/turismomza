@@ -56,11 +56,6 @@ export default function FAQsPage() {
         "Sí, puedes modificar o eliminar tus publicaciones desde tu cuenta en cualquier momento. Solo debes dirigirte al apartado de 'Mis Publicaciones' y seleccionar la opción deseada.",
     },
     {
-      title: '¿Cómo se generan los slugs únicos para las atracciones?',
-      content:
-        'El título de tu publicación se convierte automáticamente en un slug (URL amigable). Si ya existe un slug similar, se añadirá un número al final para garantizar que sea único.',
-    },
-    {
       title: '¿Cómo se manejan mis datos personales?',
       content:
         'Tu privacidad es importante para nosotros. Los datos que proporcionas solo se usan para el funcionamiento de la plataforma y no serán compartidos con terceros sin tu consentimiento. Consulta nuestra [Política de Privacidad] para más detalles.',

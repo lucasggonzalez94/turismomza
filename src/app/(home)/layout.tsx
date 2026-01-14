@@ -9,8 +9,8 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex flex-col min-h-screen pb-24 md:pb-0">
-      <Topbar></Topbar>
+    <main className="grid min-h-dvh grid-rows-[auto_1fr_auto_auto]">
+      <Topbar />
       {children}
       <NavBar />
       <Footer />

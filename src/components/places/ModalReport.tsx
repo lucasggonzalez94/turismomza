@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 import CustomModal from '../ui/CustomModal';
-import { Textarea } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
 import { reportReviewService } from '@/services/places/report-review';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface ReportFormData {
   reason: string;
@@ -55,7 +55,6 @@ const ModalReport: FC<IPropsModalReport> = ({
           <Textarea
             label="Razón del reporte"
             className="w-full"
-            labelPlacement="outside"
             placeholder="Ingresá la razón"
             {...register('reason')}
           />

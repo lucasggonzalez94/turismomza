@@ -1,14 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Textarea,
-} from '@nextui-org/react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi';
@@ -24,6 +16,8 @@ import StarsRating from '../ui/StarsRating';
 import { editReviewService } from '@/services/places/edit-review';
 import ModalReport from './ModalReport';
 import { useAuthStore } from '@/store/authStore';
+import { Button } from '@/components/ui/Button';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface IPropsReviewCard {
   review: FormattedReview;
@@ -73,6 +67,8 @@ const ReviewCard: FC<IPropsReviewCard> = ({
   const [openReportReview, setOpenReportReview] = useState(false);
   const [liked, setLiked] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const handleLike = async (reviewId: string) => {
     try {
@@ -139,6 +135,33 @@ const ReviewCard: FC<IPropsReviewCard> = ({
     setHideOptionsByUser(review?.user?.id !== user?.id);
   }, [review?.user?.id, user?.id]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const openEditModal = () => {
+    setMenuOpen(false);
+    setOpenEditReview(true);
+  };
+
+  const openDeleteModal = () => {
+    setMenuOpen(false);
+    setOpenConfirmDelete(true);
+  };
+
+  const openReportModal = () => {
+    setMenuOpen(false);
+    setOpenReportReview(true);
+  };
+
   return (
     <>
       <div
@@ -147,9 +170,10 @@ const ReviewCard: FC<IPropsReviewCard> = ({
         <div className="flex justify-between items-center">
           <div className="flex gap-1 items-center">
             <Button
-              isIconOnly
-              variant="light"
-              className="rounded-full bg-white hover:bg-gray-400"
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-white hover:bg-gray-200"
+              type="button"
             >
               <IoPerson size={25} color="#000" className="mb-[2px]" />
             </Button>
@@ -185,44 +209,47 @@ const ReviewCard: FC<IPropsReviewCard> = ({
               />
             )}
           </div>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="light" isIconOnly>
-                <IoEllipsisHorizontal />
-              </Button>
-            </DropdownTrigger>
-            {hideOptionsByUser ? (
-              <DropdownMenu aria-label="Actions review">
-                <DropdownItem
-                  key="report"
-                  onPress={() => setOpenReportReview(true)}
+          <div className="relative" ref={menuRef}>
+            <Button
+              variant="ghost"
+              size="icon"
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+            >
+              <IoEllipsisHorizontal />
+            </Button>
+            {menuOpen ? (
+              <div className="absolute right-0 top-10 z-20 min-w-[160px] rounded-md border border-gray-200 bg-white shadow-lg">
+                <button
+                  type="button"
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors"
+                  onClick={openReportModal}
                 >
                   Reportar
-                </DropdownItem>
-              </DropdownMenu>
-            ) : (
-              <DropdownMenu aria-label="Actions review">
-                <DropdownItem
-                  key="edit"
-                  onPress={() => setOpenEditReview(true)}
-                >
-                  Editar
-                </DropdownItem>
-                <DropdownItem
-                  key="delete"
-                  onPress={() => setOpenConfirmDelete(true)}
-                >
-                  Eliminar
-                </DropdownItem>
-                <DropdownItem
-                  key="report"
-                  onPress={() => setOpenReportReview(true)}
-                >
-                  Reportar
-                </DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
+                </button>
+                {!hideOptionsByUser ? (
+                  <>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors"
+                      onClick={openEditModal}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors"
+                      onClick={openDeleteModal}
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
@@ -263,13 +290,10 @@ const ReviewCard: FC<IPropsReviewCard> = ({
             <Textarea
               label="Opinión"
               className="w-full"
-              labelPlacement="outside"
               placeholder="Ingresá tu opinión"
+              errorMessage={errors.review?.message}
               {...register('review')}
             />
-            <span className="text-sm text-red-500">
-              {errors.review?.message}
-            </span>
           </div>
         </div>
       </CustomModal>

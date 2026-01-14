@@ -2,7 +2,6 @@
 
 import { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '@nextui-org/react';
 import {
   IoAt,
   IoCall,
@@ -21,6 +20,7 @@ import CustomModal from '../ui/CustomModal';
 import Link from 'next/link';
 import { deletePlaceService } from '@/services/places/delete-place';
 import { useNavigationStore } from '@/store/navigationStore';
+import { Button } from '@/components/ui/Button';
 
 interface Contact {
   contactNumber?: string | null;
@@ -97,10 +97,10 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
     <>
       <div className="flex items-center gap-2 w-full justify-end">
         <Button
-          color="default"
           variant="ghost"
-          isIconOnly
-          onPress={handleFavorite}
+          size="icon"
+          onClick={handleFavorite}
+          aria-label={favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
         >
           {favorite ? (
             <IoHeart className="text-red-600" size={25} />
@@ -108,7 +108,12 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
             <IoHeartOutline size={25} />
           )}
         </Button>
-        <Button color="default" variant="ghost" isIconOnly onPress={() => {}}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {}}
+          aria-label="Compartir lugar"
+        >
           <IoShareSocialOutline size={25} />
         </Button>
         {(contact?.contactNumber ||
@@ -116,23 +121,21 @@ const ButtonsHeaderPlace: FC<IPropsButtonsHeaderPlace> = ({
           contact?.website ||
           contact?.instagram ||
           contact?.facebook) && (
-          <Button color="primary" onPress={() => setOpenModalContact(true)}>
-            Contacto
-          </Button>
+          <Button onClick={() => setOpenModalContact(true)}>Contacto</Button>
         )}
         {user?.id === creatorId && (
-          <Button color="primary" variant="ghost" onPress={handleEdit}>
+          <Button variant="default" onClick={handleEdit}>
             Editar publicación
           </Button>
         )}
         {user?.id === creatorId && (
           <Button
-            color="danger"
             variant="ghost"
-            isIconOnly
-            onPress={() => setOpenModalDelete(true)}
+            size="icon"
+            onClick={() => setOpenModalDelete(true)}
+            aria-label="Eliminar publicación"
           >
-            <IoTrashOutline size={20} />
+            <IoTrashOutline className="text-red-600" size={20} />
           </Button>
         )}
       </div>

@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { SelectField } from '@/components/ui/Select';
+import { MultiSelect } from './MultiSelect';
 import { cn } from '@/lib/utils';
 
 interface IPropsPlaceFormDetails {
@@ -226,68 +227,14 @@ const PlaceFormDetails: FC<IPropsPlaceFormDetails> = ({
             control={control}
             render={({ field: { onChange, value } }) => (
               <div className="flex flex-col gap-1 w-full">
-                <label className="text-sm font-medium">
-                  Servicios <span className="text-red-500">*</span>
-                </label>
-                <div
-                  className={cn(
-                    'rounded-md border border-input bg-background p-3',
-                    errors.services &&
-                      'border-red-500 focus-visible:ring-red-500',
-                  )}
-                  aria-invalid={!!errors.services}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {SERVICES.map((service) => {
-                      const selected =
-                        (value as string[] | undefined)?.includes(
-                          service.key,
-                        ) || false;
-                      return (
-                        <label
-                          key={service.key}
-                          className={cn(
-                            'flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors',
-                            selected
-                              ? 'border-siren-500 bg-siren-50'
-                              : 'border-input bg-background hover:bg-muted',
-                          )}
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 border-input text-siren-600 focus:ring-siren-500"
-                            checked={selected}
-                            onChange={() => {
-                              const current =
-                                (value as string[] | undefined) || [];
-                              const next = selected
-                                ? current.filter((v) => v !== service.key)
-                                : [...current, service.key];
-                              onChange(next);
-                            }}
-                          />
-                          <span>{service.label}</span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                  {((value as string[] | undefined)?.length || 0) > 0 ? (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {(value as string[]).map((val) => {
-                        const label =
-                          SERVICES.find((s) => s.key === val)?.label || val;
-                        return (
-                          <span
-                            key={val}
-                            className="flex items-center gap-1 rounded-full bg-siren-100 px-3 py-1 text-xs font-medium text-siren-900"
-                          >
-                            {label}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  ) : null}
-                </div>
+                <MultiSelect
+                  label="Servicios"
+                  requiredMark
+                  placeholder="Seleccionar servicios"
+                  selected={(value as string[]) || []}
+                  onChange={onChange}
+                  categories={SERVICES}
+                />
                 {errors.services?.message ? (
                   <p className="text-xs text-red-500">
                     {errors.services.message}

@@ -240,11 +240,12 @@ const Topbar = () => {
               variant="secondary"
               className={`text-medium flex items-center gap-2 ${
                 black
-                  ? 'bg-black/70 text-white hover:bg-black/90'
+                  ? 'bg-white text-black hover:bg-gray-300/90'
                   : 'bg-black/60 text-white hover:bg-black/80'
               }`}
             >
               <Link href={isAuthenticated ? '/places/create' : '/auth/login'}>
+                <IoAddOutline />
                 Publicar
               </Link>
             </Button>

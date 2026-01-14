@@ -12,10 +12,11 @@ import {
   memo,
 } from 'react';
 
-import { Button } from '@nextui-org/react';
 import { IoPerson } from 'react-icons/io5';
 import ProfilePicture from './ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
+import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 
 type DropdownPosition = 'center' | 'left' | 'right';
 
@@ -104,10 +105,14 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
     return (
       <Button
-        isIconOnly={!!icon || profile}
-        variant="light"
-        className={`rounded-${square ? 'md' : 'full'} ${profile && 'bg-white hover:bg-gray-400'}`}
-        onPress={onOpen}
+        size={!!icon || profile ? 'icon' : 'default'}
+        variant="ghost"
+        className={cn(
+          'text-white',
+          square ? 'rounded-md' : 'rounded-full',
+          profile && 'bg-white text-black hover:bg-gray-200',
+        )}
+        onClick={onOpen}
         aria-label={text || (profile ? 'Abrir menú de perfil' : 'Abrir menú')}
       >
         {profile ? (

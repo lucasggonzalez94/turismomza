@@ -4,7 +4,6 @@ import { INotification as INotification } from '@/interfaces/notification';
 import { markAsReadService } from '@/services/notifications/mark-as-read';
 import { toast } from 'sonner';
 import { formatDate } from '@/utils/helpers';
-import { Tooltip } from '@nextui-org/react';
 import { FC, useEffect, useState } from 'react';
 import {
   IoChatbubbleEllipsesOutline,
@@ -99,25 +98,29 @@ const NotificationItem: FC<IPropsNotification> = ({
               {formatDate(notification?.creationDate.toString())}
             </p>
           </div>
-          {readed ? (
-            <Tooltip content="Marcar como no leída">
-              <div className="flex flex-grow justify-end items-center">
-                <IoCheckmarkCircleSharp
-                  className="text-blue-400 cursor-pointer hover:border-1 hover:border-blue-400 rounded-full"
-                  onClick={() => markAsUnread(notification.id)}
-                />
-              </div>
-            </Tooltip>
-          ) : (
-            <Tooltip content="Marcar como leída">
-              <div className="flex flex-grow justify-end items-center">
-                <IoEllipseOutline
-                  className="text-blue-400 cursor-pointer hover:bg-blue-400 rounded-full"
-                  onClick={() => markAsRead(notification.id)}
-                />
-              </div>
-            </Tooltip>
-          )}
+          <div className="flex flex-grow justify-end items-center">
+            {readed ? (
+              <button
+                type="button"
+                className="text-blue-400 hover:text-blue-600 transition-colors"
+                onClick={() => markAsUnread(notification.id)}
+                aria-label="Marcar como no leída"
+                title="Marcar como no leída"
+              >
+                <IoCheckmarkCircleSharp className="w-5 h-5" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="text-blue-400 hover:text-blue-600 transition-colors"
+                onClick={() => markAsRead(notification.id)}
+                aria-label="Marcar como leída"
+                title="Marcar como leída"
+              >
+                <IoEllipseOutline className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>

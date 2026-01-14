@@ -244,6 +244,7 @@ const FiltersForm: FC<FiltersFormProps> = ({ setFilters, prices }) => {
           control={control}
           render={({ field: { onChange, value } }) => (
             <RatingStarsSelect
+              label="Calificación"
               value={(value as number | undefined) ?? 5}
               onChange={onChange}
             />

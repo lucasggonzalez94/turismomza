@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LANGUAGES } from '@/utils/constants';
@@ -11,6 +10,10 @@ import { updateUserService } from '@/services/auth/update-user';
 import InputPassword from '../ui/InputPassword';
 import ProfilePicture from '../ui/ProfilePicture';
 import { useAuthStore } from '@/store/authStore';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
+import { Button } from '@/components/ui/Button';
+import { MultiSelect } from '@/components/places/MultiSelect';
 
 const schema = yup
   .object({
@@ -49,9 +52,6 @@ const EditProfileForm = () => {
     },
   });
 
-  const [selectedLanguageKeys, setSelectedLanguageKeys] = useState<Set<string>>(
-    new Set([]),
-  );
   const [loading, setLoading] = useState(false);
 
   const handleSave = async (data: any) => {
@@ -98,7 +98,6 @@ const EditProfileForm = () => {
 
       if (user.language && user.language.length > 0) {
         setValue('languages', user.language);
-        setSelectedLanguageKeys(new Set(user.language));
       }
     }
   }, [user, setValue]);
@@ -120,88 +119,63 @@ const EditProfileForm = () => {
             onSubmit={handleSubmit(handleSave)}
           >
             <Input
-              className="w-full"
+              containerClassName="w-full"
               label="Nombre"
-              labelPlacement="outside"
               placeholder="Ingresa tu nombre"
-              variant="faded"
-              isRequired
-              isInvalid={!!errors.name}
+              requiredMark
               errorMessage={errors.name?.message}
               {...register('name')}
             />
             <Textarea
-              className="w-full"
+              containerClassName="w-full"
               label="Bio"
-              labelPlacement="outside"
               placeholder="Ingresa una descripción sobre tí"
-              variant="faded"
-              isInvalid={!!errors.bio}
               errorMessage={errors.bio?.message}
               {...register('bio')}
             />
             <Input
-              className="w-full"
+              containerClassName="w-full"
               label="Ubicación"
-              labelPlacement="outside"
               placeholder="Ingresa tu lugar de residencia"
-              variant="faded"
-              isInvalid={!!errors.location}
               errorMessage={errors.location?.message}
               {...register('location')}
             />
             <Input
-              className="w-full"
+              containerClassName="w-full"
               label="Website"
-              labelPlacement="outside"
               placeholder="Ingresa tu sitio web"
-              variant="faded"
-              isInvalid={!!errors.website}
               errorMessage={errors.website?.message}
               {...register('website')}
             />
             <Controller
               name="languages"
               control={control}
-              render={({ field: { onChange } }) => (
-                <Select
+              render={({ field }) => (
+                <MultiSelect
                   label="Idiomas"
-                  labelPlacement="outside"
                   placeholder="¿Qué idiomas hablas?"
-                  selectionMode="multiple"
+                  selected={field.value || []}
+                  onChange={(values) => field.onChange(values)}
+                  categories={LANGUAGES}
                   className="w-full"
-                  variant="faded"
-                  isInvalid={!!errors.languages}
-                  errorMessage={errors.languages?.message}
-                  selectedKeys={selectedLanguageKeys}
-                  onSelectionChange={(keys) => {
-                    const keysArray = Array.from(keys) as string[];
-                    setSelectedLanguageKeys(new Set(keysArray));
-                    onChange(keysArray);
-                  }}
-                >
-                  {LANGUAGES.map((lang) => (
-                    <SelectItem key={lang.key} value={lang.key}>
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </Select>
+                />
               )}
             />
             {user?.hasPassword && (
               <Controller
                 name="password"
                 control={control}
-                render={({ field }) => <InputPassword required {...field} />}
+                render={({ field }) => (
+                  <InputPassword
+                    required
+                    error={errors.password?.message}
+                    {...field}
+                  />
+                )}
               />
             )}
-            <Button
-              type="submit"
-              color="primary"
-              isLoading={loading}
-              disabled={loading}
-            >
-              Guardar
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Guardando...' : 'Guardar'}
             </Button>
           </form>
         </div>

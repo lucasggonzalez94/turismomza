@@ -5,12 +5,12 @@ import useWindowSize from '@/hooks/useWindowSize';
 import { IPlace } from '@/interfaces/place';
 import CardSkeleton from '../skeletons/CardSkeleton';
 import PlaceCard from '../ui/PlaceCard';
-import { Button } from '@nextui-org/react';
 import { IoAlertCircle, IoOptionsOutline } from 'react-icons/io5';
 import FiltersForm from './FiltersForm';
 import Sidedrawer from '../ui/Sidedrawer';
 import { useAuthStore } from '@/store/authStore';
 import { getPlacesByUserService } from '@/services/places/get-places-by-user';
+import { Button } from '@/components/ui/Button';
 
 const PlacesByUser = () => {
   const user = useAuthStore((state: any) => state.user);
@@ -48,7 +48,6 @@ const PlacesByUser = () => {
           setLoadingMore(true);
         }
 
-        debugger;
         const { data, totalPages, maxPrice } = await getPlacesByUserService({
           filters,
           page,
@@ -75,9 +74,7 @@ const PlacesByUser = () => {
             maxPrice,
           });
         }
-      } catch (error: any) {
-        debugger;
-        console.error('Error fetching places:', error?.message || error);
+      } catch {
         setErrorService(true);
       } finally {
         setLoading(false);
@@ -148,10 +145,11 @@ const PlacesByUser = () => {
           <h2 className="font-bold text-xl">Mis publicaciones</h2>
           {hideFilters && (
             <Button
-              color="default"
               variant="ghost"
-              isIconOnly
+              size="icon"
+              type="button"
               onClick={() => setOpenSidedrawer((prev) => !prev)}
+              aria-label="Abrir filtros"
             >
               <IoOptionsOutline size={25} />
             </Button>

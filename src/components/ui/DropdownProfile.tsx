@@ -199,7 +199,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
             {user ? (
               <Link
                 href="/profile"
-                className="text-lg font-semibold text-gray-800"
+                className="text-md font-semibold text-gray-800"
                 onClick={() => {
                   setIsOpen(null);
                   setBackPath(pathname);

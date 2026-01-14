@@ -36,7 +36,7 @@ export const RatingStarsSelect: FC<RatingStarsSelectProps> = ({
               onMouseEnter={() => setHover(rating)}
               onMouseLeave={() => setHover(null)}
               onClick={() => onChange(rating)}
-              className="p-1"
+              className="p-[2px]"
               aria-label={`Calificación ${rating} estrellas`}
             >
               <IoStar

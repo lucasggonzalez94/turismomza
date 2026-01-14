@@ -1,9 +1,9 @@
 'use client';
 
 import { useFeedbackStore } from '@/store/feedbackStore';
-import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/Button';
 
 const FeedbackError = () => {
   const { errorFeedback } = useFeedbackStore((state) => state);
@@ -24,8 +24,7 @@ const FeedbackError = () => {
           : 'Vuelve a intentarlo más tarde.'}
       </p>
       <Button
-        color="primary"
-        onPress={() => {
+        onClick={() => {
           if (errorFeedback?.pathname) {
             router.push(errorFeedback.pathname);
           }

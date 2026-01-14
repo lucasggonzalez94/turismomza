@@ -2,7 +2,6 @@
 
 import { FC, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Badge } from '@nextui-org/react';
 import { GoHomeFill } from 'react-icons/go';
 import { IoCalendarClear, IoHeart } from 'react-icons/io5';
 import { MdPlace } from 'react-icons/md';
@@ -194,17 +193,14 @@ const Navigation: FC = () => {
                   activeIndex === index ? 'translate-y-[-38px] text-white' : ''
                 }`}
               >
-                {item.text === 'Notificaciones' ? (
-                  <Badge
-                    content={count}
-                    color="primary"
-                    className="border-none"
-                  >
-                    {item.icon}
-                  </Badge>
-                ) : (
-                  <span>{item.icon}</span>
-                )}
+                <span className="relative inline-flex">
+                  {item.icon}
+                  {item.text === 'Notificaciones' && count ? (
+                    <span className="absolute -top-1 -right-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-trinidad-500 px-1 text-[10px] font-semibold text-white">
+                      {count}
+                    </span>
+                  ) : null}
+                </span>
               </span>
               {/* Texto */}
               <span

@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import useNavigation from '@/hooks/useNavigation';
-import { Button, Divider } from '@nextui-org/react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { RiEditLine } from 'react-icons/ri';
 import { formatDate, mapLanguages } from '@/utils/helpers';
@@ -19,11 +18,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUserService } from '@/services/auth/update-user';
 import { IUser } from '@/interfaces/user';
 import GoogleLinkButton from './GoogleLinkButton';
+import { Button } from '@/components/ui/Button';
 
 interface PasswordFormData {
   password: string;
   currentPassword: string;
 }
+
+const SectionDivider = () => <div className="w-full my-2 h-px bg-gray-200" />;
 
 const passwordSchema = yup
   .object({
@@ -68,19 +70,19 @@ const UserInfoCard = ({
   location?: string;
   website?: string;
 }) => (
-  <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-center bg-white shadow-lg rounded-lg p-5">
+  <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-start bg-white shadow-lg rounded-lg p-5">
     <div className="w-full flex flex-col gap-2">
       <h4 className="text-sm font-bold">Bio</h4>
       <p className="text-sm">{bio || 'No existe una bio para este usuario.'}</p>
     </div>
-    <Divider className="my-2" />
+    <SectionDivider />
     <div className="w-full flex flex-col gap-2">
       <h4 className="text-sm font-bold">Ubicación</h4>
       <p className="text-sm">
         {location || 'No existe una ubicación para este usuario'}
       </p>
     </div>
-    <Divider className="my-2" />
+    <SectionDivider />
     <div className="w-full flex flex-col gap-2">
       <h4 className="text-sm font-bold">Sitio web</h4>
       {website ? (
@@ -100,7 +102,11 @@ const UserInfoCard = ({
 );
 
 const ProfileData = () => {
-  const { handleSubmit, control } = useForm<PasswordFormData>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<PasswordFormData>({
     resolver: yupResolver(passwordSchema),
     mode: 'onChange',
     defaultValues: {
@@ -191,11 +197,10 @@ const ProfileData = () => {
             </Link>
           </div>
           <Button
-            color="default"
-            variant="flat"
-            isIconOnly
-            size="sm"
-            onPress={navigateToEditProfile}
+            variant="ghost"
+            size="icon"
+            aria-label="Editar perfil"
+            onClick={navigateToEditProfile}
           >
             <RiEditLine size={20} />
           </Button>
@@ -213,24 +218,14 @@ const ProfileData = () => {
               <h4 className="text-sm font-bold">Idiomas</h4>
               <p className="text-sm">{mappedLanguages}</p>
             </div>
-            <Divider className="my-2" />
+            <SectionDivider />
             <div className="w-full h-full flex gap-3 items-end justify-end">
               {user?.hasPassword ? (
-                <Button
-                  size="sm"
-                  color="primary"
-                  variant="light"
-                  onPress={openPasswordModal}
-                >
+                <Button size="sm" variant="ghost" onClick={openPasswordModal}>
                   Cambiar contraseña
                 </Button>
               ) : (
-                <Button
-                  size="sm"
-                  color="primary"
-                  variant="light"
-                  onPress={openPasswordModal}
-                >
+                <Button size="sm" variant="ghost" onClick={openPasswordModal}>
                   Establecer contraseña
                 </Button>
               )}
@@ -259,12 +254,12 @@ const ProfileData = () => {
 
         <div className="flex gap-3 items-center">
           <Button
-            className="bg-red-800 text-white"
-            endContent={<IoTrashOutline />}
-            isLoading={loadingDelete}
-            onPress={handleDelete}
+            className="bg-red-800 text-white hover:bg-red-900"
+            disabled={loadingDelete}
+            onClick={handleDelete}
           >
-            Eliminar perfil
+            {loadingDelete ? 'Eliminando...' : 'Eliminar perfil'}
+            <IoTrashOutline className="ml-2" />
           </Button>
         </div>
       </div>
@@ -290,6 +285,7 @@ const ProfileData = () => {
                 label="Nueva contraseña"
                 placeholder="Ingresa la nueva contraseña"
                 required
+                error={errors.password?.message}
                 {...field}
               />
             )}
@@ -310,6 +306,7 @@ const ProfileData = () => {
                     : 'Ingresa la nueva contraseña'
                 }
                 required
+                error={errors.currentPassword?.message}
                 {...field}
               />
             )}

@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import { Button } from '@/components/ui/Button';
 import React from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
@@ -7,23 +7,29 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export const PrevButton: React.FC<ButtonProps> = ({ onClick }) => (
+export const PrevButton: React.FC<ButtonProps> = ({ onClick, disabled }) => (
   <Button
-    onPress={onClick}
-    color="secondary"
-    className="w-12 h-12 absolute left-4 top-1/2 transform -translate-y-1/2 rounded-full"
-    isIconOnly
+    type="button"
+    variant="secondary"
+    size="icon"
+    className="absolute left-4 top-1/2 h-12 w-12 -translate-y-1/2 rounded-full bg-white/90 text-black shadow hover:bg-white"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label="Imagen anterior"
   >
     <IoChevronBack size={20} />
   </Button>
 );
 
-export const NextButton: React.FC<ButtonProps> = ({ onClick }) => (
+export const NextButton: React.FC<ButtonProps> = ({ onClick, disabled }) => (
   <Button
-    onPress={onClick}
-    color="secondary"
-    className="w-12 h-12 absolute right-4 top-1/2 transform -translate-y-1/2 rounded-full"
-    isIconOnly
+    type="button"
+    variant="secondary"
+    size="icon"
+    className="absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2 rounded-full bg-white/90 text-black shadow hover:bg-white"
+    onClick={onClick}
+    disabled={disabled}
+    aria-label="Imagen siguiente"
   >
     <IoChevronForward size={20} />
   </Button>
@@ -36,7 +42,9 @@ interface DotButtonProps {
 
 export const DotButton: React.FC<DotButtonProps> = ({ selected, onClick }) => (
   <button
-    className={`w-2 h-2 border-1 border-gray-700 rounded-full ${selected ? 'bg-trinidad-600' : 'bg-gray-400'} focus:outline-none`}
+    type="button"
+    className={`h-2 w-2 rounded-full border border-gray-700 ${selected ? 'bg-trinidad-600' : 'bg-gray-400'} focus:outline-none`}
     onClick={onClick}
+    aria-label={selected ? 'Slide actual' : 'Ir al slide'}
   />
 );

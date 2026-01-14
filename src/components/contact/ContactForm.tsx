@@ -5,7 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'sonner';
-import { Button, Input, Textarea } from '@nextui-org/react';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 import { sendMail } from '@/services/contact/sendMail';
 import { useAuthStore } from '@/store/authStore';
 
@@ -65,46 +67,34 @@ const ContactForm = () => {
         <Input
           type="text"
           label="Nombre"
-          labelPlacement="outside"
           placeholder="Ingresá tu nombre"
-          variant="faded"
-          isInvalid={!!errors.name?.message}
           errorMessage={errors.name?.message}
           {...register('name')}
         />
         <Input
           type="text"
           label="Asunto"
-          labelPlacement="outside"
           placeholder="Ingresá el asunto"
-          variant="faded"
-          isInvalid={!!errors.subject?.message}
           errorMessage={errors.subject?.message}
           {...register('subject')}
         />
         <Input
           type="email"
           label="Email"
-          labelPlacement="outside"
           placeholder="Ingresá tu email"
-          variant="faded"
-          isInvalid={!!errors.email?.message}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
         <Textarea
           label="Mensaje"
           className="w-full"
-          labelPlacement="outside"
           placeholder="Ingresá el mensaje"
-          variant="faded"
-          isInvalid={!!errors.message?.message}
           errorMessage={errors.message?.message}
           {...register('message')}
         />
         <div className="flex justify-end lg:justify-end w-full">
-          <Button color="primary" type="submit" isLoading={loading}>
-            Enviar
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Enviando...' : 'Enviar'}
           </Button>
         </div>
       </form>

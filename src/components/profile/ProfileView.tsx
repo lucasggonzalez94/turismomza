@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Divider } from '@nextui-org/react';
 import { getUserByIdService } from '@/services/auth/get-user-by-id';
 import { IUser } from '@/interfaces/user';
 import { useRouter } from 'next/navigation';
@@ -13,6 +12,8 @@ import { useLoadingStore } from '@/store/loadingStore';
 interface IPropsProfileView {
   userId: string;
 }
+
+const SectionDivider = () => <div className="w-full my-2 h-px bg-gray-200" />;
 
 const ProfileView = ({ userId }: IPropsProfileView) => {
   const router = useRouter();
@@ -63,14 +64,14 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
               {user?.bio || 'No existe una bio para este usuario.'}
             </p>
           </div>
-          <Divider className="my-2" />
+          <SectionDivider />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Ubicación</h4>
             <p className="text-sm">
               {user?.location || 'No existe una ubicación para este usuario'}
             </p>
           </div>
-          <Divider className="my-2" />
+          <SectionDivider />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Sitio web</h4>
             {user?.website ? (
@@ -88,7 +89,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
               </p>
             )}
           </div>
-          <Divider className="my-2" />
+          <SectionDivider />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Idiomas</h4>
             <p className="text-sm">

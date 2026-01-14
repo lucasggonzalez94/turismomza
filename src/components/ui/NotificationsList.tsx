@@ -6,7 +6,6 @@ import NotificationItem from './NotificationItem';
 import { INotification } from '@/interfaces/notification';
 import { listNotificationsService } from '@/services/notifications/list-notifications';
 import { useAuthStore } from '@/store/authStore';
-import { Spinner } from '@nextui-org/react';
 import { useSocketStore } from '@/store/socketStore';
 
 const NotificationsList = () => {
@@ -56,8 +55,8 @@ const NotificationsList = () => {
       </div>
       <div className="overflow-y-auto bg-gray-200">
         {loading ? (
-          <div className="p-4 text-center">
-            <Spinner color="default" />
+          <div className="p-4 flex justify-center">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
           </div>
         ) : notifications.length > 0 ? (
           notifications.map((notification) => (

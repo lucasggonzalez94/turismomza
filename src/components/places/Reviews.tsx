@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Button, Textarea } from '@nextui-org/react';
 import { InfiniteMovingCards } from './InfiniteMovingCards';
 import Sidedrawer from '../ui/Sidedrawer';
 import { Review } from '@/interfaces/place';
@@ -15,6 +14,8 @@ import StarsRating from '../ui/StarsRating';
 import { addReviewService } from '@/services/places/add-review';
 import { FormattedReview } from '@/interfaces/formattedReview';
 import { useAuthStore } from '@/store/authStore';
+import { Button } from '@/components/ui/Button';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface IPropsReviews {
   reviews: Review[];
@@ -119,18 +120,11 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
                 placeId={placeId}
               />
             </div>
-            <Button
-              color="primary"
-              variant="light"
-              onPress={() => setOpenSidedrawer(true)}
-            >
+            <Button variant="ghost" onClick={() => setOpenSidedrawer(true)}>
               Ver todas las opiniones
             </Button>
             {user?.id !== creatorId ? (
-              <Button
-                color="primary"
-                onPress={() => setOpenModalAddReview(true)}
-              >
+              <Button onClick={() => setOpenModalAddReview(true)}>
                 Agregar opinión
               </Button>
             ) : null}
@@ -138,7 +132,7 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
         ) : user?.id !== creatorId ? (
           <div className="w-full min-h-96 flex flex-col gap-4 items-center justify-center">
             <span>Todavía no hay opiniones, sé el primero en agregar una.</span>
-            <Button color="primary" onPress={() => setOpenModalAddReview(true)}>
+            <Button onClick={() => setOpenModalAddReview(true)}>
               Agregar opinión
             </Button>
           </div>
@@ -192,13 +186,10 @@ const Reviews: FC<IPropsReviews> = ({ reviews, placeId, creatorId }) => {
             <Textarea
               label="Opinión"
               className="w-full"
-              labelPlacement="outside"
               placeholder="Ingresá tu opinión"
+              errorMessage={errors.review?.message}
               {...register('review')}
             />
-            <span className="text-sm text-red-500">
-              {errors.review?.message}
-            </span>
           </div>
         </div>
       </CustomModal>
