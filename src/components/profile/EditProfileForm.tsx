@@ -21,10 +21,22 @@ const schema = yup
     bio: yup
       .string()
       .optional()
-      .min(5, 'La descripción debe tener un mínimo de 100 caractéres.')
-      .max(200, 'La descripción debe tener un máximo de 500 caractéres.'),
+      .min(50, 'La descripción debe tener un mínimo de 50 caractéres.')
+      .max(160, 'La descripción debe tener un máximo de 160 caractéres.'),
     location: yup.string().optional(),
-    website: yup.string().optional(),
+    website: yup
+      .string()
+      .optional()
+      .test(
+        'is-valid-url',
+        'Debes ingresar una URL válida con https.',
+        (value) => {
+          if (!value) return true;
+          return /^https:\/\/([\w-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/.test(
+            value.trim(),
+          );
+        },
+      ),
     languages: yup.array().of(yup.string().required()).optional(),
     password: yup.string().required('El campo es obligatorio.'),
   })
@@ -129,21 +141,23 @@ const EditProfileForm = () => {
             <Textarea
               containerClassName="w-full"
               label="Bio"
-              placeholder="Ingresa una descripción sobre tí"
+              placeholder="Contá brevemente quién sos o qué tipo de viajero sos (máx. 160 caracteres)"
               errorMessage={errors.bio?.message}
+              minCharacters={50}
+              maxCharacters={160}
               {...register('bio')}
             />
             <Input
               containerClassName="w-full"
               label="Ubicación"
-              placeholder="Ingresa tu lugar de residencia"
+              placeholder="Ej: Mendoza, Argentina"
               errorMessage={errors.location?.message}
               {...register('location')}
             />
             <Input
               containerClassName="w-full"
               label="Website"
-              placeholder="Ingresa tu sitio web"
+              placeholder="https://"
               errorMessage={errors.website?.message}
               {...register('website')}
             />

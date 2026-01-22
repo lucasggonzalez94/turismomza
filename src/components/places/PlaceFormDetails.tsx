@@ -25,7 +25,8 @@ const schema = yup
     name: yup.string().required('El campo es obligatorio.'),
     description: yup
       .string()
-      .min(100, 'La descripción debe tener un mínimo de 100 caractéres.')
+      .min(50, 'La descripción debe tener un mínimo de 50 caractéres.')
+      .max(250, 'La descripción debe tener un máximo de 250 caractéres.')
       .required('El campo es obligatorio.'),
     category: yup.string().required('El campo es obligatorio.'),
     otherCategory: yup.string().when('category', {

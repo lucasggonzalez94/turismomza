@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import useNavigation from '@/hooks/useNavigation';
 import { IoTrashOutline } from 'react-icons/io5';
+import { IoSettingsOutline } from 'react-icons/io5';
 import { RiEditLine } from 'react-icons/ri';
 import { formatDate, mapLanguages } from '@/utils/helpers';
 import { toast } from 'sonner';
@@ -19,6 +20,8 @@ import { updateUserService } from '@/services/auth/update-user';
 import { IUser } from '@/interfaces/user';
 import GoogleLinkButton from './GoogleLinkButton';
 import { Button } from '@/components/ui/Button';
+import { Tooltip } from '../ui/Tooltip';
+import DropdownMenu from '../ui/DropdownMenu';
 
 interface PasswordFormData {
   password: string;
@@ -73,13 +76,13 @@ const UserInfoCard = ({
   <div className="w-full lg:w-1/2 flex flex-col gap-4 justify-start items-start bg-white shadow-lg rounded-lg p-5">
     <div className="w-full flex flex-col gap-2">
       <h4 className="text-sm font-bold">Bio</h4>
-      <p className="text-sm">{bio || 'No existe una bio para este usuario.'}</p>
+      <p className="text-sm">{bio || 'Aún no has compartido tu historia.'}</p>
     </div>
     <SectionDivider />
     <div className="w-full flex flex-col gap-2">
       <h4 className="text-sm font-bold">Ubicación</h4>
       <p className="text-sm">
-        {location || 'No existe una ubicación para este usuario'}
+        {location || 'Todavía no indicaste tu ubicación.'}
       </p>
     </div>
     <SectionDivider />
@@ -95,7 +98,7 @@ const UserInfoCard = ({
           {website}
         </Link>
       ) : (
-        <p className="text-sm">No existe un sitio web para este usuario</p>
+        <p className="text-sm">Aún no agregaste un sitio web personal.</p>
       )}
     </div>
   </div>
@@ -125,7 +128,7 @@ const ProfileData = () => {
   const mappedLanguages = useMemo(
     () =>
       mapLanguages(user?.language || [])?.join(', ') ||
-      'No existen idiomas para este usuario',
+      'Todavía no indicaste qué idiomas dominas.',
     [user?.language],
   );
 
@@ -174,7 +177,7 @@ const ProfileData = () => {
     [handleNavigation],
   );
 
-  const passwordModalTitle = useMemo(
+  const passwordTitle = useMemo(
     () => (user?.hasPassword ? 'Cambiar contraseña' : 'Establecer contraseña'),
     [user?.hasPassword],
   );
@@ -182,28 +185,51 @@ const ProfileData = () => {
   return (
     <>
       <div className="flex flex-col flex-grow gap-3">
-        <div className="flex gap-6 justify-start items-center mb-4">
-          <ProfilePicture />
-          <div className="flex flex-col">
-            <h3 className="font-bold">{user?.name}</h3>
-            <span className="text-xs text-gray-600">
-              Fecha de registro: {formatDate(user?.createdAt)}
-            </span>
-            <Link
-              href={`mailto:${user?.email}`}
-              className="text-xs text-trinidad-600 hover:underline"
-            >
-              {user?.email}
-            </Link>
+        <div className="flex justify-between items-start">
+          <div className="flex gap-6 justify-start items-center mb-4">
+            <ProfilePicture />
+            <div className="flex flex-col">
+              <h3 className="font-bold">{user?.name}</h3>
+              <span className="text-xs text-gray-600">
+                Fecha de registro: {formatDate(user?.createdAt)}
+              </span>
+              <Link
+                href={`mailto:${user?.email}`}
+                className="text-xs text-trinidad-600 hover:underline"
+              >
+                {user?.email}
+              </Link>
+            </div>
+            <Tooltip text="Editar perfil">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Editar perfil"
+                onClick={navigateToEditProfile}
+              >
+                <RiEditLine size={20} />
+              </Button>
+            </Tooltip>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Editar perfil"
-            onClick={navigateToEditProfile}
-          >
-            <RiEditLine size={20} />
-          </Button>
+          <Tooltip text="Configuración">
+            <DropdownMenu
+              titleMenu="Configuración"
+              icon={<IoSettingsOutline className="text-black" size={20} />}
+              options={[
+                {
+                  id: 'set-password',
+                  text: passwordTitle,
+                  onClick: openPasswordModal,
+                },
+                {
+                  id: 'delete-profile',
+                  text: 'Eliminar perfil',
+                  onClick: handleDelete,
+                  danger: true,
+                },
+              ]}
+            />
+          </Tooltip>
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-3 justify-between items-stretch">
@@ -219,21 +245,6 @@ const ProfileData = () => {
               <p className="text-sm">{mappedLanguages}</p>
             </div>
             <SectionDivider />
-            <div className="w-full h-full flex gap-3 items-end justify-end">
-              {user?.hasPassword ? (
-                <Button size="sm" variant="ghost" onClick={openPasswordModal}>
-                  Cambiar contraseña
-                </Button>
-              ) : (
-                <Button size="sm" variant="ghost" onClick={openPasswordModal}>
-                  Establecer contraseña
-                </Button>
-              )}
-              <GoogleLinkButton
-                hasGoogleAccount={!!user?.googleId}
-                hasPassword={!!user?.hasPassword}
-              />
-            </div>
             {/* TODO: Integrar 2FA */}
             {/* <div className="w-full h-full flex gap-3 items-end justify-end">
               <span className="text-sm">
@@ -251,20 +262,9 @@ const ProfileData = () => {
           places_count={user?.places_count}
           review_count={user?.review_count}
         />
-
-        <div className="flex gap-3 items-center">
-          <Button
-            className="bg-red-800 text-white hover:bg-red-900"
-            disabled={loadingDelete}
-            onClick={handleDelete}
-          >
-            {loadingDelete ? 'Eliminando...' : 'Eliminar perfil'}
-            <IoTrashOutline className="ml-2" />
-          </Button>
-        </div>
       </div>
       <CustomModal
-        title={passwordModalTitle}
+        title={passwordTitle}
         isOpen={openPasswordChange}
         onOpenChange={setOpenPasswordChange}
         textButton="Guardar"

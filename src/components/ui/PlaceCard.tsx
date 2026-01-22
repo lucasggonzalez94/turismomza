@@ -19,6 +19,7 @@ import useNavigation from '@/hooks/useNavigation';
 import { addFavoriteService } from '@/services/places/add-favorite';
 import { useNavigationStore } from '@/store/navigationStore';
 import { calculateAverageRating, formatPrice } from '@/utils/helpers';
+import { Tooltip } from './Tooltip';
 
 interface IPropsPlaceCard {
   user: IUser | null;
@@ -102,20 +103,25 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
         ) : null}
 
         <div className="hidden md:block">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-2 top-2 shadow-md z-10 bg-white/90 text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900"
-            onClick={handleFavorite}
-            aria-label={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-            title={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          <Tooltip
+            text={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
-            {favorite ? (
-              <IoHeart size={20} className="text-red-600" />
-            ) : (
-              <IoHeartOutline size={20} />
-            )}
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-2 shadow-md z-10 bg-white/90 text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900"
+              onClick={handleFavorite}
+              aria-label={
+                favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'
+              }
+            >
+              {favorite ? (
+                <IoHeart size={20} className="text-red-600" />
+              ) : (
+                <IoHeartOutline size={20} />
+              )}
+            </Button>
+          </Tooltip>
         </div>
 
         <Image
@@ -168,7 +174,6 @@ const PlaceCard: FC<IPropsPlaceCard> = ({ user, place }) => {
             className="min-w-0 p-1 bg-white/90 text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900"
             onClick={handleFavorite}
             aria-label={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-            title={favorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
             {favorite ? (
               <IoHeart size={18} className="text-red-600" />

@@ -208,7 +208,7 @@ const DropdownProfile: FC<IPropsDropdownProfile> = ({
                 {user?.name}
               </Link>
             ) : (
-              <h3 className="text-lg font-semibold text-gray-800">Perfil</h3>
+              <h3 className="text-md font-semibold text-gray-800">Perfil</h3>
             )}
           </div>
           <div>

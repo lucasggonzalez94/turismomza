@@ -61,14 +61,14 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Bio</h4>
             <p className="text-sm">
-              {user?.bio || 'No existe una bio para este usuario.'}
+              {user?.bio || 'Aún no ha compartido su historia.'}
             </p>
           </div>
           <SectionDivider />
           <div className="w-full flex flex-col gap-2">
             <h4 className="text-sm font-bold">Ubicación</h4>
             <p className="text-sm">
-              {user?.location || 'No existe una ubicación para este usuario'}
+              {user?.location || 'Todavía no indicó su ubicación.'}
             </p>
           </div>
           <SectionDivider />
@@ -84,9 +84,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
                 {user?.website}
               </Link>
             ) : (
-              <p className="text-sm">
-                No existe un sitio web para este usuario
-              </p>
+              <p className="text-sm">Aún no agregó un sitio web personal.</p>
             )}
           </div>
           <SectionDivider />
@@ -94,7 +92,7 @@ const ProfileView = ({ userId }: IPropsProfileView) => {
             <h4 className="text-sm font-bold">Idiomas</h4>
             <p className="text-sm">
               {mapLanguages(user?.language || [])?.join(', ') ||
-                'No existen idiomas para este usuario'}
+                'Todavía no indicó qué idiomas domina.'}
             </p>
           </div>
         </div>

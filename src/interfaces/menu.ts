@@ -6,4 +6,5 @@ export interface IPropsMenuOption {
   icon?: ReactElement | null;
   onClick?: () => void | Promise<void>;
   divider?: boolean;
+  danger?: boolean;
 }
