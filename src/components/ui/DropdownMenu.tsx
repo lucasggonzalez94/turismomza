@@ -1,6 +1,12 @@
 'use client';
 
-import { FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import {
+  ReactElement,
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { usePathname } from 'next/navigation';
 
 import DropdownButton from './DropdownButton';
@@ -8,73 +14,71 @@ import { useNavigationStore } from '@/store/navigationStore';
 import { IPropsMenuOption } from '@/interfaces/menu';
 import { cn } from '@/lib/utils';
 
-interface IPropsDropdownProfile {
+interface IPropsDropdownProfile extends React.HTMLAttributes<HTMLDivElement> {
   titleMenu: string;
   icon: ReactElement;
   options: IPropsMenuOption[];
 }
 
-const DropdownMenu: FC<IPropsDropdownProfile> = ({
-  titleMenu,
-  icon,
-  options,
-}) => {
-  const pathname = usePathname();
-  const setBackPath = useNavigationStore((state) => state.setBackPath);
+const DropdownMenu = forwardRef<HTMLDivElement, IPropsDropdownProfile>(
+  ({ titleMenu, icon, options, ...buttonProps }, ref) => {
+    const pathname = usePathname();
+    const setBackPath = useNavigationStore((state) => state.setBackPath);
 
-  const [isOpen, setisOpen] = useState(false);
+    const [isOpen, setisOpen] = useState(false);
 
-  const createNavigationOption = useCallback(
-    (
-      id: string,
-      text: string,
-      action?: () => void | Promise<void>,
-      hasDivider?: boolean,
-      icon?: ReactElement | null,
-      danger?: boolean,
-    ) => ({
-      id,
-      text,
-      onClick: action,
-      divider: hasDivider,
-      icon,
-      danger,
-    }),
-    [],
-  );
-
-  const menuOptions = useMemo(() => {
-    return options.map((option) =>
-      createNavigationOption(
-        option.id,
-        option.text,
-        option.onClick,
-        option.divider,
-        option.icon,
-        option.danger,
-      ),
+    const createNavigationOption = useCallback(
+      (
+        id: string,
+        text: string,
+        action?: () => void | Promise<void>,
+        hasDivider?: boolean,
+        optionIcon?: ReactElement | null,
+        danger?: boolean,
+      ) => ({
+        id,
+        text,
+        onClick: action,
+        divider: hasDivider,
+        icon: optionIcon,
+        danger,
+      }),
+      [],
     );
-  }, [createNavigationOption, options]);
 
-  const handleOptionClick = useCallback(
-    (option: IPropsMenuOption) => {
-      if (option?.onClick) {
-        option.onClick();
-        setisOpen(!isOpen);
-        setBackPath(pathname);
-      }
-    },
-    [isOpen, setisOpen, setBackPath, pathname],
-  );
+    const menuOptions = useMemo(() => {
+      return options.map((option) =>
+        createNavigationOption(
+          option.id,
+          option.text,
+          option.onClick,
+          option.divider,
+          option.icon,
+          option.danger,
+        ),
+      );
+    }, [createNavigationOption, options]);
 
-  return (
-    <>
+    const handleOptionClick = useCallback(
+      (option: IPropsMenuOption) => {
+        if (option?.onClick) {
+          option.onClick();
+          setisOpen((prev) => !prev);
+          setBackPath(pathname);
+        }
+      },
+      [setBackPath, pathname],
+    );
+
+    return (
       <DropdownButton
+        ref={ref}
         position="left"
         icon={icon}
         isOpen={isOpen}
         onOpen={() => setisOpen(true)}
         onClose={() => setisOpen(false)}
+        {...buttonProps}
       >
         <div className="mt-2 bg-gray-100 rounded-md shadow-ms overflow-hidden">
           <div className="p-4 bg-gray-100 border-b border-gray-200 flex items-center">
@@ -107,8 +111,10 @@ const DropdownMenu: FC<IPropsDropdownProfile> = ({
           </div>
         </div>
       </DropdownButton>
-    </>
-  );
-};
+    );
+  },
+);
+
+DropdownMenu.displayName = 'DropdownMenu';
 
 export default DropdownMenu;

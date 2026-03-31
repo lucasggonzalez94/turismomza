@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import useNavigation from '@/hooks/useNavigation';
-import { IoTrashOutline } from 'react-icons/io5';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { RiEditLine } from 'react-icons/ri';
 import { formatDate, mapLanguages } from '@/utils/helpers';
@@ -18,7 +17,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateUserService } from '@/services/auth/update-user';
 import { IUser } from '@/interfaces/user';
-import GoogleLinkButton from './GoogleLinkButton';
 import { Button } from '@/components/ui/Button';
 import { Tooltip } from '../ui/Tooltip';
 import DropdownMenu from '../ui/DropdownMenu';

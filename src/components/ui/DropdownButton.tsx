@@ -1,11 +1,12 @@
 'use client';
 
 import {
-  FC,
   ReactElement,
   ReactNode,
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
@@ -26,7 +27,7 @@ const POSITION_MAP: Record<DropdownPosition, string> = {
   center: 'translate-x-[-45%]',
 };
 
-interface IPropsDropdownButton {
+interface IPropsDropdownButton extends React.HTMLAttributes<HTMLDivElement> {
   icon?: ReactElement;
   text?: string;
   children: ReactNode;
@@ -38,21 +39,28 @@ interface IPropsDropdownButton {
   onClose: () => void;
 }
 
-const DropdownButton: FC<IPropsDropdownButton> = ({
-  icon,
-  text,
-  children,
-  position = 'center',
-  square,
-  profile,
-  isOpen,
-  onOpen,
-  onClose,
-}) => {
+const DropdownButtonComponent = (
+  {
+    icon,
+    text,
+    children,
+    position = 'center',
+    square,
+    profile,
+    isOpen,
+    onOpen,
+    onClose,
+    className,
+    ...rest
+  }: IPropsDropdownButton,
+  forwardedRef: React.Ref<HTMLDivElement | null>,
+) => {
   const user = useAuthStore((state) => state.user);
   const [positionValue, setPositionValue] = useState(POSITION_MAP.center);
   const [hidden, setHidden] = useState(true);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useImperativeHandle(forwardedRef, () => dropdownRef.current, []);
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
@@ -126,9 +134,10 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
 
   return (
     <div
-      className="flex items-center justify-center relative"
+      className={cn('flex items-center justify-center relative', className)}
       ref={dropdownRef}
       data-dropdown-button
+      {...rest}
     >
       {renderButton()}
 
@@ -149,4 +158,6 @@ const DropdownButton: FC<IPropsDropdownButton> = ({
   );
 };
 
-export default memo(DropdownButton);
+DropdownButtonComponent.displayName = 'DropdownButton';
+
+export default memo(forwardRef(DropdownButtonComponent));

@@ -18,7 +18,7 @@ type TooltipProps = {
   className?: string;
 };
 
-type TooltipPlacement = 'top' | 'bottom';
+type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 const SAFE_MARGIN = 8;
 
@@ -50,42 +50,70 @@ export const Tooltip = ({
 
     const spaceAbove = triggerRect.top - SAFE_MARGIN;
     const spaceBelow = viewportHeight - triggerRect.bottom - SAFE_MARGIN;
+    const spaceLeft = triggerRect.left - SAFE_MARGIN;
+    const spaceRight = viewportWidth - triggerRect.right - SAFE_MARGIN;
 
-    let nextPlacement: TooltipPlacement = 'top';
-    let top = triggerRect.top - tooltipRect.height - offset;
+    const centeredLeft =
+      triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
+    const centeredRightEdge = centeredLeft + tooltipRect.width;
+
+    const canCenterHorizontally =
+      centeredLeft >= SAFE_MARGIN &&
+      centeredRightEdge <= viewportWidth - SAFE_MARGIN;
 
     const fitsAbove = spaceAbove >= tooltipRect.height + offset;
     const fitsBelow = spaceBelow >= tooltipRect.height + offset;
+    const fitsLeft = spaceLeft >= tooltipRect.width + offset;
+    const fitsRight = spaceRight >= tooltipRect.width + offset;
 
-    if (!fitsAbove && fitsBelow) {
+    let nextPlacement: TooltipPlacement = 'top';
+
+    if (fitsAbove && canCenterHorizontally) {
+      nextPlacement = 'top';
+    } else if (fitsBelow && canCenterHorizontally) {
       nextPlacement = 'bottom';
-      top = triggerRect.bottom + offset;
-    } else if (!fitsAbove && !fitsBelow) {
-      nextPlacement = spaceAbove > spaceBelow ? 'top' : 'bottom';
+    } else if (fitsLeft || fitsRight) {
+      if (fitsLeft && fitsRight) {
+        nextPlacement = spaceRight >= spaceLeft ? 'right' : 'left';
+      } else {
+        nextPlacement = fitsRight ? 'right' : 'left';
+      }
+    } else if (fitsAbove || fitsBelow) {
+      nextPlacement = fitsAbove ? 'top' : 'bottom';
+    } else {
+      nextPlacement = spaceRight >= spaceLeft ? 'right' : 'left';
+    }
+
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(Math.max(value, min), max);
+
+    const maxTop = viewportHeight - tooltipRect.height - SAFE_MARGIN;
+    const maxLeft = viewportWidth - tooltipRect.width - SAFE_MARGIN;
+
+    let top = 0;
+    let left = 0;
+
+    if (nextPlacement === 'top' || nextPlacement === 'bottom') {
       top =
         nextPlacement === 'top'
           ? Math.max(SAFE_MARGIN, triggerRect.top - tooltipRect.height - offset)
-          : Math.min(
-              viewportHeight - tooltipRect.height - SAFE_MARGIN,
-              triggerRect.bottom + offset,
-            );
+          : Math.min(maxTop, triggerRect.bottom + offset);
+      left = canCenterHorizontally
+        ? centeredLeft
+        : clamp(centeredLeft, SAFE_MARGIN, maxLeft);
     } else {
-      top = Math.max(SAFE_MARGIN, top);
-    }
+      const verticalCenter =
+        triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
+      top = clamp(verticalCenter, SAFE_MARGIN, maxTop);
 
-    if (
-      nextPlacement === 'bottom' &&
-      top + tooltipRect.height > viewportHeight - SAFE_MARGIN
-    ) {
-      top = viewportHeight - tooltipRect.height - SAFE_MARGIN;
-    }
-
-    let left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-
-    if (left < SAFE_MARGIN) {
-      left = SAFE_MARGIN;
-    } else if (left + tooltipRect.width > viewportWidth - SAFE_MARGIN) {
-      left = viewportWidth - tooltipRect.width - SAFE_MARGIN;
+      if (nextPlacement === 'left') {
+        left = Math.max(
+          SAFE_MARGIN,
+          triggerRect.left - tooltipRect.width - offset,
+        );
+      } else {
+        left = Math.min(maxLeft, triggerRect.right + offset);
+      }
     }
 
     setPlacement(nextPlacement);
@@ -169,19 +197,22 @@ export const Tooltip = ({
               <div
                 className={cn(
                   'relative rounded-full bg-black px-3 py-1 text-xs font-medium text-white shadow-xl transition-transform duration-150 will-change-transform',
-                  placement === 'top'
-                    ? 'animate-in fade-in-0 zoom-in-95'
-                    : 'animate-in fade-in-0 zoom-in-95',
+                  'animate-in fade-in-0 zoom-in-95',
                   className,
                 )}
               >
                 {text}
                 <span
                   className={cn(
-                    'absolute left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-black',
-                    placement === 'top'
-                      ? 'bottom-0 translate-y-1/2'
-                      : 'top-0 -translate-y-1/2',
+                    'absolute h-2 w-2 bg-black rotate-45',
+                    placement === 'top' &&
+                      'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2',
+                    placement === 'bottom' &&
+                      'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2',
+                    placement === 'left' &&
+                      'top-1/2 right-0 translate-x-[35%] -translate-y-1/2',
+                    placement === 'right' &&
+                      'top-1/2 left-0 -translate-x-[35%] -translate-y-1/2',
                   )}
                 />
               </div>
