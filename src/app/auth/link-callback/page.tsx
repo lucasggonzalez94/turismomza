@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { linkGoogleAccount } from '@/services/auth/link-google';
 import { useAuthStore } from '@/store/authStore';
 
-export default function LinkGoogleCallbackPage() {
+function LinkGoogleCallbackContent() {
   const [isProcessing, setIsProcessing] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -56,5 +56,21 @@ export default function LinkGoogleCallbackPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LinkGoogleCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Cargando...</h1>
+          </div>
+        </div>
+      }
+    >
+      <LinkGoogleCallbackContent />
+    </Suspense>
   );
 }

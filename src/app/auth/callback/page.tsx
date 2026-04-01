@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import useNavigation from '@/hooks/useNavigation';
 import { useNavigationStore } from '@/store/navigationStore';
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { handleNavigation } = useNavigation();
@@ -31,5 +31,19 @@ export default function AuthCallback() {
     <div className="flex items-center justify-center h-full w-full">
       <p>Procesando autenticación...</p>
     </div>
+  );
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-full w-full">
+          <p>Cargando...</p>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   );
 }
