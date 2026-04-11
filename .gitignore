@@ -14,8 +14,11 @@
 /out/
 
 # production
+.*
 /build
 .env
+skills-lock.json
+opencode.json
 
 # misc
 .DS_Store
